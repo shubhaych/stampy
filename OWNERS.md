@@ -16,13 +16,13 @@ A = Face (everything people see). B = Brain (data, rules, roles, voice, db).
 | `dashboard-ui` | A | `web/app/dashboard/**`, `web/components/dashboard/**`, `web/styles/dashboard.css` |
 | `system-page` | A | `web/app/system/**`, `web/components/system/**` |
 | `rules` | B | `packages/snap-rules/**` |
-| `qc-data` | B | `data/qc/**`, `data/golden/**`, `worker/src/features/qc/**`, `worker/src/features/docgen/**`, `worker/fixtures/qc/**`, `worker/fixtures/docgen/**`, `scripts/qc-*.ts` |
+| `qc-data` | B | `data/qc/**`, `db/migrations/qc/**`, `data/golden/**`, `worker/src/features/qc/**`, `worker/src/features/docgen/**`, `worker/fixtures/qc/**`, `worker/fixtures/docgen/**`, `scripts/qc-*.ts` |
 | `seats` | B | `worker/src/features/seats/**`, `worker/src/features/recompute/**`, `worker/fixtures/seats/**`, `worker/fixtures/recompute/**` |
 | `policy` | B | `worker/src/features/policy/**`, `worker/fixtures/policy/**`, `data/policy/**`, `scripts/policy-*.ts` |
 | `voice-engine` | B | `worker/src/features/voice/**`, `worker/fixtures/voice/**`, `db/migrations/voice/**` |
 | `ledger` | B | `worker/src/features/ledger/**`, `worker/fixtures/ledger/**`, `db/migrations/ledger/**` |
 | `planner` | B | `worker/src/features/planner/**`, `db/migrations/planner/**`, `worker/fixtures/planner/**` |
-| `db-core` | B | `db/migrate.ts`, `db/migrations/cases/**`, `db/migrations/flags/**`, `db/migrations/workflow/**`, `worker/src/core/**`, `worker/src/*.ts`, `worker/src/features/_template/**`, `worker/test/core/**` |
+| `db-core` | B | `db/migrate.ts`, `db/migrations/cases/**`, `db/migrations/flags/**`, `db/migrations/workflow/**`, `worker/src/core/**`, `worker/src/*.ts`, `worker/src/features/types.ts`, `worker/src/features/_template/**`, `worker/test/core/**` |
 | `eval` | B | `worker/src/features/eval/**`, `worker/fixtures/eval/**` |
 | `ops` | B | `scripts/**`, `.github/**`, `e2e/smoke*`, `env/ops.env`, `playwright.config.ts`, `vitest.config.ts`, `eslint.config.js`, `docs/ARCHITECTURE.md`, `docs/LIVE_CHECKLIST.md`, `docs/REAL_VS_SIMULATED.md` |
 
