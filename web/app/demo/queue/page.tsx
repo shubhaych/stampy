@@ -6,10 +6,11 @@ import { ROUTES } from '@/lib/routes';
 export const metadata = { title: 'My cases' };
 
 export default async function QueuePage() {
-  const queue = await data.queue();
+  const queue = (await data.queue()).filter((q) => q.state === 'CA');
   return (
     <DeckPage eyebrow="Demo · step 2 of 3" title="My cases" prov={queue[0]?.prov ?? 'fixture'}>
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
+        <p className="text-sm opacity-70 lg:col-span-2">California pilot · This queue shows reviewable case bundles. Imported public QC rows need a case builder before they appear here. Each case shows its provenance badge.</p>
         <section className="panel overflow-x-auto" aria-label="Case queue">
           <table className="deck-table">
             <thead>

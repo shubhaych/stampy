@@ -28,9 +28,9 @@ export function StateSelect({ states }: { states: StateProfile[] }) {
   const [busy, setBusy] = useState(false);
   const sel = useMemo(() => states.find((s) => s.code === code) ?? states[0]!, [states, code]);
 
-  async function start(shuffle = false) {
+  async function start() {
     setBusy(true);
-    await data.startShift(sel.code, shuffle ? Math.floor(Math.random() * 1e6) : undefined);
+    await data.startShift(sel.code);
     router.push(ROUTES.queue);
   }
 
@@ -50,14 +50,16 @@ export function StateSelect({ states }: { states: StateProfile[] }) {
                 role="option"
                 aria-selected={s.code === code}
                 onClick={() => setCode(s.code)}
+                disabled={s.code !== 'CA'}
                 className="aspect-square rounded-md font-mono text-[0.68rem] transition-transform hover:-translate-y-0.5"
                 style={{
                   gridColumn: s.col + 1,
                   gridRow: s.row + 1,
                   background: b === null ? 'var(--glass)' : `color-mix(in srgb, var(--over) ${20 + b * 18}%, var(--deck-2))`,
                   border: s.code === code ? '1.5px solid var(--glow)' : '1px solid var(--deck-line)',
+                  opacity: s.code === 'CA' ? 1 : 0.48,
                 }}
-                title={`${s.name}: ${s.perFy2025 === null ? 'n/a' : pct(s.perFy2025)}`}
+                title={s.code === 'CA' ? `${s.name}: ${s.perFy2025 === null ? 'n/a' : pct(s.perFy2025)}` : `${s.name}: available after the California pilot`}
               >
                 {s.code}
               </button>
@@ -98,12 +100,9 @@ export function StateSelect({ states }: { states: StateProfile[] }) {
           <dd className="m-0">{sel.manual ?? 'Federal 7 CFR 273 only (state manual not loaded)'}</dd>
         </dl>
         <div className="mt-6 flex flex-wrap items-center gap-4">
-          <Btn onClick={() => start(false)} disabled={busy}>Start shift</Btn>
-          <button type="button" className="text-sm underline underline-offset-4 opacity-80" onClick={() => start(true)} disabled={busy}>
-            Shuffle cases
-          </button>
+          <Btn onClick={start} disabled={busy}>Start California review</Btn>
         </div>
-        <p className="mt-3 text-xs opacity-60">Assigns 8 cases drawn with a seeded sample from the QC history. Until the QC file is loaded, the queue is the golden fixture set.</p>
+        <p className="mt-3 text-xs opacity-60">California pilot: the review queue uses available case bundles. Fixture examples are labeled Fixture. Public QC rows require a case builder before they can be reviewed here.</p>
       </HudFrame>
     </div>
   );
