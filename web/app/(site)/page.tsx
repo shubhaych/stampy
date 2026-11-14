@@ -1,4 +1,5 @@
 import { SectionDivider, TextCta } from '@/components/ui';
+import { ROUTES } from '@/lib/routes';
 import { Hero } from '@/components/home/hero';
 import { ProblemScroll } from '@/components/home/problem-scroll';
 import { CaseWalkthrough } from '@/components/home/case-walkthrough';
@@ -17,7 +18,7 @@ export default function HomePage() {
       <BackendLedger />
       <section className="closing wrap" aria-labelledby="closing-title">
         <h2 id="closing-title" className="font-display h-section">Work a case yourself.</h2>
-        <TextCta href="/demo">Start the demo →</TextCta>
+        <TextCta href={ROUTES.apply}>Start the demo →</TextCta>
       </section>
     </main>
   );

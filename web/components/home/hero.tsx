@@ -1,6 +1,7 @@
 'use client';
 
 import { TextCta } from '@/components/ui';
+import { ROUTES } from '@/lib/routes';
 import { CaseWheel } from './case-wheel';
 import { useHomeStatic } from './use-static';
 
@@ -17,7 +18,7 @@ export function Hero() {
           Stampy reads the case file, flags what doesn&apos;t match with the exact source line and the rule behind it, and recomputes the benefit. A merit-staff worker makes every decision.
         </p>
         <div className="hero__ctas">
-          <TextCta href="/demo">Work a case →</TextCta>
+          <TextCta href={ROUTES.cases}>Work a case →</TextCta>
           <a href="#problem" className="hero__secondary">See the issue</a>
         </div>
         <p className="eyebrow hero__mono">Every dollar right, in both directions · We never deny · We never auto-correct</p>
