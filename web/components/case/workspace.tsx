@@ -78,8 +78,8 @@ export function Workspace({ bundle }: { bundle: CaseBundle }) {
                       </button>
                     ))}
                   </div>
-                  <div className="relative mx-auto aspect-[8.5/11] max-w-[520px] rounded-md bg-[#FBF9F4] p-6 text-[#222] shadow-lg" data-figure aria-label={`${doc?.title ?? 'Document'} (synthetic rendering)`}>
-                    <div className="flex items-center justify-between font-mono text-[0.7rem] uppercase tracking-widest text-[#666]">
+                  <div className="relative mx-auto aspect-[8.5/11] max-w-[520px] rounded-md bg-[var(--doc-paper)] p-6 text-[var(--doc-ink)] shadow-lg" data-figure aria-label={`${doc?.title ?? 'Document'} (synthetic rendering)`}>
+                    <div className="flex items-center justify-between font-mono text-[0.7rem] uppercase tracking-widest text-[var(--doc-soft)]">
                       <span>{doc?.title}</span>
                       {doc ? <Badge kind={doc.prov} /> : null}
                     </div>
@@ -89,7 +89,7 @@ export function Workspace({ bundle }: { bundle: CaseBundle }) {
                         <span className="relative px-1">{e.text}</span>
                       </div>
                     ))}
-                    {ex.length === 0 ? <p className="mt-10 text-center text-sm text-[#777]">No extracted fields on this document.</p> : null}
+                    {ex.length === 0 ? <p className="mt-10 text-center text-sm text-[var(--doc-soft)]">No extracted fields on this document.</p> : null}
                   </div>
                 </>
               ) : tab === 'resolve' ? (

@@ -1,4 +1,4 @@
-# Stampy (repo: stampy)
+# Stampy
 
 A document-grounded second check before SNAP benefits go out. AI roles read the case file and flag what does not match, with the source line and the rule; a deterministic engine recomputes; a voice agent verifies with employers and landlords; **a merit-staff worker decides everything.** Not an eligibility system.
 

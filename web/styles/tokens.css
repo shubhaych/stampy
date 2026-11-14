@@ -1,28 +1,43 @@
 /*
-  FROZEN after scaffold-v1. Stampy tokens (master prompt section 7 + 0.4).
-  Paper (pitch) and deck (work pages). Amber = overissuance risk, blue = underissuance risk,
-  always shown together and always paired with an arrow glyph and the word "over" / "under".
+  FROZEN after scaffold-v1 (changed by infra/stampy-rebrand). Stampy tokens: Catppuccin Latte
+  (https://github.com/catppuccin/catppuccin) on every surface. Pitch pages sit on Mocha base; work pages
+  (the command deck) sit on mantle with white panels. Synthetic documents render on white paper.
+  Peach = overissuance risk, blue = underissuance risk, always shown together and always paired with an arrow
+  glyph and the word "over" / "under".
 */
 :root {
-  /* paper (pitch) */
-  --paper: #F2EFE7; --paper-2: #FBF9F4; --ink: #10231D; --ink-soft: #4F625B; --line: #D8D3C5;
-  --pine: #174C41; --pine-2: #1F6355;
+  /* Catppuccin Latte palette */
+  --ctp-rosewater: #dc8a78; --ctp-flamingo: #dd7878; --ctp-pink: #ea76cb; --ctp-mauve: #8839ef;
+  --ctp-red: #d20f39; --ctp-maroon: #e64553; --ctp-peach: #fe640b; --ctp-yellow: #df8e1d;
+  --ctp-green: #40a02b; --ctp-teal: #179299; --ctp-sky: #04a5e5; --ctp-sapphire: #209fb5;
+  --ctp-blue: #1e66f5; --ctp-lavender: #7287fd; --ctp-text: #4c4f69; --ctp-subtext1: #5c5f77;
+  --ctp-subtext0: #6c6f85; --ctp-overlay2: #7c7f93; --ctp-overlay1: #8c8fa1; --ctp-overlay0: #9ca0b0;
+  --ctp-surface2: #acb0be; --ctp-surface1: #bcc0cc; --ctp-surface0: #ccd0da; --ctp-base: #eff1f5;
+  --ctp-mantle: #e6e9ef; --ctp-crust: #dce0e8;
+
+  /* pitch surface */
+  --paper: var(--ctp-base); --paper-2: #ffffff; --ink: var(--ctp-text); --ink-soft: var(--ctp-subtext0); --line: var(--ctp-surface1);
+  --pine: var(--ctp-mauve); --pine-2: var(--ctp-lavender);   /* brand accent (names kept for compatibility) */
+  --on-accent: #ffffff;                               /* text on any filled accent */
   /* signal pair + status */
-  --over: #D99A1E;      /* overissuance risk (amber) */
-  --under: #3E6FB5;     /* underissuance risk (blue) */
-  --over-ink: #8A5F0A;  /* AA text on paper for amber labels */
-  --under-ink: #2C5594;
-  --proof: #2E8B67;     /* verified / matches */
-  --conflict: #B5473E;  /* contradiction (never "denied") */
-  --voice: #7C5CBF;     /* call accent */
+  --over: var(--ctp-peach);      /* overissuance risk */
+  --under: var(--ctp-blue);      /* underissuance risk */
+  --over-ink: color-mix(in srgb, var(--ctp-peach) 72%, #4c4f69);
+  --under-ink: var(--ctp-blue);
+  --proof: var(--ctp-green);     /* verified / matches */
+  --conflict: var(--ctp-red);    /* contradiction (never "denied") */
+  --voice: var(--ctp-pink);      /* call accent */
   /* deck (work pages) */
-  --deck: #0B1411; --deck-2: #111E19; --deck-line: rgba(236,240,232,.12);
-  --deck-ink: #E8EEE9; --deck-ink-soft: rgba(232,238,233,.66); --glow: #6FE3B2;
-  --glass: rgba(255,255,255,.04); --glass-line: rgba(255,255,255,.12);
+  --deck: var(--ctp-mantle); --deck-2: #ffffff; --deck-line: rgba(76, 79, 105, .14);
+  --deck-ink: var(--ctp-text); --deck-ink-soft: var(--ctp-subtext0); --glow: var(--ctp-teal);
+  --glass: rgba(76, 79, 105, .04); --glass-line: rgba(76, 79, 105, .14);
+  /* synthetic documents (Catppuccin Latte) */
+  --doc-paper: #ffffff; --doc-ink: #4c4f69; --doc-soft: #6c6f85; --doc-line: #ccd0da;
   /* decision pipeline legend (0.4) */
-  --src: #484840; --question: #E0B04A; --ai: #3D3585; --ledger: #22503F; --human: #6E2E1C;
+  --src: var(--ctp-overlay1); --question: var(--ctp-yellow); --ai: var(--ctp-lavender); --ledger: var(--ctp-green); --human: var(--ctp-maroon);
   /* shape */
   --radius: 10px; --radius-card: 12px; --radius-glass: 18px; --maxw: 1080px;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -44,6 +59,8 @@
   --color-deck-ink: var(--deck-ink);
   --color-deck-ink-soft: var(--deck-ink-soft);
   --color-glow: var(--glow);
+  --color-doc-paper: var(--doc-paper);
+  --color-doc-ink: var(--doc-ink);
   --color-src: var(--src);
   --color-question: var(--question);
   --color-ai: var(--ai);

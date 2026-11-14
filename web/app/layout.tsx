@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   description: 'A document-grounded second check before SNAP benefits go out. Stampy flags and cites; a merit-staff worker decides.',
 };
 
-export const viewport: Viewport = { themeColor: '#F2EFE7', width: 'device-width', initialScale: 1 };
+export const viewport: Viewport = { themeColor: '#eff1f5', width: 'device-width', initialScale: 1 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
