@@ -8,7 +8,7 @@ import { api, ApiError, subscribeEvents } from '@/lib/stampy/api';
 import { FIXTURE_BUNDLE } from '@/lib/stampy/fixture';
 import { formatRef } from '@/lib/stampy/util';
 import { ROUTES } from '@/lib/routes';
-import { CaseworkerSignIn, Empty, ErrorLine, FixtureProvider, ModeChips, StatusChip, useCaseworker } from './common';
+import { Empty, ErrorLine, FixtureProvider, ModeChips, StatusChip } from './common';
 import { LoopTracker } from './loop-tracker';
 import { DocumentsPanel, LedgerPanel, QuestionsPanel } from './evidence';
 import { CallsPanel, DecisionPanel, DemoControls, OutreachPanel, RecomputePanel } from './actions';
@@ -20,7 +20,6 @@ export function CaseScreen({ id, fixture }: { id: string; fixture: boolean }) {
   const [connected, setConnected] = useState(false);
   const [docId, setDocId] = useState<string | null>(null);
   const [factId, setFactId] = useState<string | null>(null);
-  const { worker, signIn, signOut } = useCaseworker();
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const load = useCallback(async () => {
@@ -107,7 +106,6 @@ export function CaseScreen({ id, fixture }: { id: string; fixture: boolean }) {
               </div>
               <ModeChips modes={bundle.modes} phoneNumber={bundle.phoneNumber} />
             </div>
-            <CaseworkerSignIn worker={worker} onSignIn={signIn} onSignOut={signOut} />
           </header>
           <ErrorLine error={error} />
 
@@ -135,20 +133,16 @@ export function CaseScreen({ id, fixture }: { id: string; fixture: boolean }) {
             <aside className="stp-case__side">
               <DecisionPanel
                 bundle={bundle}
-                worker={worker}
                 onDecide={async (action, note) => {
-                  if (!worker) return;
-                  await api.decide(id, action, worker, note);
+                  await api.decide(id, action, note);
                   await after();
                 }}
               />
               <OutreachPanel
                 outreach={bundle.outreach}
                 inbound={bundle.inbound}
-                worker={worker}
                 onSend={async () => {
-                  if (!worker) return;
-                  await api.sendRequest(id, worker);
+                  await api.sendRequest(id);
                   await after();
                 }}
               />
