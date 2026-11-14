@@ -1,0 +1,12 @@
+{
+  "_note": "Every value needs a source. null = <fill in>; the rules feature (machine B) loads these from the FY2027 COLA notice / PolicyEngine-US parameters.",
+  "tolerance": { "value": 59, "source": "QC Policy Memo 25-04 (as summarized in docs/RESEARCH.md)", "verified": false },
+  "toleranceFy2026": { "value": 58, "source": "QC Policy Memo 25-04 (as summarized in docs/RESEARCH.md)", "verified": false },
+  "earnedIncomeDeductionRate": { "value": 0.2, "source": "master prompt section 10 station 6 (7 CFR 273.9(d), verify)", "verified": false },
+  "standardDeduction": { "value": null, "source": "<fill in>", "verified": false },
+  "maxAllotment": { "value": null, "source": "<fill in>", "verified": false },
+  "excessShelterCap": { "value": null, "source": "<fill in>", "verified": false },
+  "sua": { "value": null, "source": "<fill in: per state>", "verified": false },
+  "grossIncomeLimit": { "value": null, "source": "<fill in>", "verified": false },
+  "netIncomeLimit": { "value": null, "source": "<fill in>", "verified": false }
+}
