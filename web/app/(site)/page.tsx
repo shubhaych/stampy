@@ -1,15 +1,38 @@
-import { TextCta } from '@/components/ui';
+import { SectionDivider } from '@/components/ui';
+import { OpeningScene } from '@/components/home/opening-scene';
+import { StatBeats } from '@/components/home/stat-beats';
+import { CostShareClock } from '@/components/home/cost-share-clock';
+import { AnswerBar } from '@/components/home/answer-bar';
+import { HowItWorks } from '@/components/home/how-it-works';
+import { MiniDemo } from '@/components/home/mini-demo';
+import { VoiceSpotlight } from '@/components/home/voice-spotlight';
+import { Closing, Guardrails, MarketProof, PoweredBy, StateStart } from '@/components/home/closing-sections';
 
-/** Homepage placeholder (scaffold). The home feature replaces this on branch a/home. */
 export default function HomePage() {
   return (
-    <main className="wrap py-24">
-      <div className="eyebrow mb-4 text-[var(--ink-soft)]">Stampy · Pre-issuance accuracy for SNAP</div>
-      <h1 className="font-display h-hero m-0 max-w-[18ch]">Check the case before the benefit goes out.</h1>
-      <p className="mt-4 max-w-[60ch] text-[var(--ink-soft)]">
-        Stampy reads the case file, flags what doesn&apos;t match with the exact source line and the rule behind it, and recomputes the benefit. A merit-staff worker makes every decision.
-      </p>
-      <div className="mt-6"><TextCta href="/demo">Work a case →</TextCta></div>
+    <main className="home">
+      <OpeningScene />
+      <SectionDivider />
+      <StatBeats />
+      <SectionDivider />
+      <CostShareClock />
+      <SectionDivider />
+      <AnswerBar />
+      <SectionDivider />
+      <HowItWorks />
+      <SectionDivider />
+      <MiniDemo />
+      <SectionDivider />
+      <VoiceSpotlight />
+      <SectionDivider />
+      <Guardrails />
+      <SectionDivider />
+      <MarketProof />
+      <SectionDivider />
+      <StateStart />
+      <SectionDivider />
+      <PoweredBy />
+      <Closing />
     </main>
   );
 }
