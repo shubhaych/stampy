@@ -1,19 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { Direction as Dir } from '@stampy/contracts';
 import type { Call, CaseBundleV2, Decision, InboundEmail, Outreach, Recompute } from '@stampy/contracts/stampy';
 import { Badge, Direction, Fig, HudFrame, Odometer, StampMark } from '@/components/ui';
 import { money, signedMoney } from '@/lib/format';
 import type { WorkerIdentity } from '@/lib/stampy/api';
+import { decisionReady } from '@/lib/stampy/workflow';
 import { clockTime, dateTime, mss } from '@/lib/stampy/util';
 import { Empty, ErrorLine, MoneyText, useIsFixture, useProv } from './common';
 
 /** Runs one worker action with busy/error state. */
 export function useAction() {
+  const running = useRef(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   async function run(key: string, fn: () => Promise<unknown>) {
+    if (running.current) return;
+    running.current = true;
     setBusy(key);
     setError(null);
     try {
@@ -21,6 +25,7 @@ export function useAction() {
     } catch (e) {
       setError((e as Error).message);
     } finally {
+      running.current = false;
       setBusy(null);
     }
   }
@@ -98,17 +103,17 @@ export function DecisionPanel({ bundle, worker, onDecide }: { bundle: CaseBundle
   const [note, setNote] = useState('');
   const { busy, error, run } = useAction();
   const d: Decision | null = bundle.decision;
-  const ready = bundle.case.status === 'ready_for_review';
+  const ready = decisionReady(bundle);
   const r = bundle.recompute;
   const why = fixture
     ? 'Fixture view: actions are off.'
     : !worker
       ? 'Sign in as a caseworker to decide.'
       : !ready
-        ? 'Available when the case is ready for review.'
+        ? 'Resolve questions, review all documents and load both benefit calculations first.'
         : null;
   return (
-    <section className="panel stp-decision" aria-label="Caseworker decision">
+    <section id="stp-decision" className="panel stp-decision" aria-label="Caseworker decision">
       <div className="panel__title"><span>Caseworker decision</span></div>
       {d ? (
         <div className="stp-decision__done">
@@ -160,7 +165,7 @@ export function OutreachPanel({ outreach, inbound, worker, onSend }: { outreach:
     ...inbound.map((i) => ({ at: i.receivedAt, inb: i })),
   ].sort((a, b) => new Date(a.at).getTime() - new Date(b.at).getTime());
   return (
-    <section className="panel" aria-label="Outreach thread">
+    <section className="panel" aria-label="Outreach thread" id="stp-outreach">
       <div className="panel__title"><span>Email thread</span></div>
       {items.length === 0 ? <Empty>No email yet. The AI drafts a request when questions open.</Empty> : null}
       <ol className="stp-thread">
@@ -177,7 +182,7 @@ export function OutreachPanel({ outreach, inbound, worker, onSend }: { outreach:
               <pre className="stp-mail__body"><MoneyText text={it.out.bodyText} prov={pv('live')} /></pre>
               {it.out.approvedBy ? <div className="stp-sub">Approved by {it.out.approvedBy}</div> : null}
               {it.out.error ? <p className="stp-error">{it.out.error}</p> : null}
-              {it.out.status === 'draft' && it.out.kind === 'request' ? (
+              {(it.out.status === 'draft' || it.out.status === 'failed') && it.out.kind === 'request' ? (
                 <div className="stp-mail__actions">
                   <span className="stp-sub">Draft</span>
                   <button type="button" className="btn btn--primary" disabled={fixture || !worker || !!busy} onClick={() => run('send', onSend)}>
@@ -246,11 +251,11 @@ export function CallsPanel({ calls }: { calls: Call[] }) {
 
 /* ---------- Demo controls ---------- */
 
-export function DemoControls({ onRun }: { onRun: (what: 'call' | 'reply' | 'reread' | 'recompute') => Promise<void> }) {
+export function DemoControls({ onRun, disabled = false }: { disabled?: boolean; onRun: (what: 'call' | 'reply' | 'reread' | 'recompute') => Promise<void> }) {
   const fixture = useIsFixture();
   const { busy, error, run } = useAction();
   const b = (key: 'call' | 'reply' | 'reread' | 'recompute', label: string) => (
-    <button type="button" className="btn btn--ghost stp-demo__btn" disabled={fixture || !!busy} onClick={() => run(key, () => onRun(key))}>
+    <button type="button" className="btn btn--ghost stp-demo__btn" disabled={disabled || fixture || !!busy} onClick={() => run(key, () => onRun(key))}>
       {busy === key ? 'Working…' : label}
     </button>
   );

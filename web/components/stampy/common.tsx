@@ -10,15 +10,17 @@ import { splitMoney } from '@/lib/stampy/util';
 /* ---------- provenance: a fixture view never shows a Live badge ---------- */
 
 const FixtureCtx = createContext(false);
+const EvidenceCtx = createContext<Prov>('live');
 
-export function FixtureProvider({ fixture, children }: { fixture: boolean; children: ReactNode }) {
-  return <FixtureCtx.Provider value={fixture}>{children}</FixtureCtx.Provider>;
+export function FixtureProvider({ fixture, provenance = 'live', children }: { fixture: boolean; provenance?: Prov; children: ReactNode }) {
+  return <FixtureCtx.Provider value={fixture}><EvidenceCtx.Provider value={provenance}>{children}</EvidenceCtx.Provider></FixtureCtx.Provider>;
 }
 
 /** Returns the badge to show for a figure: the given provenance, or Fixture when the page renders the dev fixture. */
 export function useProv(): (p: Prov) => Prov {
   const fixture = useContext(FixtureCtx);
-  return useCallback((p: Prov) => (fixture ? 'fixture' : p), [fixture]);
+  const provenance = useContext(EvidenceCtx);
+  return useCallback((p: Prov) => (fixture ? 'fixture' : p === 'live' ? provenance : p), [fixture, provenance]);
 }
 
 export function useIsFixture() {
@@ -176,4 +178,8 @@ export function CaseworkerSignIn({ worker, onSignIn, onSignOut }: { worker: Work
       <span className="stp-hint">Demo access code: stampy-worker. The worker checks it on every action.</span>
     </form>
   );
+}
+
+export function DataFooter() {
+  return <footer className="stp-data-footer">Synthetic documents generated from public USDA QC records. No real applicants. Stampy flags and cites; a merit-staff worker decides. Not an eligibility system.</footer>;
 }

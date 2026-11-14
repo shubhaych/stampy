@@ -7,7 +7,7 @@ import { Badge, Direction, Fig } from '@/components/ui';
 import { money } from '@/lib/format';
 import { api } from '@/lib/stampy/api';
 import { clockTime, mss } from '@/lib/stampy/util';
-import { Empty, MoneyText, SourceBadge, useProv } from './common';
+import { Empty, MoneyText, SourceBadge, useIsFixture, useProv } from './common';
 
 const DOC_KIND: Record<string, string> = { application_form: 'Application form', paystub: 'Paystub', lease: 'Lease', other: 'Other', unknown: 'Unknown' };
 const READ_LABEL: Record<DocumentMeta['readStatus'], string> = { pending: 'Waiting to read', reading: 'Reading…', read: 'Read', failed: 'Read failed', needs_person: 'Needs a person' };
@@ -73,8 +73,10 @@ export function DocumentsPanel({ docs, facts, selectedDocId, onSelectDoc, select
 }
 
 function DocViewer({ doc, facts, selectedFactId, onSelectFact }: { doc: DocumentMeta; facts: Fact[]; selectedFactId: string | null; onSelectFact: (id: string | null) => void }) {
+  const fixture = useIsFixture();
   const [failed, setFailed] = useState<Record<string, boolean>>({});
   const url = api.docUrl(doc.id);
+  if (fixture) return <div className="stp-doc__missing">Image not loaded for this fixture. Review its recorded fields in the evidence ledger.</div>;
   if (failed[doc.id]) return <div className="stp-doc__missing">Document image not loaded.</div>;
   if (doc.contentType === 'application/pdf') {
     return (
@@ -111,11 +113,11 @@ function DocViewer({ doc, facts, selectedFactId, onSelectFact }: { doc: Document
 export function QuestionsPanel({ questions, facts, onSelectFact }: { questions: Question[]; facts: Fact[]; onSelectFact: (f: Fact) => void }) {
   const open = questions.filter((q) => q.status !== 'closed').length;
   return (
-    <section className="panel" aria-label="Open questions">
+    <section className="panel" aria-label="Open questions" id="stp-questions">
       <div className="panel__title">
         <span>Open questions · {open} open of {questions.length}</span>
       </div>
-      {questions.length === 0 ? <Empty>No questions. Every source agrees so far.</Empty> : null}
+      {questions.length === 0 ? <Empty>No questions recorded. Review the source documents before proceeding.</Empty> : null}
       <div className="grid gap-3">
         {questions.map((q) => (
           <QuestionCard key={q.id} q={q} facts={facts} onSelectFact={onSelectFact} />
@@ -221,7 +223,7 @@ export function LedgerPanel({ facts, questions, selectedFactId, onSelectFact }: 
                 <span className="stp-lg__field">{fieldLabel(field)}</span>
                 {conflict ? (
                   <span className="stp-pill stp-pill--conflict">{values.length} different values</span>
-                ) : compared ? (
+                ) : compared && rows.length > 1 ? (
                   <span className="stp-pill stp-pill--agree">agree</span>
                 ) : (
                   <span className="stp-pill">{values.length > 1 ? 'one per document' : 'recorded'}</span>
@@ -247,8 +249,8 @@ export function LedgerPanel({ facts, questions, selectedFactId, onSelectFact }: 
                           {f.atSeconds !== null ? <span className="tabular"> at {mss(f.atSeconds)}</span> : null}
                         </span>
                         <span className={`stp-fact__conf stp-fact__conf--${confLevel(f.confidence)}`} title="Reader confidence">{confLevel(f.confidence)} confidence</span>
-                        {f.questionId ? <a className="stp-fact__q" href={`#q-${f.questionId}`} onClick={(e) => e.stopPropagation()}>answers {qTitle(f.questionId)}</a> : null}
                       </button>
+                      {f.questionId ? <a className="stp-fact__q" href={`#q-${f.questionId}`}>answers {qTitle(f.questionId)}</a> : null}
                     </li>
                   );
                 })}

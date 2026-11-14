@@ -2,8 +2,10 @@
  * Browser client for the Stampy worker (REST + SSE). The worker URL is public config only; no keys here.
  * Every call throws ApiError with the worker's { error } message so pages can show it inline.
  */
+import { z } from 'zod';
+import { CaseBundleV2 as BundleSchema, CaseSummary as SummarySchema, StampyEvent as EventSchema } from '@stampy/contracts/stampy';
 import { StampyRoutes } from '@stampy/contracts/stampy';
-import type { CaseBundleV2, CaseSummary, Decision, Outreach, Recompute, StampyEvent } from '@stampy/contracts/stampy';
+import type { Decision, Outreach, StampyEvent } from '@stampy/contracts/stampy';
 
 export const WORKER_URL = (process.env.NEXT_PUBLIC_WORKER_URL || 'http://localhost:8787').replace(/\/$/, '');
 
@@ -41,7 +43,7 @@ export const workerUrl = (path: string) => `${WORKER_URL}${path}`;
 async function req<T>(path: string, init?: RequestInit): Promise<T> {
   let res: Response;
   try {
-    res = await fetch(workerUrl(path), { cache: 'no-store', ...init });
+    res = await fetch(workerUrl(path), { cache: 'no-store', signal: AbortSignal.timeout(90_000), ...init });
   } catch {
     throw new ApiError(`Could not reach the worker at ${WORKER_URL}. Is it running?`, 0);
   }
@@ -60,15 +62,22 @@ async function req<T>(path: string, init?: RequestInit): Promise<T> {
       : `${res.status} ${res.statusText || 'request failed'}`;
     throw new ApiError(msg, res.status);
   }
+  if (body === null) throw new ApiError('The worker returned an empty or unreadable response. Refresh to check whether the action completed.', 502);
   return body as T;
+}
+
+async function checked<S extends z.ZodType>(path: string, schema: S): Promise<z.infer<S>> {
+  const parsed = schema.safeParse(await req<unknown>(path));
+  if (!parsed.success) throw new ApiError('This worker uses an incompatible API. Connect the b/stampy-loop worker and retry.', 502);
+  return parsed.data;
 }
 
 const json = (data: unknown): RequestInit => ({ method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) });
 
 export const api = {
   status: () => req<WorkerStatus>(StampyRoutes.status),
-  cases: () => req<CaseSummary[]>(StampyRoutes.cases),
-  caseBundle: (id: string) => req<CaseBundleV2>(StampyRoutes.case(id)),
+  cases: () => checked(StampyRoutes.cases, SummarySchema.array()),
+  caseBundle: (id: string) => checked(StampyRoutes.case(id), BundleSchema),
   samples: () => req<SampleDoc[]>(StampyRoutes.samples),
   sampleUrl: (name: string) => workerUrl(StampyRoutes.sample(name)),
   docUrl: (id: string) => workerUrl(StampyRoutes.doc(id)),
@@ -76,7 +85,7 @@ export const api = {
   sendRequest: (id: string, worker: WorkerIdentity) => req<{ outreach: Outreach }>(StampyRoutes.sendRequest(id), json({ worker })),
   simulateCall: (id: string) => req<{ callId: string }>(StampyRoutes.simulateCall(id), { method: 'POST' }),
   simulateReply: (id: string) => req<{ inboundId: string }>(StampyRoutes.simulateReply(id), { method: 'POST' }),
-  recompute: (id: string) => req<{ recompute: Recompute }>(StampyRoutes.recompute(id), { method: 'POST' }),
+  recompute: (id: string) => req<{ ok: boolean }>(StampyRoutes.recompute(id), { method: 'POST' }),
   reread: (id: string) => req<unknown>(StampyRoutes.reread(id), { method: 'POST' }),
   decide: (id: string, action: 'approve' | 'reject', worker: WorkerIdentity, note?: string) =>
     req<{ decision: Decision }>(StampyRoutes.decide(id), json({ action, note: note || undefined, worker })),
@@ -91,8 +100,8 @@ export function subscribeEvents(onEvent: (e: StampyEvent) => void, onState?: (op
   const es = new EventSource(workerUrl(StampyRoutes.events));
   const handle = (m: MessageEvent) => {
     try {
-      const e = JSON.parse(String(m.data)) as StampyEvent;
-      if (e && e.type === 'case.updated' && typeof e.caseId === 'string') onEvent(e);
+      const e = EventSchema.safeParse(JSON.parse(String(m.data)));
+      if (e.success) onEvent(e.data);
     } catch {
       /* ignore keep-alives and malformed frames */
     }
