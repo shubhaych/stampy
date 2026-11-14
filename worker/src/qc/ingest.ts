@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { z } from 'zod';
 import { RELEASE, STATE_CODES } from './release';
 
-/** Explicit allowlist. No income, error coding or constructed QC benefit leaves this boundary. */
+/** Explicit allowlist. No income, error coding or constructed QC benefit leaves this boundary as data (replay.ts prints verified values only onto generated documents). */
 export const PublicRecord = z.object({
   id: z.string(), householdId: z.string(), state: z.string(), stateName: z.string(), stateFips: z.string(),
   sampleMonth: z.string(), householdSize: z.number().int().nullable(), benefitMonthly: z.number().nullable(),

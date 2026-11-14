@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { z } from 'zod';
 import { Badge, Fig } from '@/components/ui';
 
@@ -81,10 +81,15 @@ export function QcBrowser() {
   const [selected, setSelected] = useState<string | null>(null);
   const [detail, setDetail] = useState<z.infer<typeof Detail> | null>(null);
   const [detailError, setDetailError] = useState<string | null>(null);
+  const first = useRef(true);
 
   useEffect(() => {
     const control = new AbortController();
-    setPage(null); setLoading(true); setError(null); setSelected(null); setDetail(null);
+    setPage(null); setLoading(true); setError(null); setDetail(null);
+    // A link from a case (?record=qc-2024-…) opens straight onto that published row.
+    const linked = first.current ? new URLSearchParams(window.location.search).get('record') : null;
+    first.current = false;
+    setSelected(linked && /^qc-\d{4}-\d+$/.test(linked) ? linked : null);
     const query = new URLSearchParams({ offset: String(offset), limit: '25' });
     if (state) query.set('state', state);
     void read(`/qc/cases?${query}`, Page, control.signal).then((data) => { if (!control.signal.aborted) setPage(data); })

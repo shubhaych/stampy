@@ -1,7 +1,7 @@
 ---
 slug: stampy-ui
 machine: a
-owns: ["web/components/stampy/**", "web/lib/stampy/**", "web/app/cases/**", "web/styles/stampy.css", "web/components/ui/deck-page.tsx", "web/styles/qc.css", "worker/src/qc/**", "worker/test/qc/**", "scripts/qc-ingest.ts", "data/qc/**", "worker/src/app.ts"]
+owns: ["web/components/stampy/**", "web/lib/stampy/**", "web/app/cases/**", "web/styles/stampy.css", "web/components/ui/deck-page.tsx", "web/styles/qc.css", "worker/src/qc/**", "worker/test/qc/**", "scripts/qc-ingest.ts", "data/qc/**", "worker/src/app.ts", "worker/src/email/templates.ts", "worker/test/stampy-ui/**"]
 reads: ["packages/contracts/**", "worker/**"]
 transferred_from: stampy-loop
 touches_module: false

@@ -7,7 +7,8 @@ import { CaseBundleV2 as BundleSchema, CaseSummary as SummarySchema, StampyEvent
 import { StampyRoutes } from '@stampy/contracts/stampy';
 import type { Decision, Outreach, StampyEvent } from '@stampy/contracts/stampy';
 
-export const WORKER_URL = (process.env.NEXT_PUBLIC_WORKER_URL || 'http://localhost:8787').replace(/\/$/, '');
+/** Same-origin bridge (web/app/cases/api): the browser never calls the worker host directly. */
+export const WORKER_URL = '/cases/api';
 
 export class ApiError extends Error {
   constructor(message: string, readonly status: number) {
@@ -45,7 +46,7 @@ async function req<T>(path: string, init?: RequestInit): Promise<T> {
   try {
     res = await fetch(workerUrl(path), { cache: 'no-store', signal: AbortSignal.timeout(90_000), ...init });
   } catch {
-    throw new ApiError(`Could not reach the worker at ${WORKER_URL}. Is it running?`, 0);
+    throw new ApiError('Could not reach Stampy. Check that the web server is running, then retry.', 0);
   }
   let body: unknown = null;
   const text = await res.text();
