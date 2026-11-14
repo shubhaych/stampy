@@ -4,5 +4,7 @@
   "catalog": "https://snapqcdata.net/datafiles",
   "url": "https://snapqcdata.net/sites/default/files/2026-08/qcfy2024_csv.zip",
   "documentation": "https://snapqcdata.net/sites/default/files/2026-08/FY-2024-Tech-Doc.pdf",
+  "sha256": "b8b29b8593f78aa51c48332c47d2d92fa5bbecf5346570acb45e26f2d9ebd2b5",
+  "member": "qc_pub_fy2024.csv",
   "documentedRows": 44891
 }

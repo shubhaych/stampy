@@ -7,7 +7,7 @@ import { pipeline } from 'node:stream/promises';
 import { ROOT } from './lib';
 
 const release = JSON.parse(readFileSync(join(ROOT, 'data/qc/fy2024-release.json'), 'utf8')) as {
-  fiscalYear: number; revision: string; url: string; catalog: string; documentation: string; documentedRows: number;
+  fiscalYear: number; revision: string; url: string; catalog: string; documentation: string; documentedRows: number; sha256: string; member: string;
 };
 const destination = join(ROOT, 'data/qc/raw', `qcfy${release.fiscalYear}_${release.revision}.zip`);
 const temporary = `${destination}.partial`;
@@ -17,7 +17,10 @@ if (existsSync(destination)) {
 }
 mkdirSync(join(ROOT, 'data/qc/raw'), { recursive: true });
 try {
-  const response = await fetch(release.url, { signal: AbortSignal.timeout(60_000), redirect: 'follow' });
+  const response = await fetch(release.url, { signal: AbortSignal.timeout(60_000), redirect: 'follow', headers: {
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36',
+    referer: release.catalog,
+  } });
   if (!response.ok || !response.body) throw new Error(`download returned HTTP ${response.status}; obtain the public archive manually from ${release.catalog} if access is blocked`);
   const finalUrl = new URL(response.url);
   if (finalUrl.protocol !== 'https:' || finalUrl.hostname !== 'snapqcdata.net') throw new Error(`unexpected download host: ${finalUrl.hostname}`);
@@ -27,6 +30,7 @@ try {
   const bytes = readFileSync(temporary);
   if (bytes.length < 1024 || bytes.length > 50_000_000 || bytes.subarray(0, 4).toString('hex') !== '504b0304') throw new Error('download is not an expected ZIP archive');
   const sha256 = createHash('sha256').update(bytes).digest('hex');
+  if (sha256 !== release.sha256) throw new Error('archive checksum differs from the reviewed release');
   renameSync(temporary, destination);
   writeFileSync(`${destination}.meta.json`, JSON.stringify({ ...release, retrievedAt: new Date().toISOString(), sha256, bytes: bytes.length }, null, 2) + '\n');
   console.log(`Saved public-use FY${release.fiscalYear} archive (${bytes.length} bytes, SHA-256 ${sha256})`);
