@@ -1,0 +1,15 @@
+{
+  "_note": "Source labels for every figure on screen (facts ledger, master prompt section 3). href stays null until verified; never guess a URL. Titles here are the only allow-list for check:rules.",
+  "sources": [
+    { "id": "fna-fy2025-per", "label": "USDA FNA FY2025 PER", "title": "USDA FNA FY2025 payment error rate", "href": null },
+    { "id": "fns-qc-fy2023", "label": "FNS QC Annual Report FY2023", "title": "SNAP Quality Control Annual Report FY2023", "href": null },
+    { "id": "qc-memo-25-04", "label": "QC Policy Memo 25-04", "title": "QC Policy Memo 25-04", "href": null },
+    { "id": "statute-cost-share", "label": "Statute, as summarized in research doc", "title": "Cost-share statute (as summarized)", "href": null },
+    { "id": "nyu-2026", "label": "NYU simulation on public QC data, Nov 2, 2026", "title": "NYU simulation on public QC data", "href": null },
+    { "id": "proof-news-micara", "label": "Proof News, Nov 5, 2026", "title": "Michigan MiCARA pre-certification reviews", "href": null },
+    { "id": "wv-watch-sas", "label": "West Virginia Watch", "title": "West Virginia SAS Payment Integrity emergency purchase", "href": null },
+    { "id": "newsweek-fl", "label": "Newsweek", "title": "Florida DCF data analytics appropriation", "href": null },
+    { "id": "fna-ptig", "label": "FNA PTIG and EVS grants", "title": "Process and Technology Improvement Grants; Earnings Verification Support", "href": null },
+    { "id": "fy2027-cola", "label": "FY2027 COLA parameters (via PolicyEngine-US)", "title": "FY2027 SNAP COLA", "href": null }
+  ]
+}

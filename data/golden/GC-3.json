@@ -1,0 +1,75 @@
+{
+  "_note": "Hand-authored golden case (master prompt section 11). Badge: Fixture. qc_* values are server-only (truth.ts).",
+  "qc_history": {
+    "qc_id": "GC-3",
+    "source": "golden",
+    "fiscal_year": 2027,
+    "fiscal_month": null,
+    "state": "NY",
+    "household_size": 2,
+    "cert_earned_income": 0,
+    "qc_earned_income": 0,
+    "cert_unearned_income": 1610,
+    "qc_unearned_income": 1610,
+    "cert_shelter": 880,
+    "qc_shelter": 880,
+    "cert_net_income": null,
+    "qc_net_income": null,
+    "cert_allotment": null,
+    "qc_allotment": null,
+    "error_amount": null,
+    "error_direction": "under",
+    "error_element": "Standard utility allowance",
+    "error_nature": null,
+    "error_responsibility": "agency",
+    "discovery_method": null,
+    "raw_json": null
+  },
+  "case_file": {
+    "id": "GC-3",
+    "qcId": "GC-3",
+    "state": "NY",
+    "fiscalYear": 2027,
+    "householdSize": 2,
+    "members": [
+      {
+        "id": "M1",
+        "name": "Grace O.",
+        "age": 67,
+        "relationship": "head",
+        "elderlyOrDisabled": true
+      },
+      {
+        "id": "M2",
+        "name": "Samuel O.",
+        "age": 70,
+        "relationship": "spouse",
+        "elderlyOrDisabled": true
+      }
+    ],
+    "filedAt": "2026-10-01",
+    "receivedAt": "2026-10-02",
+    "expedited": {
+      "screened": true,
+      "eligible": false
+    },
+    "interviewRecorded": true,
+    "budget": {
+      "unearnedIncomeMonthly": 1610,
+      "dependentCareMonthly": 0,
+      "medicalMonthly": 0,
+      "childSupportMonthly": 0,
+      "allotmentMonthly": null,
+      "earnedIncomeMonthly": 0,
+      "payFrequency": null,
+      "grossPerPeriod": null,
+      "rentMonthly": 880,
+      "suaApplied": false,
+      "suaType": "none"
+    },
+    "employerAlias": null,
+    "landlordAlias": null,
+    "prov": "fixture",
+    "story": "Heating bill, SUA not applied"
+  }
+}

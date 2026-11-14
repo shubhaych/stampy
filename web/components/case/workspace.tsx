@@ -78,7 +78,7 @@ export function Workspace({ bundle }: { bundle: CaseBundle }) {
                       </button>
                     ))}
                   </div>
-                  <div className="relative mx-auto aspect-[8.5/11] max-w-[520px] rounded-md bg-[#FBF9F4] p-6 text-[#222] shadow-lg" aria-label={`${doc?.title ?? 'Document'} (synthetic rendering)`}>
+                  <div className="relative mx-auto aspect-[8.5/11] max-w-[520px] rounded-md bg-[#FBF9F4] p-6 text-[#222] shadow-lg" data-figure aria-label={`${doc?.title ?? 'Document'} (synthetic rendering)`}>
                     <div className="flex items-center justify-between font-mono text-[0.7rem] uppercase tracking-widest text-[#666]">
                       <span>{doc?.title}</span>
                       {doc ? <Badge kind={doc.prov} /> : null}
@@ -144,8 +144,8 @@ export function Workspace({ bundle }: { bundle: CaseBundle }) {
               </div>
             </div>
             {proofFlag ? (
-              <div className="panel" data-testid="proof-thread">
-                <h2 className="panel__title">Proof thread</h2>
+              <div className="panel" data-testid="proof-thread" data-figure>
+                <h2 className="panel__title">Proof thread <Badge kind={bundle.case.prov} /></h2>
                 {(() => {
                   const f = flags.find((x) => x.id === proofFlag)!;
                   const exs = bundle.extractions.filter((e) => f.extractionIds.includes(e.id));

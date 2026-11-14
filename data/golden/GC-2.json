@@ -1,0 +1,68 @@
+{
+  "_note": "Hand-authored golden case (master prompt section 11). Badge: Fixture. qc_* values are server-only (truth.ts).",
+  "qc_history": {
+    "qc_id": "GC-2",
+    "source": "golden",
+    "fiscal_year": 2027,
+    "fiscal_month": null,
+    "state": "TX",
+    "household_size": 1,
+    "cert_earned_income": 1890,
+    "qc_earned_income": 1890,
+    "cert_unearned_income": 0,
+    "qc_unearned_income": 0,
+    "cert_shelter": 1050,
+    "qc_shelter": 1350,
+    "cert_net_income": null,
+    "qc_net_income": null,
+    "cert_allotment": null,
+    "qc_allotment": null,
+    "error_amount": null,
+    "error_direction": "under",
+    "error_element": "Shelter deduction",
+    "error_nature": null,
+    "error_responsibility": "agency",
+    "discovery_method": null,
+    "raw_json": null
+  },
+  "case_file": {
+    "id": "GC-2",
+    "qcId": "GC-2",
+    "state": "TX",
+    "fiscalYear": 2027,
+    "householdSize": 1,
+    "members": [
+      {
+        "id": "M1",
+        "name": "Maria R.",
+        "age": 41,
+        "relationship": "head",
+        "elderlyOrDisabled": false
+      }
+    ],
+    "filedAt": "2026-10-06",
+    "receivedAt": "2026-10-06",
+    "expedited": {
+      "screened": true,
+      "eligible": false
+    },
+    "interviewRecorded": true,
+    "budget": {
+      "unearnedIncomeMonthly": 0,
+      "dependentCareMonthly": 0,
+      "medicalMonthly": 0,
+      "childSupportMonthly": 0,
+      "allotmentMonthly": null,
+      "earnedIncomeMonthly": 1890,
+      "payFrequency": "semimonthly",
+      "grossPerPeriod": 945,
+      "rentMonthly": 1050,
+      "suaApplied": true,
+      "suaType": "heating_cooling"
+    },
+    "employerAlias": null,
+    "landlordAlias": "Landlord B (synthetic)",
+    "prov": "fixture",
+    "story": "Lease rent and occupants"
+  }
+}

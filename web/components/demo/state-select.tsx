@@ -64,7 +64,8 @@ export function StateSelect({ states }: { states: StateProfile[] }) {
             );
           })}
         </div>
-        <div className="mt-4 flex flex-wrap gap-3 text-xs opacity-75">
+        {/* PER band labels are legend text, not figures. */}
+        <div className="mt-4 flex flex-wrap gap-3 text-xs opacity-75" data-badge-exempt>
           {BANDS.map((b, i) => (
             <span key={b.label} className="inline-flex items-center gap-1.5">
               <span className="inline-block h-3 w-3 rounded-sm" style={{ background: `color-mix(in srgb, var(--over) ${20 + i * 18}%, var(--deck-2))` }} />

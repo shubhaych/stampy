@@ -1,0 +1,18 @@
+{
+  "_note": "CFR sections cited in the app. verified flips to true only after the section is checked on eCFR (policy feature). Unverified cites render with '(unverified)'.",
+  "citations": [
+    { "section": "7 CFR 272.4", "verified": false, "checked_at": null },
+    { "section": "7 CFR 272.8", "verified": false, "checked_at": null },
+    { "section": "7 CFR 273.1", "verified": false, "checked_at": null },
+    { "section": "7 CFR 273.2(c)", "verified": false, "checked_at": null },
+    { "section": "7 CFR 273.2(e)", "verified": false, "checked_at": null },
+    { "section": "7 CFR 273.2(f)", "verified": false, "checked_at": null },
+    { "section": "7 CFR 273.2(i)", "verified": false, "checked_at": null },
+    { "section": "7 CFR 273.9", "verified": false, "checked_at": null },
+    { "section": "7 CFR 273.9(d)", "verified": false, "checked_at": null },
+    { "section": "7 CFR 273.9(d)(6)", "verified": false, "checked_at": null },
+    { "section": "7 CFR 273.10", "verified": false, "checked_at": null },
+    { "section": "7 CFR 273.10(c)", "verified": false, "checked_at": null },
+    { "section": "7 CFR 273.10(g)", "verified": false, "checked_at": null }
+  ]
+}

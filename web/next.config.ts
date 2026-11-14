@@ -14,8 +14,8 @@ for (const f of ['.env.local', '.env']) {
   }
 }
 const slot = Number(process.env.SLOT ?? 0) || 0;
-process.env.NEXT_PUBLIC_WORKER_URL ??= `http://localhost:${8787 + slot}`;
-process.env.NEXT_PUBLIC_DATA ??= 'fixture';
+process.env.NEXT_PUBLIC_WORKER_URL ||= `http://localhost:${8787 + slot}`;
+process.env.NEXT_PUBLIC_DATA ||= 'fixture';
 
 const nextConfig: NextConfig = {
   transpilePackages: ['@cleancase/contracts', '@cleancase/snap-rules'],

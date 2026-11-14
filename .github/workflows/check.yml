@@ -1,0 +1,19 @@
+name: check
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run env:build && git diff --exit-code .env.example
+      - run: npm run db:build
+      - run: npm run check
+      - run: npx playwright install --with-deps chromium
+      - run: npm run e2e

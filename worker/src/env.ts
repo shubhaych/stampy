@@ -10,7 +10,7 @@ for (const f of ['.env.local', '.env']) {
   }
 }
 
-const s = (k: string, d = '') => process.env[k] ?? d;
+const s = (k: string, d = '') => process.env[k] || d;
 const n = (k: string, d: number) => {
   const v = Number(process.env[k]);
   return Number.isFinite(v) && process.env[k] !== '' && process.env[k] !== undefined ? v : d;

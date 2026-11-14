@@ -8,6 +8,7 @@
     "start": "tsx src/server.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.8.0",
     "@cleancase/contracts": "*",
     "@cleancase/snap-rules": "*",
     "@hono/node-server": "^1.19.6",

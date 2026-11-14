@@ -1,0 +1,82 @@
+{
+  "_note": "Hand-authored golden case (master prompt section 11). Badge: Fixture. qc_* values are server-only (truth.ts).",
+  "qc_history": {
+    "qc_id": "GC-4",
+    "source": "golden",
+    "fiscal_year": 2027,
+    "fiscal_month": null,
+    "state": "CA",
+    "household_size": 3,
+    "cert_earned_income": 2150,
+    "qc_earned_income": 2150,
+    "cert_unearned_income": 0,
+    "qc_unearned_income": 0,
+    "cert_shelter": 1200,
+    "qc_shelter": 1200,
+    "cert_net_income": null,
+    "qc_net_income": null,
+    "cert_allotment": null,
+    "qc_allotment": null,
+    "error_amount": null,
+    "error_direction": "none",
+    "error_element": null,
+    "error_nature": null,
+    "error_responsibility": "none",
+    "discovery_method": null,
+    "raw_json": null
+  },
+  "case_file": {
+    "id": "GC-4",
+    "qcId": "GC-4",
+    "state": "CA",
+    "fiscalYear": 2027,
+    "householdSize": 3,
+    "members": [
+      {
+        "id": "M1",
+        "name": "Priya K.",
+        "age": 29,
+        "relationship": "head",
+        "elderlyOrDisabled": false
+      },
+      {
+        "id": "M2",
+        "name": "Dev K.",
+        "age": 6,
+        "relationship": "child",
+        "elderlyOrDisabled": false
+      },
+      {
+        "id": "M3",
+        "name": "Asha K.",
+        "age": 3,
+        "relationship": "child",
+        "elderlyOrDisabled": false
+      }
+    ],
+    "filedAt": "2026-10-08",
+    "receivedAt": "2026-10-08",
+    "expedited": {
+      "screened": true,
+      "eligible": false
+    },
+    "interviewRecorded": true,
+    "budget": {
+      "unearnedIncomeMonthly": 0,
+      "dependentCareMonthly": 300,
+      "medicalMonthly": 0,
+      "childSupportMonthly": 0,
+      "allotmentMonthly": null,
+      "earnedIncomeMonthly": 2150,
+      "payFrequency": "semimonthly",
+      "grossPerPeriod": 1075,
+      "rentMonthly": 1200,
+      "suaApplied": true,
+      "suaType": "heating_cooling"
+    },
+    "employerAlias": "Employer D (synthetic)",
+    "landlordAlias": "Landlord D (synthetic)",
+    "prov": "fixture",
+    "story": "Clean case"
+  }
+}

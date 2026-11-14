@@ -1,0 +1,68 @@
+{
+  "_note": "Hand-authored golden case (master prompt section 11). Badge: Fixture. qc_* values are server-only (truth.ts).",
+  "qc_history": {
+    "qc_id": "GC-1",
+    "source": "golden",
+    "fiscal_year": 2027,
+    "fiscal_month": null,
+    "state": "CA",
+    "household_size": 1,
+    "cert_earned_income": 1240,
+    "qc_earned_income": 2666,
+    "cert_unearned_income": 0,
+    "qc_unearned_income": 0,
+    "cert_shelter": 950,
+    "qc_shelter": 950,
+    "cert_net_income": null,
+    "qc_net_income": null,
+    "cert_allotment": null,
+    "qc_allotment": null,
+    "error_amount": null,
+    "error_direction": "over",
+    "error_element": "Wages and salaries",
+    "error_nature": null,
+    "error_responsibility": "agency",
+    "discovery_method": null,
+    "raw_json": null
+  },
+  "case_file": {
+    "id": "GC-1",
+    "qcId": "GC-1",
+    "state": "CA",
+    "fiscalYear": 2027,
+    "householdSize": 1,
+    "members": [
+      {
+        "id": "M1",
+        "name": "Lena T.",
+        "age": 34,
+        "relationship": "head",
+        "elderlyOrDisabled": false
+      }
+    ],
+    "filedAt": "2026-10-03",
+    "receivedAt": "2026-10-03",
+    "expedited": {
+      "screened": true,
+      "eligible": false
+    },
+    "interviewRecorded": false,
+    "budget": {
+      "unearnedIncomeMonthly": 0,
+      "dependentCareMonthly": 0,
+      "medicalMonthly": 0,
+      "childSupportMonthly": 0,
+      "allotmentMonthly": null,
+      "earnedIncomeMonthly": 1240,
+      "payFrequency": "monthly",
+      "grossPerPeriod": 1240,
+      "rentMonthly": 950,
+      "suaApplied": true,
+      "suaType": "heating_cooling"
+    },
+    "employerAlias": "Employer A (synthetic)",
+    "landlordAlias": null,
+    "prov": "fixture",
+    "story": "Pay frequency"
+  }
+}
