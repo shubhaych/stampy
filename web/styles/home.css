@@ -7,7 +7,7 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 
 /* ---------- 1. Hero + Case Wheel (A1) ---------- */
-.hero { position: relative; min-height: min(92vh, 860px); overflow: hidden; display: flex; align-items: flex-end; margin-top: -60px; padding-top: 60px;
+.hero { position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden; display: flex; align-items: flex-end; margin-top: -60px; padding-top: 60px;
   background: radial-gradient(120% 80% at 50% 100%, var(--ctp-surface0) 0%, var(--paper) 62%); }
 .hero__copy { position: relative; z-index: 200; padding-bottom: 56px; text-align: center; display: grid; justify-items: center; }
 .hero__eyebrow { margin-bottom: 14px; color: var(--pine) !important; }
@@ -17,7 +17,7 @@ html.lenis, html.lenis body { height: auto; }
 .hero__ctas .text-cta { color: var(--pine); }
 .hero__secondary { font-size: 0.95rem; color: var(--ink-soft); text-decoration: underline; text-underline-offset: 4px; }
 .hero__mono { margin-top: 18px; font-size: 0.64rem; }
-@media (max-width: 719px) { .hero { min-height: auto; padding-top: 96px; } .hero__copy { text-align: left; justify-items: start; } .hero__ctas { justify-content: flex-start; } }
+@media (max-width: 719px) { .hero { padding-top: 96px; align-items: center; } .hero__copy { text-align: left; justify-items: start; } .hero__ctas { justify-content: flex-start; } }
 
 .case-wheel { position: absolute; inset: 0; z-index: 1; cursor: grab; touch-action: pan-y; }
 .case-wheel:active { cursor: grabbing; }
