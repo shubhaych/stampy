@@ -28,7 +28,7 @@ export function GateSheet({ bundle }: { bundle: CaseBundle }) {
               <li key={i.id} className="rounded-lg border p-3" style={{ borderColor: i.resolved || i.override ? 'var(--deck-line)' : 'var(--over)' }} data-gate={i.rule}>
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span><span className="num text-xs opacity-60">{i.rule} · station {i.station}</span> <strong className="ml-2">{i.label}</strong></span>
-                  {i.resolved ? <span className="eyebrow" style={{ color: 'var(--glow)' }}>Resolved</span> : i.override ? <span className="eyebrow" style={{ color: 'var(--over)' }}>Overridden: {i.override.reason}</span> : (
+                  {i.resolved ? <span className="eyebrow" style={{ color: 'var(--glow)' }}>Resolved</span> : i.override ? <span className="eyebrow" style={{ color: 'var(--over-ink)' }}>Overridden: {i.override.reason}</span> : (
                     <span className="flex gap-2">
                       <Link className="btn btn--ghost" style={{ minHeight: 32 }} href={ROUTES.case(bundle.case.id)}>Go to station</Link>
                       <Btn variant="ghost" style={{ minHeight: 32 }} onClick={() => resolve(i.id)}>Mark resolved</Btn>

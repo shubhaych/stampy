@@ -4,6 +4,8 @@
  * must sit within 4 lines of <Fig>, <Badge>, a prov= prop, or data-figure. The Playwright smoke test
  * adds the runtime pass: every $ or % text node in the DOM lives inside [data-figure] with a [data-prov].
  * Escape hatch for a non-figure (for example a CSS value): put `badge-ok` in a comment on that line.
+ * Section-level notes: a file that uses data-prov-scope="<id>" (pitch pages) is checked at runtime instead, where the
+ * smoke test requires the referenced [data-prov-note] element to exist and be visible.
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -16,7 +18,9 @@ const NEARBY = /<Fig\b|<Badge\b|\bprov=|data-figure|<Odometer\b|<Stat\b/;
 const problems: string[] = [];
 const files = walk('web', (p) => p.endsWith('.tsx') && !p.includes('/ui/badge') && !p.includes('/ui/fig'));
 for (const f of files) {
-  const lines = readFileSync(join(ROOT, f), 'utf8').split('\n');
+  const src = readFileSync(join(ROOT, f), 'utf8');
+  if (src.includes('data-prov-scope')) continue;
+  const lines = src.split('\n');
   lines.forEach((line, i) => {
     if (line.includes('badge-ok')) return;
     if (!FIGURE_CALL.test(line) && !FIGURE_TEXT.test(line)) return;

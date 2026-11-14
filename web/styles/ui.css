@@ -12,7 +12,7 @@
 .badge--fixture { color: var(--over-ink); border-color: var(--over); background: color-mix(in srgb, var(--over) 12%, transparent); }
 .badge--sandbox { color: var(--ink-soft); border: 1px dotted var(--ink-soft); }
 .app-dark .badge--replay { color: var(--under); }
-.app-dark .badge--fixture { color: var(--over); }
+.app-dark .badge--fixture { color: var(--over-ink); }
 .app-dark .badge--synthetic { color: var(--voice); border-color: var(--voice); }
 .app-dark .badge--sandbox { color: var(--deck-ink-soft); border-color: var(--deck-ink-soft); }
 .app-dark .badge--live { background: var(--proof); color: var(--on-accent); border-color: var(--proof); }
@@ -63,7 +63,7 @@
 /* ---------- HudFrame ---------- */
 .hud-frame {
   position: relative; overflow: hidden; border-radius: var(--radius-glass); padding: 18px;
-  background: linear-gradient(160deg, var(--ctp-surface0) 0%, var(--ctp-mantle) 55%, var(--ctp-crust) 100%);
+  background: linear-gradient(160deg, #ffffff 0%, var(--ctp-mantle) 100%); box-shadow: 0 18px 50px rgba(76, 79, 105, .12);
   border: 1px solid var(--glass-line); color: var(--deck-ink);
 }
 .hud-frame__corner { position: absolute; width: 14px; height: 14px; border-color: var(--glow); border-style: solid; border-width: 0; opacity: 0.85; z-index: 2; }
@@ -95,13 +95,13 @@ body:has(.app-dark) .site-footer { border-top-color: var(--deck-line); color: va
 .deck-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 .deck-table th { text-align: left; font-family: var(--font-mono); font-weight: 500; font-size: 0.64rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--deck-ink-soft); padding: 8px 10px; border-bottom: 1px solid var(--deck-line); }
 .deck-table td { padding: 10px; border-bottom: 1px solid var(--deck-line); vertical-align: middle; }
-.fixture-ribbon { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--over); display: inline-flex; gap: 8px; align-items: center; }
+.fixture-ribbon { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--over-ink); display: inline-flex; gap: 8px; align-items: center; }
 
 /* ---------- Direction ---------- */
 .dir { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
 .dir--over { color: var(--over-ink); }
 .dir--under { color: var(--under-ink); }
-.app-dark .dir--over { color: var(--over); }
+.app-dark .dir--over { color: var(--over-ink); }
 .app-dark .dir--under { color: var(--under); }
 .dir--none { color: var(--ink-soft); }
 .app-dark .dir--none { color: var(--deck-ink-soft); }
@@ -143,7 +143,7 @@ body:has(.app-dark) .site-footer { border-top-color: var(--deck-line); color: va
 
 /* ---------- ClockChip ---------- */
 .clock-chip { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 0.7rem; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--deck-line); color: var(--deck-ink); white-space: nowrap; }
-.clock-chip--warn { border-color: var(--over); color: var(--over); }
+.clock-chip--warn { border-color: var(--over); color: var(--over-ink); }
 .clock-chip--breach { border-color: var(--conflict); color: var(--conflict); }
 
 /* ---------- StampMark (A3) ---------- */
