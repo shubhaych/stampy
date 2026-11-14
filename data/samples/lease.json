@@ -1,0 +1,67 @@
+{
+  "name": "lease",
+  "label": "Residential lease, page 1",
+  "filename": "lease.png",
+  "contentType": "image/png",
+  "kind": "lease",
+  "description": "Page 1 of the lease for 418 Alder Street, Apt 3, Fresno, CA 93721.",
+  "uploadByDefault": true,
+  "synthetic": true,
+  "summary": "Lease from Alder Street Properties LLC (fictional) to Lena Torres for 03/01/2026 to 02/28/2027 at $950.00 per month, with three occupants; landlord pays water and trash, tenant pays electricity and gas.",
+  "width": 1275,
+  "height": 1650,
+  "fields": [
+    {
+      "field": "tenant_names",
+      "value": "Lena Torres",
+      "page": 1,
+      "line": "Tenant: Lena Torres",
+      "bbox": {
+        "x": 0.156,
+        "y": 0.1968,
+        "w": 0.0749,
+        "h": 0.0133
+      },
+      "confidence": 1
+    },
+    {
+      "field": "household_members",
+      "value": "Lena Torres, Maya Torres, Leo Torres",
+      "page": 1,
+      "line": "Occupants: Lena Torres, Maya Torres, Leo Torres",
+      "bbox": {
+        "x": 0.181,
+        "y": 0.2794,
+        "w": 0.2376,
+        "h": 0.0134
+      },
+      "confidence": 1
+    },
+    {
+      "field": "monthly_rent",
+      "value": "$950.00",
+      "page": 1,
+      "line": "Monthly rent: $950.00, due on the 1st",
+      "bbox": {
+        "x": 0.1986,
+        "y": 0.4317,
+        "w": 0.051,
+        "h": 0.0133
+      },
+      "confidence": 1
+    },
+    {
+      "field": "utilities_included",
+      "value": "water and trash",
+      "page": 1,
+      "line": "Utilities: landlord pays water and trash; tenant pays electricity and gas",
+      "bbox": {
+        "x": 0.2507,
+        "y": 0.4961,
+        "w": 0.0958,
+        "h": 0.0134
+      },
+      "confidence": 1
+    }
+  ]
+}

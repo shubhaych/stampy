@@ -20,7 +20,7 @@ Stack: Node 22, TS strict, npm workspaces, SQLite (`better-sqlite3`, only the wo
 **Data honesty**
 8. Every number on screen has a badge: Live, Replay, Synthetic, Fixture, Sandbox. A hard-coded number is never Live. `check:badges` enforces it.
 9. Synthetic documents come from QC-verified values: replay "catches" demonstrate the pipeline, not detection rates. Say so in the debrief and dashboard.
-10. Footer on every page (verbatim): "Synthetic documents generated from public USDA QC records. No real applicants. Stampy flags and cites; a merit-staff worker decides. Not an eligibility system."
+10. Footer on every page (verbatim): "Synthetic demo documents. No real applicants. Stampy flags and cites; a merit-staff worker decides. Not an eligibility system."
 11. Voice calls open with AI disclosure, purpose, and a human-callback offer. Simulated, or only to `VOICE_ALLOWED_NUMBERS`. Household consent recorded before the call button enables. Minimum disclosure.
 
 **Engineering**

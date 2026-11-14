@@ -29,38 +29,36 @@
     "env:check": "tsx scripts/env-check.ts",
     "dev-ports": "tsx scripts/dev-ports.ts",
     "db:migrate": "tsx db/migrate.ts",
-    "db:build": "tsx scripts/db-build.ts",
-    "db:reset": "tsx scripts/db-build.ts --reset",
-    "qc:ingest": "tsx scripts/qc-ingest.ts",
-    "qc:sample": "tsx scripts/qc-sample.ts",
-    "policy:fetch": "tsx scripts/policy-fetch.ts",
-    "policy:index": "tsx scripts/policy-index.ts",
-    "eval": "tsx scripts/eval.ts",
-    "hello:db": "tsx scripts/hello-db.ts",
+    "db:reset": "tsx db/migrate.ts --reset",
     "hello:claude": "tsx scripts/hello-claude.ts",
-    "hello:moss": "tsx scripts/hello-moss.ts",
-    "hello:deepgram": "tsx scripts/hello-deepgram.ts",
     "hello:policyengine": "tsx scripts/hello-policyengine.ts",
     "e2e": "playwright test",
-    "prepare": "simple-git-hooks || true"
+    "prepare": "simple-git-hooks || true",
+    "db:up": "docker compose up -d --wait",
+    "db:down": "docker compose down",
+    "pe:setup": "cd services/policyengine && uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python -r requirements.txt",
+    "pe:serve": "services/policyengine/.venv/bin/python -I services/policyengine/server.py",
+    "samples": "tsx scripts/samples.ts",
+    "live:setup": "tsx scripts/live-setup.ts",
+    "demo:run": "tsx scripts/demo-run.ts"
   },
   "simple-git-hooks": {
     "pre-commit": "npx tsx scripts/check-ownership.ts --staged && npx tsx scripts/check-rules.ts"
   },
   "dependencies": {
-    "better-sqlite3": "^12.4.1",
+    "pg": "^8.23.1",
     "zod": "^4.1.12"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.56.1",
-    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.19.1",
     "eslint": "^10.15.0",
     "simple-git-hooks": "^2.13.1",
     "tsx": "^4.20.6",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.72.2",
-    "vitest": "^4.0.8"
+    "vitest": "^4.0.8",
+    "@types/pg": "^8.15.6"
   }
 }

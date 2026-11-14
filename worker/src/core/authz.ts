@@ -4,7 +4,7 @@
  * - Review requires a supervisor whose identity differs from the certifier.
  * - The `ai` identity may only append AI rows and drafts; it can never call a human function.
  */
-export type Role = 'worker' | 'supervisor' | 'ai' | 'system';
+export type Role = 'worker' | 'supervisor' | 'ai' | 'system' | 'applicant';
 
 export interface Identity {
   id: string;

@@ -1,0 +1,38 @@
+[
+  {
+    "name": "application-form",
+    "label": "Application for Food Assistance",
+    "filename": "application-form.png",
+    "contentType": "image/png",
+    "kind": "application_form",
+    "description": "The signed food-assistance application Lena Torres filed on 11/02/2026.",
+    "uploadByDefault": true
+  },
+  {
+    "name": "paystub-2026-09",
+    "label": "Pay stub, September 2026",
+    "filename": "paystub-2026-09.png",
+    "contentType": "image/png",
+    "kind": "paystub",
+    "description": "Harbor Lane Grocery earnings statement for the 09/06/2026 – 09/19/2026 pay period.",
+    "uploadByDefault": true
+  },
+  {
+    "name": "lease",
+    "label": "Residential lease, page 1",
+    "filename": "lease.png",
+    "contentType": "image/png",
+    "kind": "lease",
+    "description": "Page 1 of the lease for 418 Alder Street, Apt 3, Fresno, CA 93721.",
+    "uploadByDefault": true
+  },
+  {
+    "name": "paystub-2026-10-photo",
+    "label": "Pay stub photo, October 2026",
+    "filename": "paystub-2026-10-photo.jpg",
+    "contentType": "image/jpeg",
+    "kind": "paystub",
+    "description": "Phone photo of the Harbor Lane Grocery stub for 10/04/2026 – 10/17/2026, emailed in later by the applicant.",
+    "uploadByDefault": false
+  }
+]

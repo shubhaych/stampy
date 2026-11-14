@@ -1,26 +1,15 @@
-/** Server-Sent Events bus. Every payload is checked for truth keys and dropped if any are present (hard rule 15). */
-import type { ServerEvent } from '@stampy/contracts';
-import { containsTruth } from './core/truth';
+/** In-process Server-Sent Events bus. Events carry ids only; pages refetch the case bundle. */
+import type { StampyEvent } from '@stampy/contracts/stampy';
 
-type Listener = (e: ServerEvent) => void;
+type Listener = (e: StampyEvent) => void;
 const listeners = new Set<Listener>();
-let dropped = 0;
 
 export function subscribe(fn: Listener): () => void {
   listeners.add(fn);
   return () => listeners.delete(fn);
 }
 
-export function publish(e: ServerEvent): boolean {
-  if (containsTruth(e)) {
-    dropped += 1;
-    console.error(`[events] dropped an event containing truth keys (type=${e.type})`);
-    return false;
-  }
+export function publishCase(caseId: string, action: string): void {
+  const e: StampyEvent = { type: 'case.updated', caseId, action, at: new Date().toISOString() };
   for (const fn of listeners) fn(e);
-  return true;
-}
-
-export function droppedCount(): number {
-  return dropped;
 }

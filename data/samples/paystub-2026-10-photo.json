@@ -1,0 +1,106 @@
+{
+  "name": "paystub-2026-10-photo",
+  "label": "Pay stub photo, October 2026",
+  "filename": "paystub-2026-10-photo.jpg",
+  "contentType": "image/jpeg",
+  "kind": "paystub",
+  "description": "Phone photo of the Harbor Lane Grocery stub for 10/04/2026 – 10/17/2026, emailed in later by the applicant.",
+  "uploadByDefault": false,
+  "synthetic": true,
+  "summary": "Photo of a biweekly earnings statement for Lena Torres: 80.00 hours at $15.50 for $1,240.00 gross and $1,088.26 net, paid 10/23/2026, YTD gross $27,280.00.",
+  "width": 1200,
+  "height": 1600,
+  "fields": [
+    {
+      "field": "applicant_name",
+      "value": "Lena Torres",
+      "page": 1,
+      "line": "Employee: Lena Torres",
+      "bbox": {
+        "x": 0.0945,
+        "y": 0.2177,
+        "w": 0.073,
+        "h": 0.0133
+      },
+      "confidence": 1
+    },
+    {
+      "field": "employer_name",
+      "value": "Harbor Lane Grocery",
+      "page": 1,
+      "line": "Harbor Lane Grocery",
+      "bbox": {
+        "x": 0.1285,
+        "y": 0.0932,
+        "w": 0.221,
+        "h": 0.0238
+      },
+      "confidence": 1
+    },
+    {
+      "field": "gross_pay_amount",
+      "value": "$1,240.00",
+      "page": 1,
+      "line": "Gross pay 80.00 $1,240.00 1,760.00 $27,280.00",
+      "bbox": {
+        "x": 0.5689,
+        "y": 0.3341,
+        "w": 0.0549,
+        "h": 0.0124
+      },
+      "confidence": 1
+    },
+    {
+      "field": "pay_frequency",
+      "value": "Biweekly",
+      "page": 1,
+      "line": "Pay frequency: Biweekly",
+      "bbox": {
+        "x": 0.8428,
+        "y": 0.1429,
+        "w": 0.0527,
+        "h": 0.0124
+      },
+      "confidence": 1
+    },
+    {
+      "field": "pay_date",
+      "value": "10/23/2026",
+      "page": 1,
+      "line": "Pay date: 10/23/2026",
+      "bbox": {
+        "x": 0.831,
+        "y": 0.1262,
+        "w": 0.0639,
+        "h": 0.0126
+      },
+      "confidence": 1
+    },
+    {
+      "field": "pay_period_start",
+      "value": "10/04/2026",
+      "page": 1,
+      "line": "Pay period: 10/04/2026 – 10/17/2026",
+      "bbox": {
+        "x": 0.7539,
+        "y": 0.111,
+        "w": 0.0639,
+        "h": 0.0126
+      },
+      "confidence": 1
+    },
+    {
+      "field": "pay_period_end",
+      "value": "10/17/2026",
+      "page": 1,
+      "line": "Pay period: 10/04/2026 – 10/17/2026",
+      "bbox": {
+        "x": 0.8304,
+        "y": 0.1095,
+        "w": 0.064,
+        "h": 0.0126
+      },
+      "confidence": 1
+    }
+  ]
+}

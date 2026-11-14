@@ -1,0 +1,106 @@
+{
+  "name": "paystub-2026-09",
+  "label": "Pay stub, September 2026",
+  "filename": "paystub-2026-09.png",
+  "contentType": "image/png",
+  "kind": "paystub",
+  "description": "Harbor Lane Grocery earnings statement for the 09/06/2026 – 09/19/2026 pay period.",
+  "uploadByDefault": true,
+  "synthetic": true,
+  "summary": "Biweekly earnings statement for Lena Torres: 80.00 hours at $15.50 for $1,240.00 gross and $1,088.26 net, paid 09/25/2026, YTD gross $24,800.00.",
+  "width": 1275,
+  "height": 1650,
+  "fields": [
+    {
+      "field": "applicant_name",
+      "value": "Lena Torres",
+      "page": 1,
+      "line": "Employee: Lena Torres",
+      "bbox": {
+        "x": 0.0698,
+        "y": 0.1707,
+        "w": 0.079,
+        "h": 0.0133
+      },
+      "confidence": 1
+    },
+    {
+      "field": "employer_name",
+      "value": "Harbor Lane Grocery",
+      "page": 1,
+      "line": "Harbor Lane Grocery",
+      "bbox": {
+        "x": 0.1114,
+        "y": 0.0352,
+        "w": 0.2398,
+        "h": 0.0218
+      },
+      "confidence": 1
+    },
+    {
+      "field": "gross_pay_amount",
+      "value": "$1,240.00",
+      "page": 1,
+      "line": "Gross pay 80.00 $1,240.00 1,600.00 $24,800.00",
+      "bbox": {
+        "x": 0.5814,
+        "y": 0.3112,
+        "w": 0.0593,
+        "h": 0.0127
+      },
+      "confidence": 1
+    },
+    {
+      "field": "pay_frequency",
+      "value": "Biweekly",
+      "page": 1,
+      "line": "Pay frequency: Biweekly",
+      "bbox": {
+        "x": 0.8865,
+        "y": 0.103,
+        "w": 0.057,
+        "h": 0.0127
+      },
+      "confidence": 1
+    },
+    {
+      "field": "pay_date",
+      "value": "09/25/2026",
+      "page": 1,
+      "line": "Pay date: 09/25/2026",
+      "bbox": {
+        "x": 0.8743,
+        "y": 0.0842,
+        "w": 0.0692,
+        "h": 0.0127
+      },
+      "confidence": 1
+    },
+    {
+      "field": "pay_period_start",
+      "value": "09/06/2026",
+      "page": 1,
+      "line": "Pay period: 09/06/2026 – 09/19/2026",
+      "bbox": {
+        "x": 0.791,
+        "y": 0.0655,
+        "w": 0.0692,
+        "h": 0.0127
+      },
+      "confidence": 1
+    },
+    {
+      "field": "pay_period_end",
+      "value": "09/19/2026",
+      "page": 1,
+      "line": "Pay period: 09/06/2026 – 09/19/2026",
+      "bbox": {
+        "x": 0.8743,
+        "y": 0.0655,
+        "w": 0.0692,
+        "h": 0.0127
+      },
+      "confidence": 1
+    }
+  ]
+}
