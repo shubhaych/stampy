@@ -29,8 +29,8 @@
 .nav--over-hero { background: transparent; border-bottom-color: transparent; }
 .nav--deck { background: color-mix(in srgb, var(--deck) 92%, transparent); border-bottom-color: var(--deck-line); color: var(--deck-ink); backdrop-filter: blur(10px); }
 .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 16px; }
-.nav__mark { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 650; font-size: 1.2rem; letter-spacing: -0.03em; }
-.nav__logo { flex: none; color: var(--pine); transition: transform .18s ease; }
+.nav__mark { display: inline-flex; align-items: center; gap: 11px; font-family: var(--font-display); font-weight: 650; font-size: 1.6rem; line-height: 1; letter-spacing: -0.03em; }
+.nav__logo { flex: none; width: 32px; height: 32px; color: var(--pine); transition: transform .18s ease; }
 .nav__mark:hover .nav__logo { transform: rotate(4deg) scale(1.06); } /* the stamp straightens as if being pressed */
 .nav__links { display: none; gap: 22px; font-size: 0.92rem; color: var(--ink-soft); }
 .nav--deck .nav__links { color: var(--deck-ink-soft); }
