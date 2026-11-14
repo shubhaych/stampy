@@ -1,6 +1,6 @@
 import type { Hono } from 'hono';
 import type Database from 'better-sqlite3';
-import type { IntegrationStatus } from '@cleancase/contracts';
+import type { IntegrationStatus } from '@stampy/contracts';
 import type { Env } from '../env';
 
 export interface FeatureContext {

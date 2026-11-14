@@ -9,7 +9,7 @@ worker (Hono, Node)  ── the only process that opens SQLite (WAL)
    ├─ features/   qc · docgen · ledger · planner · seats · recompute · policy · voice · eval   (each: register(app), status())
    └─ adapters    fixture | live per integration (features/_template/adapter.ts); parse fails closed to needs_human
    ▼
-data/db/cleancase.db   qc_history (main table) + app tables, migrations per feature folder
+data/db/stampy.db   qc_history (main table) + app tables, migrations per feature folder
 ```
 
 ## Guarantees and where they are enforced

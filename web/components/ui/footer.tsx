@@ -1,4 +1,4 @@
-import { FOOTER_TEXT } from '@cleancase/contracts';
+import { FOOTER_TEXT } from '@stampy/contracts';
 
 /** Hard rule 10: this line, verbatim, on every page. */
 export function Footer() {

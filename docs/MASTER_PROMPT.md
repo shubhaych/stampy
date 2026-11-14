@@ -1,4 +1,4 @@
-# CleanCase master prompt (v2)
+# Stampy master prompt (v2)
 
 > Saved verbatim at scaffold time (Phase 0, step 0). Section 0 overrides anything below that disagrees.
 
@@ -18,7 +18,7 @@
 Everywhere below, "CREAO", "reducer", `module/`, `STDB_*`, `module_bindings` and `stdb:*` are replaced by: Claude role, service-layer function, `db/`, `DB_PATH`, nothing (no generated bindings), `db:*`. Where this section and a later section disagree, this section wins; the later sections have been patched to match where practical.
 
 **0.2 The historical data is the main database (confirmed).** The USDA QC public-use data, loaded as table `qc_history`, is the system of record that everything else reads from.
-- File: `data/db/cleancase.db` (git-ignored, built locally on each machine by `npm run db:build`, deterministic). One row per QC case across every fiscal year available; columns come from the verified `column-map.ts`; both the state-certified and the QC-verified values are stored, plus the error coding. The build prints the row count and it must equal the source file's row count; never pad or fabricate rows. Until the raw file is present, load `data/golden` into the same table with `source='golden'` and badge everything Fixture.
+- File: `data/db/stampy.db` (git-ignored, built locally on each machine by `npm run db:build`, deterministic). One row per QC case across every fiscal year available; columns come from the verified `column-map.ts`; both the state-certified and the QC-verified values are stored, plus the error coding. The build prints the row count and it must equal the source file's row count; never pad or fabricate rows. Until the raw file is present, load `data/golden` into the same table with `source='golden'` and badge everything Fixture.
 - Everything reads it: the shift queue (a seeded SQL draw), docgen, state profiles (aggregates for the tile map), base rates for the risk view, the dashboard projection, and replay evaluation. App tables (`case_state`, `fact`, `flag`, ...) reference `qc_history.qc_id`.
 - `case_truth` (the QC-verified values) is reachable only through `worker/src/core/truth.ts`, which refuses to run before a case's debrief. The web app never opens the database: it talks to the worker (REST for reads and actions, `GET /events` SSE for live updates).
 - Migrations: `db/migrations/<feature>/NNN_name.sql`, applied in (feature, number) order by `db/migrate.ts` (frozen). Each feature owns its own migration folder, so two machines never edit the same file. `audit_log` is append-only, enforced by `BEFORE UPDATE` / `BEFORE DELETE` triggers that `RAISE(ABORT)`.
@@ -71,9 +71,9 @@ Legend (also the pipeline visual's colors): gray = sources and facts, amber = op
 
 # 1. Role and mission
 
-You are the lead engineer and scaffolder for **CleanCase**, a hackathon build. Two people on two computers will run AI coding agents on this one repo at the same time for the next ~36 hours (`<fill in: event name, deadline>`). Your first job is to build the foundation so that neither side can break the other. Your second job is the homepage. Then you help ship features.
+You are the lead engineer and scaffolder for **Stampy**, a hackathon build. Two people on two computers will run AI coding agents on this one repo at the same time for the next ~36 hours (`<fill in: event name, deadline>`). Your first job is to build the foundation so that neither side can break the other. Your second job is the homepage. Then you help ship features.
 
-**One sentence.** CleanCase is a document-grounded second check that runs before SNAP benefits go out: AI seats read the case file, flag what does not match with the exact source line and the rule it breaks, a deterministic engine recomputes the benefit, a voice agent calls employers and landlords to verify what the documents cannot, and a merit-staff worker decides everything.
+**One sentence.** Stampy is a document-grounded second check that runs before SNAP benefits go out: AI seats read the case file, flag what does not match with the exact source line and the rule it breaks, a deterministic engine recomputes the benefit, a voice agent calls employers and landlords to verify what the documents cannot, and a merit-staff worker decides everything.
 
 **Pitch angle (do not drift from it).** Not "AI catches fraud." It is: *agency-caused income and deduction errors are most of the error dollars, and about 45% of them are visible in the case file. A second check before issuance, with proof, in both directions.* Timing: FY2027, the period being sampled right now, sets each state's FY2030 cost share.
 
@@ -92,7 +92,7 @@ A caseworker picks a state, gets a queue of cases drawn from the USDA QC public-
 # 2. Hard rules (copy these into AGENTS.md and enforce them in `scripts/check-rules.ts`)
 
 **Legal and product honesty**
-1. CleanCase never decides. Only merit staff certify (7 CFR 272.4). AI output is a flag, a citation, a question to ask, or a draft. Nothing the AI produces writes to the case file without a human accept click. The word "decision" in UI always belongs to the worker.
+1. Stampy never decides. Only merit staff certify (7 CFR 272.4). AI output is a flag, a citation, a question to ask, or a draft. Nothing the AI produces writes to the case file without a human accept click. The word "decision" in UI always belongs to the worker.
 2. Never deny on thin evidence. Unsure means: ask for more evidence, ask a question, or send to a person. No code path produces an automatic denial or an automatic correction.
 3. Accuracy in both directions. Overissuance risk and underissuance risk get the same visual weight, same urgency. Underpayments are reported, not hidden.
 4. Never say or imply: it detects fraud, it determines eligibility, it reduces a state's error rate by X%, it is FNA-approved, FedRAMP/StateRAMP-authorized or Pub 1075-compliant, it uses credit data to verify applicants, it is integrated with CalSAWS/TIERS/any state system, or its projected PER equals the official PER. `check:rules` greps UI strings for: `fraud`, `scam`, `deny`, `denied`, `denial`, `auto-approve`, `auto-correct`, `guarantee`, `FNA-approved`, `compliant with Pub 1075` (allow-list only for quoted source titles in `data/sources.json`).
@@ -103,7 +103,7 @@ A caseworker picks a state, gets a queue of cases drawn from the USDA QC public-
 **Data honesty (every number on screen carries a badge)**
 8. Badges: **Live** (computed now from database rows or a real API run), **Replay** (from the USDA QC public-use file, FY`<fill in>`), **Synthetic** (a document or call generated from a QC record or a persona), **Fixture** (recorded or hand-written test data), **Sandbox** (vendor sandbox). A hard-coded number is never Live. `scripts/check-badges.ts` fails the build when a rendered figure has no adjacent badge.
 9. Synthetic documents are generated from QC-verified values, so "the AI caught it" on replay cases demonstrates the pipeline, not real-world detection rates. The debrief and dashboard say so in plain words. Never present replay recall as a performance claim.
-10. Footer on every page: "Synthetic documents generated from public USDA QC records. No real applicants. CleanCase flags and cites; a merit-staff worker decides. Not an eligibility system."
+10. Footer on every page: "Synthetic documents generated from public USDA QC records. No real applicants. Stampy flags and cites; a merit-staff worker decides. Not an eligibility system."
 11. Voice: every call opens by stating it is an AI assistant calling on behalf of the agency, names the purpose, and offers a human callback. Calls are simulated or go only to numbers on `VOICE_ALLOWED_NUMBERS`. Household consent to a collateral contact is recorded in the UI before the call button enables. The agent discloses the minimum needed and never reveals benefit status beyond what the question requires.
 
 **Engineering**
@@ -141,7 +141,7 @@ Not allowed on screen: Mississippi's "$40M" claim (unsupported), any state-level
 Same stack as the Vouch project minus SpacetimeDB and CREAO: Node 22, TypeScript strict, npm workspaces, SQLite.
 
 ```
-cleancase/
+stampy/
   AGENTS.md  CLAUDE.md(@AGENTS.md)  PROGRESS.md  OWNERS.md  README.md
   .env.example (GENERATED from env/*.env)   env/*.env   .env.local (git-ignored)
   .features/            one claim file per feature branch (section 5)
@@ -153,7 +153,7 @@ cleancase/
   db/
     migrate.ts          frozen runner
     migrations/<feature>/NNN_name.sql   each feature owns its folder
-    (cleancase.db lives in data/db/, git-ignored)
+    (stampy.db lives in data/db/, git-ignored)
   worker/               Node 22 + Hono
     src/server.ts  src/env.ts  src/db.ts  src/events.ts (SSE)
     src/core/           authz, audit, control, truth
@@ -167,7 +167,7 @@ cleancase/
     styles/{tokens.css,home.css,demo.css,case.css,pipeline.css,resolve.css,voice.css,dashboard.css}
     lib/{data,routes.ts}   (lib/data talks to the worker over REST + SSE; web never opens the database)
   data/
-    db/                 cleancase.db (git-ignored; qc_history is the main table)
+    db/                 stampy.db (git-ignored; qc_history is the main table)
     golden/             4 hand-authored golden cases (section 11)
     qc/{raw(git-ignored),sample}/   states.json   sources.json
     policy/<source>/*.md   (fetched text only)
@@ -175,7 +175,7 @@ cleancase/
   e2e/                  Playwright smoke per route
 ```
 
-Read `web/node_modules/next/dist/docs/` before writing web code: this Next.js has breaking changes from older versions. SQLite facts: one writer, so only the worker opens `cleancase.db` (WAL mode on); the web app never does.
+Read `web/node_modules/next/dist/docs/` before writing web code: this Next.js has breaking changes from older versions. SQLite facts: one writer, so only the worker opens `stampy.db` (WAL mode on); the web app never does.
 
 # 5. The two-machine protocol (this is what keeps two AI-driven machines from colliding)
 
@@ -206,7 +206,7 @@ A is "Face" (everything people see), B is "Brain" (data, rules, agents, voice). 
 
 **5.2 Frozen hot files.** After tag `scaffold-v1` these change only through an `infra/` or `contract/` PR that is under 150 lines, merged within 30 minutes, and acknowledged by the other machine: `packages/contracts/**`, `db/migrate.ts`, `worker/src/features/index.ts`, `web/app/layout.tsx`, `web/styles/tokens.css`, all `package.json`, `package-lock.json`, `.env.example`. The scaffold pre-creates a stub for every feature, every route, every migration folder and every barrel import so that features fill in files and never add lines to shared ones. `.env.example` is generated from `env/<feature>.env` by `npm run env:build`; features edit only their own fragment. CSS: `globals.css` holds tokens and base only; every feature has its own CSS file.
 
-**5.3 Claim files, one per branch (no shared ledger).** `npm run feature:start -- <a|b> <slug>` creates branch `<machine>/<slug>`, a worktree at `../cleancase-wt/<machine>-<slug>`, and `.features/<slug>.md`:
+**5.3 Claim files, one per branch (no shared ledger).** `npm run feature:start -- <a|b> <slug>` creates branch `<machine>/<slug>`, a worktree at `../stampy-wt/<machine>-<slug>`, and `.features/<slug>.md`:
 
 ```yaml
 ---
@@ -230,7 +230,7 @@ It then pushes the branch immediately, so `npm run feature:list` (`git fetch` pl
 
 **5.5 Collision-proof runtime.**
 - `.env.local` (git-ignored) sets `MACHINE=a|b` and `SLOT=0..9`. `scripts/dev-ports.ts` derives `WEB_PORT=3000+SLOT`, `WORKER_PORT=8787+SLOT`, so several worktrees on one machine can run at once.
-- Databases are per machine: each machine builds its own `data/db/cleancase.db` (`npm run db:build`). There is no shared database and no publish step; the demo machine builds fresh. Migrations are per-feature folders, so schemas never collide.
+- Databases are per machine: each machine builds its own `data/db/stampy.db` (`npm run db:build`). There is no shared database and no publish step; the demo machine builds fresh. Migrations are per-feature folders, so schemas never collide.
 - Nothing generated is committed: there are no bindings. The browser talks to the worker over REST and SSE, so the contracts in `packages/contracts` are the only shared types.
 
 **5.6 Git rules.** Trunk-based. Branch `<machine>/<slug>`, short-lived (under 3 hours). Squash-merge PRs of under 400 lines after `npm run sync && npm run check`. Never force-push `main`. Dependencies: add with a tiny `infra/deps-<name>` PR merged immediately, then rebase. No merge commits on feature branches (rebase). Commit after each step with a one-line message. One file per event, never a shared append-only file: contract changes go in `packages/contracts/changes/<yyyymmdd-hhmm>-<slug>.md`, status goes in your own `status/<machine>.md`.
@@ -256,7 +256,7 @@ Do these in order; commit after each; stop for nothing missing. Ownership checks
 
 # 7. Design system
 
-**Decision.** Keep Vouch's editorial skeleton (serif display, calm scroll-driven scenes, quiet text CTAs, evidence cards) and Constructa's command deck (dark glass HUD, corner reticles, pulse divider, mono kickers) but change the palette so CleanCase reads as public-benefits accuracy, not retail fintech. Vouch's aubergine and marigold say "commerce." Pine, ledger paper and an amber/blue pair say "case file." The amber/blue pair becomes the product's visual signature: **amber = overissuance risk, blue = underissuance risk, always shown together.** If the team prefers Vouch's colors, only `tokens.css` changes.
+**Decision.** Keep Vouch's editorial skeleton (serif display, calm scroll-driven scenes, quiet text CTAs, evidence cards) and Constructa's command deck (dark glass HUD, corner reticles, pulse divider, mono kickers) but change the palette so Stampy reads as public-benefits accuracy, not retail fintech. Vouch's aubergine and marigold say "commerce." Pine, ledger paper and an amber/blue pair say "case file." The amber/blue pair becomes the product's visual signature: **amber = overissuance risk, blue = underissuance risk, always shown together.** If the team prefers Vouch's colors, only `tokens.css` changes.
 
 **Two surfaces.** Pitch pages (`/`) are light paper. Work pages (`/demo`, `/case`, `/dashboard`, `/system`) are the dark command deck, switched with `body:has(.app-dark)` exactly as Vouch does.
 
@@ -286,7 +286,7 @@ Contrast: all text pairs meet WCAG 2.1 AA; amber and blue are never the only sig
 **Component inventory (each is one small file in `web/components/ui`)**
 | Component | Spec |
 |---|---|
-| `Nav` | Sticky, solid paper on pitch pages (`over-hero` = transparent on the home hero), serif wordmark "CleanCase" with a small pine square mark, links: Demo, How it works, Numbers, System; right side a single underlined text CTA "Work a case". On deck pages: deck background, `--deck-ink`. Pill variant not used. |
+| `Nav` | Sticky, solid paper on pitch pages (`over-hero` = transparent on the home hero), serif wordmark "Stampy" with a small pine square mark, links: Demo, How it works, Numbers, System; right side a single underlined text CTA "Work a case". On deck pages: deck background, `--deck-ink`. Pill variant not used. |
 | `Badge` | Mono 0.58rem uppercase. Live = pine fill with paper text; Replay = outlined `--under`; Synthetic = dashed `--voice`; Fixture = `--over` outline on tint; Sandbox = dotted `--ink-soft`. Tooltip text from a single `TITLE` map. |
 | `TextCta` | Underlined serif-weight 650 text link, 2.75rem tall, no pill (Vouch style). `Btn` pill for in-app actions: primary (pine), ghost, `over`, `under`, `proof`. |
 | `HudFrame` | From Constructa: dark gradient panel, four 1px corner reticles in `--glow`, top-bar mono label with pulsing dot, 4% film grain. Used for the mini demo, voice panel, dashboard gauge. |
@@ -324,19 +324,19 @@ Optional image plates (leave slots, do not block on them): `web/public/images/ho
 Structure borrows Vouch's journey (sticky scroll scenes, stat beats, two-column analogy, evidence card, accordion "powered by") and Constructa's rhythm (hero, telemetry cards, HUD mini demo, divider pulses). Sections, in order:
 
 1. **Opening scene (A1 then A2 then A3)**, light paper, nav transparent over it.
-   Eyebrow (mono): `CleanCase · Pre-issuance accuracy for SNAP`.
+   Eyebrow (mono): `Stampy · Pre-issuance accuracy for SNAP`.
    H1: **Check the case before the benefit goes out.**
-   Sub: "CleanCase reads the case file, flags what doesn't match with the exact source line and the rule behind it, and recomputes the benefit. A merit-staff worker makes every decision."
+   Sub: "Stampy reads the case file, flags what doesn't match with the exact source line and the rule behind it, and recomputes the benefit. A merit-staff worker makes every decision."
    CTAs: text CTA "Work a case →" to `/demo`; secondary "See the numbers" scrolls to section 2. Mono line: `Every dollar right, in both directions · We never deny · We never auto-correct`.
    Scroll beats: Case Wheel deals in; scroll lifts the paystub into The Pass; the last beat ends on The Stamp with the caption "Flag. Cite. Recompute. A person decides."
-2. **The cost of getting it wrong (stat beats, Vouch `Dilemma` pattern).** Sticky track; each figure owns the stage alone, then clears: `$10.1B` (FY2025 improper payments, 10.62%), `6.65 of 11.68` (points of dollar error that agencies caused, FY2023), `55.5%` (variances in income). Each with a source chip and `<fill in>` href. Finale screen: **Two ways to be wrong**, editorial two-column ("Pressure A / Pressure B" layout with a vertical rule): *Overissue* ($9.04B, FY2023) and *Underissue* ($1.48B, 82% agency-caused), with the Ledger Beam (A4) between them. Copy: "Underpayments are errors too. CleanCase reports them with the same urgency."
+2. **The cost of getting it wrong (stat beats, Vouch `Dilemma` pattern).** Sticky track; each figure owns the stage alone, then clears: `$10.1B` (FY2025 improper payments, 10.62%), `6.65 of 11.68` (points of dollar error that agencies caused, FY2023), `55.5%` (variances in income). Each with a source chip and `<fill in>` href. Finale screen: **Two ways to be wrong**, editorial two-column ("Pressure A / Pressure B" layout with a vertical rule): *Overissue* ($9.04B, FY2023) and *Underissue* ($1.48B, 82% agency-caused), with the Ledger Beam (A4) between them. Copy: "Underpayments are errors too. Stampy reports them with the same urgency."
 3. **Why now (A5 Cost-Share Clock).** Title: "FY2027 is being sampled right now. It sets your FY2030 share." One line under: "Every case worked this year counts."
-4. **Where the answer lives (A6).** Title: "About 45% of errors are visible in the case file. The rest need a person." Then three cards (Constructa telemetry style, mono kickers): `01 · Read` (Document Reader and the seats), `02 · Ask` (interview questions CleanCase writes, never answers), `03 · Call` (Voice Verifier phones the employer or landlord).
+4. **Where the answer lives (A6).** Title: "About 45% of errors are visible in the case file. The rest need a person." Then three cards (Constructa telemetry style, mono kickers): `01 · Read` (Document Reader and the seats), `02 · Ask` (interview questions Stampy writes, never answers), `03 · Call` (Voice Verifier phones the employer or landlord).
 5. **How one case works (Decision Pipeline replay from 0.4, plus `CaseVsDoc`; Vouch `how-it-works` flow-steps as the mobile fallback).** Five steps: Read the documents · Compare to the case file · Cite the rule · Recompute both ways · Worker decides, with the paystub example rendered as `CaseVsDoc` ("Budgeted $1,240 / month" vs "Paystub: $1,240 biweekly = $2,666 / month"). Note: "A flag alone never changes a case."
 6. **Live preview (Constructa `InteractiveMiniDemo` pattern, inside `HudFrame` labelled `LIVE PREVIEW`, badge Fixture).** Auto-cycling loop with tabs `01 UPLOAD · 02 READ · 03 FLAG · 04 RECOMPUTE`, ~18 s cycle, pausable. Clicking a tab jumps to it. Ends on a button that opens `/demo`.
-7. **Voice spotlight.** Title: "When the document can't answer, CleanCase makes the call." A `HudFrame` with a looping Voice Bloom (A8) of a scripted employer call: AI disclosure line, question, answer, chips flying into "Pay frequency: biweekly (verified by employer, 0:42)". Right column: the four guardrails (discloses it is an AI, household consent first, human can take over, never accuses or negotiates). Badge: Synthetic.
+7. **Voice spotlight.** Title: "When the document can't answer, Stampy makes the call." A `HudFrame` with a looping Voice Bloom (A8) of a scripted employer call: AI disclosure line, question, answer, chips flying into "Pay frequency: biweekly (verified by employer, 0:42)". Right column: the four guardrails (discloses it is an AI, household consent first, human can take over, never accuses or negotiates). Badge: Synthetic.
 8. **Guardrails ("What we will never do").** Four stamped commitments: Never deny · Never auto-correct · Cite every flag · Both directions. Below, a quiet list headed "What we do not claim" with the section 2 rule 4 items rewritten as plain sentences. Honest framing is the trust signal.
-9. **Already happening (market proof).** One row of facts from ledger row 12, each with source chip. Tag line: "States are buying this category now. CleanCase starts as a free shadow-mode replay."
+9. **Already happening (market proof).** One row of facts from ledger row 12, each with source chip. Tag line: "States are buying this category now. Stampy starts as a free shadow-mode replay."
 10. **How a state starts.** Four-step rail (Vouch flow-step style): Replay the public QC file for your state (free) → Shadow mode on 200 closed cases, no system access → Paid pre-issuance pilot on one office queue → Accuracy report in both directions. Ask line: "200 closed QC cases or a de-identified replay."
 11. **Powered by (Vouch accordion).** Collapsed by default; each card says what the tool actually does in this product, one sentence, with a Live/Fixture/Sandbox badge that reflects `/system` status at runtime: Anthropic, Moss, SQLite with the QC history, Deepgram voice, PolicyEngine-US.
 12. **Closing CTA and footer.** "Work a case" text CTA, then the section 2 rule 10 footer line verbatim.
@@ -539,7 +539,7 @@ Now begin Phase 0 (section 6). Do not ask questions you can answer from this pro
 # 20. Feature session preamble (paste at the start of every later session, either machine)
 
 ```
-You are working on feature `<slug>` for CleanCase on machine `<a|b>`.
+You are working on feature `<slug>` for Stampy on machine `<a|b>`.
 1. Run `npm run sync`. Read AGENTS.md, OWNERS.md and .features/<slug>.md.
 2. Work only inside the paths in your claim file. If you need a change anywhere else, stop and write it under "Needs from the other machine" in your claim file and in status/<machine>.md, then continue with fixtures. Do not edit frozen hot files except through an infra/ or contract/ PR (<150 lines).
 3. Build against packages/contracts and fixtures. Never wait on the other machine. Never import across feature boundaries except through packages/contracts and packages/snap-rules.

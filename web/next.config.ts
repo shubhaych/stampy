@@ -18,7 +18,7 @@ process.env.NEXT_PUBLIC_WORKER_URL ||= `http://localhost:${8787 + slot}`;
 process.env.NEXT_PUBLIC_DATA ||= 'fixture';
 
 const nextConfig: NextConfig = {
-  transpilePackages: ['@cleancase/contracts', '@cleancase/snap-rules'],
+  transpilePackages: ['@stampy/contracts', '@stampy/snap-rules'],
   allowedDevOrigins: ['*.trycloudflare.com', '*.ngrok-free.app', '*.ngrok.app'],
   env: {
     NEXT_PUBLIC_WORKER_URL: process.env.NEXT_PUBLIC_WORKER_URL,

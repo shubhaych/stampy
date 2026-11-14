@@ -1,5 +1,5 @@
-import type { StateProfile } from '@cleancase/contracts';
-import { FIXTURE_QUEUE, FIXTURE_SYSTEM_STATUS, GOLDEN_BUNDLES, GOLDEN_DEBRIEFS } from '@cleancase/contracts/fixtures';
+import type { StateProfile } from '@stampy/contracts';
+import { FIXTURE_QUEUE, FIXTURE_SYSTEM_STATUS, GOLDEN_BUNDLES, GOLDEN_DEBRIEFS } from '@stampy/contracts/fixtures';
 import statesFile from '../../../data/states.json';
 import type { DataSource } from './index';
 

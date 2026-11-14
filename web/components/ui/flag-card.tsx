@@ -1,4 +1,4 @@
-import type { Flag } from '@cleancase/contracts';
+import type { Flag } from '@stampy/contracts';
 import { Direction } from './direction';
 import { Fig } from './fig';
 import { signedMoney } from '@/lib/format';

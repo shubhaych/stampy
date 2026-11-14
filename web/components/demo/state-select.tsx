@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { StateProfile } from '@cleancase/contracts';
+import type { StateProfile } from '@stampy/contracts';
 import { Badge, Btn, Fig, HudFrame } from '@/components/ui';
 import { data } from '@/lib/data';
 import { ROUTES } from '@/lib/routes';

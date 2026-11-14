@@ -1,4 +1,4 @@
-import { CaseBundle, Debrief, QueueItem, ServerEvent, Shift, StateProfile, SystemStatus, WorkerRoutes } from '@cleancase/contracts';
+import { CaseBundle, Debrief, QueueItem, ServerEvent, Shift, StateProfile, SystemStatus, WorkerRoutes } from '@stampy/contracts';
 import type { z } from 'zod';
 import type { DataSource } from './index';
 

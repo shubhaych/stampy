@@ -1,5 +1,5 @@
 import type Database from 'better-sqlite3';
-import type { Control } from '@cleancase/contracts';
+import type { Control } from '@stampy/contracts';
 import { assertCan, type Identity } from './authz';
 import { appendAudit } from './audit';
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { CaseBundle } from '@cleancase/contracts';
+import type { CaseBundle } from '@stampy/contracts';
 import { Badge, Btn, Direction, Fig } from '@/components/ui';
 import { money } from '@/lib/format';
 

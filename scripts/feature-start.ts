@@ -1,6 +1,6 @@
 /**
  * npm run feature:start -- <a|b> <slug> [--no-worktree] [--no-push]
- * Creates branch <machine>/<slug>, a worktree at ../cleancase-wt/<machine>-<slug>, and the claim file
+ * Creates branch <machine>/<slug>, a worktree at ../stampy-wt/<machine>-<slug>, and the claim file
  * .features/<slug>.md with `owns` copied from OWNERS.md. Commits and pushes immediately so
  * `npm run feature:list` shows the claim on the other machine.
  */
@@ -25,7 +25,7 @@ const branch = `${machine}/${slug}`;
 git('fetch', 'origin', 'main');
 const base = git('rev-parse', '--verify', 'origin/main') ? 'origin/main' : 'main';
 const useWorktree = !flags.has('--no-worktree');
-const wt = resolve(ROOT, '..', 'cleancase-wt', `${machine}-${slug}`);
+const wt = resolve(ROOT, '..', 'stampy-wt', `${machine}-${slug}`);
 let cwd = ROOT;
 if (useWorktree) {
   mkdirSync(resolve(wt, '..'), { recursive: true });

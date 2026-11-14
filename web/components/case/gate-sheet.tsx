@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import type { CaseBundle, GateItem } from '@cleancase/contracts';
-import { validOverride } from '@cleancase/snap-rules';
+import type { CaseBundle, GateItem } from '@stampy/contracts';
+import { validOverride } from '@stampy/snap-rules';
 import { Badge, Btn, DeckPage, StampMark } from '@/components/ui';
 import { ROUTES } from '@/lib/routes';
 

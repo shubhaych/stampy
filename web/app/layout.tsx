@@ -21,8 +21,8 @@ const dmSans = DM_Sans({ variable: '--font-dm', subsets: ['latin'], display: 'sw
 const jetbrains = JetBrains_Mono({ variable: '--font-jetbrains', subsets: ['latin'], display: 'swap' });
 
 export const metadata: Metadata = {
-  title: { default: 'CleanCase', template: '%s · CleanCase' },
-  description: 'A document-grounded second check before SNAP benefits go out. CleanCase flags and cites; a merit-staff worker decides.',
+  title: { default: 'Stampy', template: '%s · Stampy' },
+  description: 'A document-grounded second check before SNAP benefits go out. Stampy flags and cites; a merit-staff worker decides.',
 };
 
 export const viewport: Viewport = { themeColor: '#F2EFE7', width: 'device-width', initialScale: 1 };

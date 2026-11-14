@@ -1,7 +1,7 @@
 /**
  * FROZEN after scaffold-v1. Applies db/migrations/<feature>/NNN_name.sql in (feature, number) order.
  * Each feature owns its own folder, so two machines never edit the same migration file.
- * Usage: npm run db:migrate   (DB_PATH, default data/db/cleancase.db)
+ * Usage: npm run db:migrate   (DB_PATH, default data/db/stampy.db)
  */
 import Database from 'better-sqlite3';
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync } from 'node:fs';
@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const MIGRATIONS_DIR = join(HERE, 'migrations');
-export const DEFAULT_DB_PATH = 'data/db/cleancase.db';
+export const DEFAULT_DB_PATH = 'data/db/stampy.db';
 
 export interface MigrationFile { feature: string; number: number; name: string; path: string }
 

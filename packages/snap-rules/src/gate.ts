@@ -1,4 +1,4 @@
-import type { AgentRun, CaseFile, Flag, GateItem, OpenQuestion, StepState } from '@cleancase/contracts';
+import type { AgentRun, CaseFile, Flag, GateItem, OpenQuestion, StepState } from '@stampy/contracts';
 import { STATIONS } from './steps';
 
 export interface GateInput {

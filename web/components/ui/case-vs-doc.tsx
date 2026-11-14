@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { BBox, Prov } from '@cleancase/contracts';
+import type { BBox, Prov } from '@stampy/contracts';
 import { Fig } from './fig';
 
 /** "Case file vs Document": budgeted value beside the value read from the document, with its crop and bbox. */

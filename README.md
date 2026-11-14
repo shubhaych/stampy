@@ -1,4 +1,4 @@
-# CleanCase (repo: stampy)
+# Stampy (repo: stampy)
 
 A document-grounded second check before SNAP benefits go out. AI roles read the case file and flag what does not match, with the source line and the rule; a deterministic engine recomputes; a voice agent verifies with employers and landlords; **a merit-staff worker decides everything.** Not an eligibility system.
 
@@ -31,7 +31,7 @@ Everything runs in fixture mode with no keys. `npm run env:check` shows what is 
 ## Two machines
 
 ```bash
-npm run feature:start -- a home     # branch a/home, worktree ../cleancase-wt/a-home, claim file pushed
+npm run feature:start -- a home     # branch a/home, worktree ../stampy-wt/a-home, claim file pushed
 npm run feature:list                # who is doing what
 npm run sync                        # before work and before every push
 npm run check                       # typecheck, tests, check:rules, check:badges, check:ownership

@@ -1,6 +1,6 @@
 import { Badge, DeckPage } from '@/components/ui';
 import { DecisionPipeline } from '@/components/pipeline/decision-pipeline';
-import { GC1_WORKED_BUNDLE } from '@cleancase/contracts/fixtures';
+import { GC1_WORKED_BUNDLE } from '@stampy/contracts/fixtures';
 import { data, DATA_MODE } from '@/lib/data';
 
 export const metadata = { title: 'System' };

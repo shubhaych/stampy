@@ -1,5 +1,5 @@
 /** Server-Sent Events bus. Every payload is checked for truth keys and dropped if any are present (hard rule 15). */
-import type { ServerEvent } from '@cleancase/contracts';
+import type { ServerEvent } from '@stampy/contracts';
 import { containsTruth } from './core/truth';
 
 type Listener = (e: ServerEvent) => void;

@@ -1,4 +1,4 @@
-import type { Prov } from '@cleancase/contracts';
+import type { Prov } from '@stampy/contracts';
 
 /** Hard rule 8: every number on screen sits next to one of these. */
 export const BADGE_LABEL: Record<Prov, string> = { live: 'Live', replay: 'Replay', synthetic: 'Synthetic', fixture: 'Fixture', sandbox: 'Sandbox' };

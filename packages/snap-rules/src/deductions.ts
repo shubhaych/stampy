@@ -1,4 +1,4 @@
-import type { CaseBudget, HouseholdMember } from '@cleancase/contracts';
+import type { CaseBudget, HouseholdMember } from '@stampy/contracts';
 
 export interface DeductionBreakdown {
   standard: number | null;

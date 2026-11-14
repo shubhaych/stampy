@@ -1,5 +1,5 @@
 import type Database from 'better-sqlite3';
-import type { AuditEntry } from '@cleancase/contracts';
+import type { AuditEntry } from '@stampy/contracts';
 import type { Identity } from './authz';
 import { publish } from '../events';
 

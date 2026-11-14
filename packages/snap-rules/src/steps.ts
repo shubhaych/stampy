@@ -4,7 +4,7 @@
  * Citations with verify: true must be checked on eCFR before display; the UI shows
  * them as unverified until data/policy/citations.json says otherwise.
  */
-import type { StationId } from '@cleancase/contracts';
+import type { StationId } from '@stampy/contracts';
 
 export interface LegalBasis {
   cite: string;

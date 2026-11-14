@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import type { CaseBundle } from '@cleancase/contracts';
+import type { CaseBundle } from '@stampy/contracts';
 import { Badge } from '@/components/ui';
 import { buildPipeline, type NodeKind, type PipelineNode } from './graph';
 

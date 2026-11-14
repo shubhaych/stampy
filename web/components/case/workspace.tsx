@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import type { CaseBundle, Flag, StationId } from '@cleancase/contracts';
-import { STATIONS } from '@cleancase/snap-rules';
+import type { CaseBundle, Flag, StationId } from '@stampy/contracts';
+import { STATIONS } from '@stampy/snap-rules';
 import { Badge, ClockChip, ExpeditedChip, Fig, FlagCard, StationRail, Direction } from '@/components/ui';
 import { DecisionPipeline } from '@/components/pipeline/decision-pipeline';
 import { ResolvePanel } from '@/components/resolve/resolve-panel';

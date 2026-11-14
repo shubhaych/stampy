@@ -1,4 +1,4 @@
-/** The worker is the only process that opens cleancase.db (single writer, WAL). */
+/** The worker is the only process that opens stampy.db (single writer, WAL). */
 import type Database from 'better-sqlite3';
 import { migrate, openDb } from '../../db/migrate';
 import { env } from './env';

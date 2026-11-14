@@ -1,0 +1,20 @@
+# Local Postgres for Stampy (the evidence ledger and everything else). `npm run db:up` starts it.
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: stampy-postgres
+    environment:
+      POSTGRES_USER: stampy
+      POSTGRES_PASSWORD: stampy
+      POSTGRES_DB: stampy
+    ports:
+      - "5433:5432"
+    volumes:
+      - stampy-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stampy -d stampy"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+volumes:
+  stampy-pg:

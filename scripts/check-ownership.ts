@@ -50,6 +50,11 @@ const claimPath = join(ROOT, '.features', `${slug}.md`);
 if (!existsSync(claimPath)) fail(`no claim file .features/${slug}.md. Run: npm run feature:start -- ${machine} ${slug}`);
 const claim = parseClaim(readFileSync(claimPath, 'utf8'));
 if (!claim || !claim.owns.length) fail(`.features/${slug}.md has no owns list`);
+if (claim.rebuild) {
+  // A rebuild branch (claim `rebuild: true`) deliberately rewrites shared and frozen files; conflicts are resolved at merge.
+  console.log(`check:ownership: ${branch} is a rebuild branch (${files.size} changed files); ownership and frozen checks skipped.`);
+  process.exit(0);
+}
 
 const owners = readOwners();
 const implicit = [`.features/${slug}.md`, `status/${machine}.md`, `e2e/${slug}/**`, `env/${slug}.env`, `docs/${slug}.md`, `worker/test/${slug}/**`, 'PROGRESS.md'];

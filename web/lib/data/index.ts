@@ -3,7 +3,7 @@
  * NEXT_PUBLIC_DATA=fixture reads packages/contracts/fixtures; live talks to the worker over REST + SSE.
  * Both return the same contract types, so features build against fixtures and flip to live unchanged.
  */
-import type { CaseBundle, Debrief, QueueItem, ServerEvent, Shift, StateProfile, SystemStatus } from '@cleancase/contracts';
+import type { CaseBundle, Debrief, QueueItem, ServerEvent, Shift, StateProfile, SystemStatus } from '@stampy/contracts';
 import { fixtureSource } from './fixture';
 import { liveSource } from './live';
 

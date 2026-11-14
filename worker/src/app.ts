@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { streamSSE } from 'hono/streaming';
-import type { IntegrationStatus, ServerEvent, SystemStatus } from '@cleancase/contracts';
-import { WorkerRoutes } from '@cleancase/contracts';
+import type { IntegrationStatus, ServerEvent, SystemStatus } from '@stampy/contracts';
+import { WorkerRoutes } from '@stampy/contracts';
 import { FEATURES, type FeatureContext } from './features/index';
 import { subscribe } from './events';
 import { getControl } from './core/control';

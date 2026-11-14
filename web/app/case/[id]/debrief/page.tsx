@@ -1,4 +1,4 @@
-import { REPLAY_CAVEAT } from '@cleancase/contracts';
+import { REPLAY_CAVEAT } from '@stampy/contracts';
 import { Badge, DeckPage, Fig, HudFrame } from '@/components/ui';
 import { data } from '@/lib/data';
 import { money } from '@/lib/format';

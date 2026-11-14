@@ -1,11 +1,11 @@
-# CleanCase: VC-Grade Deep Dive on a Pre-Issuance SNAP Payment-Accuracy Layer
+# Stampy: VC-Grade Deep Dive on a Pre-Issuance SNAP Payment-Accuracy Layer
 
-CleanCase is worth building as a company. The pitch should not be "AI catches fraud." It should be "a document-grounded second check before benefits go out, aimed at the agency-caused income and deduction errors that make up most error dollars." There is also a timing point you need to get right. The FY2028 cost share is already locked to periods that have closed: FY2025 has been published and FY2026 ended September 30, 2026. Under the statute, FY2029 and later use the rate from three years earlier, so **FY2027, the period being sampled right now, sets each state's FY2030 cost share.** Pitch it that way to states.
+Stampy is worth building as a company. The pitch should not be "AI catches fraud." It should be "a document-grounded second check before benefits go out, aimed at the agency-caused income and deduction errors that make up most error dollars." There is also a timing point you need to get right. The FY2028 cost share is already locked to periods that have closed: FY2025 has been published and FY2026 ended September 30, 2026. Under the statute, FY2029 and later use the rate from three years earlier, so **FY2027, the period being sampled right now, sets each state's FY2030 cost share.** Pitch it that way to states.
 
 ## TL;DR
 
 - **The market is real and states are buying now.** The FY2025 national payment error rate was 10.62% ($10.1B; 9.28% over, 1.33% under). In FY2023, agency-caused errors made up 6.65 of the 11.68 points of dollar error. Income variances were 55.5% of all variances, and 44.5% of variances were discoverable from the case file alone. States are already contracting: Florida's FY2026-27 budget gave DCF $4M to "competitively procure a vendor to provide an electronic data analytics solution" using "machine learning" (Newsweek). West Virginia made an $876,259 emergency purchase of SAS Payment Integrity for Food Assistance (West Virginia Watch), and Nevada also picked SAS. Pennsylvania hired Nava, and North Carolina won $1.75M to flag "missing, duplicated, or inconsistent evidence." Maximus has launched an "accuracy assistant." You are entering an emerging category, not creating one.
-- **Build Vouch's architecture again, mapped onto SNAP's legal constraints.** Only state merit staff may determine eligibility (7 CFR 272.4), and FNA's AI framework says agencies should stop using AI whose outputs are "accepted without appropriate scrutiny." So CleanCase flags and cites, a deterministic rules engine (PolicyEngine-US) recomputes, and a merit worker decides. Moss is almost certainly the "MOSS" you mean (moss.dev, a sub-10 ms semantic search runtime); use it for policy-manual retrieval. CREAO runs the named analyst seats over its run API with webhooks. Keep CRS (credit-bureau identity data) out of eligibility decisions entirely; at most, show it as a labeled, sandbox-only step-up identity signal.
+- **Build Vouch's architecture again, mapped onto SNAP's legal constraints.** Only state merit staff may determine eligibility (7 CFR 272.4), and FNA's AI framework says agencies should stop using AI whose outputs are "accepted without appropriate scrutiny." So Stampy flags and cites, a deterministic rules engine (PolicyEngine-US) recomputes, and a merit worker decides. Moss is almost certainly the "MOSS" you mean (moss.dev, a sub-10 ms semantic search runtime); use it for policy-manual retrieval. CREAO runs the named analyst seats over its run API with webhooks. Keep CRS (credit-bureau identity data) out of eligibility decisions entirely; at most, show it as a labeled, sandbox-only step-up identity signal.
 - **Go-to-market:** start with free shadow-mode replays on closed QC cases or the public QC file, then a sub-threshold pilot or a subcontract under an incumbent or civic-tech prime. Fund it with FNA grants: Process and Technology Improvement Grants (up to $2M, and nonprofits can lead with a state letter) and the $38M Earnings Verification Support grants. Plan for 9 to 18 months to first real revenue, at $250K to $2M per state per year.
 
 ## Key Findings
@@ -15,7 +15,7 @@ CleanCase is worth building as a company. The pitch should not be "AI catches fr
    - Agencies caused 56.98% of variances, rising to 81.99% of underpayment variances.
    - 63.97% of variances occurred at or before the most recent certification; 35.09% occurred after it.
 2. **About half of errors are document-visible, and the rest need people.** 44.54% of variances were found in the case file, 35.00% from the household, and 20.46% through collateral contacts. A document-reading AI can realistically address the first bucket and part of the third. The household bucket needs interviews.
-3. **The tolerance threshold sets the floor for what counts.** Errors of $58 or less (FY2026; $59 in FY2027) are excluded from the PER unless the household was ineligible, but every error must still be reported. Calibrate CleanCase to flag dollar deltas above the threshold first.
+3. **The tolerance threshold sets the floor for what counts.** Errors of $58 or less (FY2026; $59 in FY2027) are excluded from the PER unless the household was ineligible, but every error must still be reported. Calibrate Stampy to flag dollar deltas above the threshold first.
 4. **Independent research backs the core design.** A November 2, 2026 NYU simulation on public QC data found that risk-based review alone costs "about seven times as much as combining AI flags with risk scores."
 5. **Regulators allow this, with conditions.** FNA's advanced-automation guidance treats any shift of merit-staff functions as a "major change" requiring FNA notice or approval. In Michigan, the ACLU sent a public-records request on July 30, 2026 asking whether the state's Vertex AI case reader got FNA approval before launch. Expect the same scrutiny.
 
@@ -28,7 +28,7 @@ CleanCase is worth building as a company. The pitch should not be "AI catches fr
 | 1 | **File application.** Online portal, paper, phone, in person, community partner (food bank, navigator), or an integrated Medicaid/SNAP/TANF application. A valid filing needs only name, address and signature, which starts the clock. | Household, partner | Filing date starts the 30-day and 7-day clocks | Paper and faxed applications are scanned and indexed by hand. Duplicate applications pile up when households get no confirmation (FNA listening sessions). RI's 40-page application is written at a 10th–12th grade level, and its online form prefilled "No." |
 | 2 | **Expedited screening.** Very low income or resources, or shelter costs above income. | Intake worker | Benefits by the **7th calendar day**. Identity must be verified; other verification can be postponed. | Screening is missed, and the 7-day clock restarts from discovery |
 | 3 | **Interview.** Phone or in person, conducted by merit staff. | Caseworker (merit staff) | Scheduled so benefits arrive within 30 days. A missed interview triggers a Notice of Missed Interview, and the agency can't deny before day 30. | Workers retype interview answers into the eligibility system. Massachusetts DTA is piloting AI transcription with summaries the worker edits and saves to BEACON. |
-| 4 | **Verification request** (pending-verification notice). | Caseworker, household | At least **10 days** to provide documents | Uploads land in a document repository unlinked to data fields. Workers rekey paystub and lease amounts by hand, which is where CleanCase fits. |
+| 4 | **Verification request** (pending-verification notice). | Caseworker, household | At least **10 days** to provide documents | Uploads land in a document repository unlinked to data fields. Workers rekey paystub and lease amounts by hand, which is where Stampy fits. |
 | 5 | **Mandatory verification.** Gross non-exempt income, identity, alien status, SSN, residency, disability where relevant, utility expenses or SUA eligibility, medical costs claimed, and household composition when questionable (7 CFR 273.2(f)). | Caseworker | Before certification | Shelter and utility proofs are often missing or stale |
 | 6 | **Data matches.** IEVS (7 CFR 272.8): SSA benefit data, state wage records (SWICA), unemployment insurance, IRS unearned income (FTI). Also SAVE for non-citizens, prisoner and death matches, the National Accuracy Clearinghouse for duplicate participation, and commercial third-party income databases (TPIDs) such as Equifax's The Work Number. NDNH access varies. *(Match list is from domain knowledge and was not re-verified in this pass. Confirm per state.)* | System, caseworker | Matches must be acted on | Alerts go into worker queues and age there. "Agency failed to follow up" is a coded QC cause. |
 | 7 | **Determination and benefit calculation.** The eligibility system computes the benefit; the worker certifies. | Caseworker, sometimes **supervisor** second-party review | 30-day standard | Wrong pay-frequency conversion, wrong utility standard, stale deductions |
@@ -42,7 +42,7 @@ CleanCase is worth building as a company. The pitch should not be "AI catches fr
 **State variations (primary documents):**
 
 - **California CalFresh** (county-administered, 58 counties). Application form CF 285 (cdss.ca.gov/Portals/9/FMUForms/A-D/CF285.pdf); policy in MPP Division 63. Every CalFresh household has been on **Semi-Annual Reporting** since June 1, 2016, with the **SAR 7** due by the 5th of the submit month. Elderly/disabled households with no earnings (SARA) submit at 12 months, and ESAP households file no SAR 7 during their 36-month certification. County variation is the main pain point: each county runs its own intake and QA.
-- **Texas** (state-administered, HHSC). Form H1010 "Texas Works Application for Assistance – Your Texas Benefits"; policy in the Texas Works Handbook (fhb.hhs.texas.gov). Texas calls its version **"streamlined reporting"** (TWH A-2350) and sets three tiers: SR 1 is under 130% FPL, SR 2 is 130–165% FPL, and SR 3 is not subject to streamlined reporting. Texas posted a 6.70% PER in FY2023, and its underpayment rate (2.15%) is unusually high. CleanCase's "accuracy in both directions" story suits Texas well.
+- **Texas** (state-administered, HHSC). Form H1010 "Texas Works Application for Assistance – Your Texas Benefits"; policy in the Texas Works Handbook (fhb.hhs.texas.gov). Texas calls its version **"streamlined reporting"** (TWH A-2350) and sets three tiers: SR 1 is under 130% FPL, SR 2 is 130–165% FPL, and SR 3 is not subject to streamlined reporting. Texas posted a 6.70% PER in FY2023, and its underpayment rate (2.15%) is unusually high. Stampy's "accuracy in both directions" story suits Texas well.
 - **New York** (county-administered through local districts, with NYC HRA as the largest). Application LDSS-4826 (otda.ny.gov/programs/applications/4826.pdf); policy in the SNAP Source Book, revised July 2025 (otda.ny.gov/programs/snap/SNAPSB.pdf). FY2025 PER was 13.18%.
 - **Rhode Island**, the lesson to pitch with. In 2014 RI switched from caseload-based to task-based processing, and its PER fell to 3.91% in 2015 and 1.24% in early 2016. The new RIBridges system then disrupted operations and the PER peaked at 21.04% in 2019. The takeaway: process and system changes swing PER by 10+ points either way.
 
@@ -62,7 +62,7 @@ CleanCase is worth building as a company. The pitch should not be "AI catches fr
 
 **Variance definition (QC report):** a variance happens when "information verified by the QC reviewer differs from information used at the time of the most recent certification action," when policy is misapplied, or when the basis of an issuance is wrong. All error dollars are assigned to the first coded variance.
 
-**Tolerance and technical errors:** the FY2026 threshold is $58 (QC Policy Memo 25-04) and FY2027 is $59. It is indexed to the Thrifty Food Plan. The House had proposed $0, but the enacted law kept the threshold (CRS R48552). A GAO analysis of FY2013 found sub-threshold errors were 38% of misspent dollars, so a future zero-tolerance push would widen CleanCase's addressable error pool. *I did not re-verify the 2022 "technical error" change in this pass. Treat it as from your prior research and confirm it in the FNS QC Handbook (FNS 310).*
+**Tolerance and technical errors:** the FY2026 threshold is $58 (QC Policy Memo 25-04) and FY2027 is $59. It is indexed to the Thrifty Food Plan. The House had proposed $0, but the enacted law kept the threshold (CRS R48552). A GAO analysis of FY2013 found sub-threshold errors were 38% of misspent dollars, so a future zero-tolerance push would widen Stampy's addressable error pool. *I did not re-verify the 2022 "technical error" change in this pass. Treat it as from your prior research and confirm it in the FNS QC Handbook (FNS 310).*
 
 **State corrective-action examples:**
 
@@ -91,7 +91,7 @@ CleanCase is worth building as a company. The pitch should not be "AI catches fr
   - off-the-books work
   - anything needing the household (35%) or a collateral contact (about 20%)
 
-For those, CleanCase should produce the **question to ask**, not an answer.
+For those, Stampy should produce the **question to ask**, not an answer.
 
 ## 3) AI Capabilities to Implement (Mapped to Workflow)
 
@@ -143,7 +143,7 @@ Each seat returns schema-validated JSON and **never writes to the eligibility sy
   - Arkansas's algorithmic Medicaid home-care cuts
   - Michigan's MiDAS unemployment system, which "wrongfully accused approximately 40,000 people" of fraud. A 2016 state review of 22,000 of its determinations found "93% did not actually involve fraud" (Proof News, November 5, 2026). Attorneys now cite MiDAS against Michigan's SNAP AI.
 
-  *(The Indiana and Arkansas items are summarized from domain knowledge.)* CleanCase's answer: no denials, no auto-corrections, citations on every flag, error tracking in both directions, and published accuracy.
+  *(The Indiana and Arkansas items are summarized from domain knowledge.)* Stampy's answer: no denials, no auto-corrections, citations on every flag, error tracking in both directions, and published accuracy.
 - **Unverified:** the "Hawaii AI policy assistant." I found no primary source.
 
 **Precedents:**
@@ -159,7 +159,7 @@ Each seat returns schema-validated JSON and **never writes to the eligibility sy
 
 ## Hackathon Tool Map
 
-| Tool / data | Role in CleanCase | Weekend feasibility | Real vs. mocked |
+| Tool / data | Role in Stampy | Weekend feasibility | Real vs. mocked |
 |---|---|---|---|
 | SpacetimeDB | System of record for cases, flags, decisions; scheduled reducer replays the QC file; live dashboard | Free/local | Real |
 | CREAO agents (Developer API + webhooks) | Seats: Document Reader, Income Analyst, Shelter Checker, Composition Checker, Triage, QC Projection | Account required | Real agents, fixture documents |

@@ -30,7 +30,7 @@ export function Nav() {
       <nav className="wrap nav__inner" aria-label="Main">
         <Link href={ROUTES.home} className="nav__mark">
           <span className="nav__square" aria-hidden />
-          CleanCase
+          Stampy
         </Link>
         <div className="nav__links">
           {LINKS.map((l) => (

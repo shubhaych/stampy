@@ -6,7 +6,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import type { z } from 'zod';
-import type { Prov, NeedsHuman } from '@cleancase/contracts';
+import type { Prov, NeedsHuman } from '@stampy/contracts';
 
 export type Mode = 'fixture' | 'live';
 

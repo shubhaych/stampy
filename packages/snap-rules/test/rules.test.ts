@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { GC1_BUNDLE, GC4_BUNDLE } from '@cleancase/contracts/fixtures';
+import { GC1_BUNDLE, GC4_BUNDLE } from '@stampy/contracts/fixtures';
 import { STATIONS, toMonthly, conversionArithmetic, incomeDelta, evaluate, validOverride } from '../src/index';
 
 describe('stations', () => {

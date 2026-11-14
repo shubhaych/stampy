@@ -1,5 +1,5 @@
 -- db-core: the main table (qc_history), control, audit_log (append-only), limits, case workflow.
--- qc_history columns are CleanCase concept names; worker/src/features/qc/column-map.ts maps the
+-- qc_history columns are Stampy concept names; worker/src/features/qc/column-map.ts maps the
 -- official QC file columns onto them. Both state-certified (cert_*) and QC-verified (qc_*) values.
 CREATE TABLE qc_history (
   qc_id TEXT PRIMARY KEY,

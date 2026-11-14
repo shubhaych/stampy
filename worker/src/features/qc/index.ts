@@ -5,8 +5,8 @@
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { WorkerRoutes, type StateProfile } from '@cleancase/contracts';
-import { FIXTURE_QUEUE, GOLDEN_BUNDLES, GOLDEN_DEBRIEFS } from '@cleancase/contracts/fixtures';
+import { WorkerRoutes, type StateProfile } from '@stampy/contracts';
+import { FIXTURE_QUEUE, GOLDEN_BUNDLES, GOLDEN_DEBRIEFS } from '@stampy/contracts/fixtures';
 import type { Feature } from '../types';
 import { stubStatus } from '../types';
 

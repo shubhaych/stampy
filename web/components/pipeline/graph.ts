@@ -2,7 +2,7 @@
  * Decision Pipeline graph (master prompt 0.4), generated from the case's real audit_log and ledger rows.
  * A node is lit only if rows back it. Pure: tested in graph.test.ts.
  */
-import type { AuditEntry, CaseBundle, Prov } from '@cleancase/contracts';
+import type { AuditEntry, CaseBundle, Prov } from '@stampy/contracts';
 
 export type NodeKind = 'source' | 'question' | 'ai' | 'ledger' | 'human';
 export type NodeId =

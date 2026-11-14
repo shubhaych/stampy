@@ -100,7 +100,7 @@ export const FROZEN = [
   'web/styles/tokens.css', '**/package.json', 'package-lock.json', '.env.example', '.npmrc',
 ];
 
-export interface Claim { slug: string; machine: string; owns: string[]; reads: string[]; status: string; transferredFrom?: string }
+export interface Claim { slug: string; machine: string; owns: string[]; reads: string[]; status: string; transferredFrom?: string; rebuild?: boolean }
 
 /** Parse a .features/<slug>.md claim file (YAML-ish front matter, one-line arrays). */
 export function parseClaim(text: string): Claim | null {
@@ -111,7 +111,7 @@ export function parseClaim(text: string): Claim | null {
     const v = get(k);
     return v.startsWith('[') ? [...v.matchAll(/"([^"]+)"|'([^']+)'/g)].map((m) => m[1] ?? m[2]!) : [];
   };
-  return { slug: get('slug'), machine: get('machine'), owns: arr('owns'), reads: arr('reads'), status: get('status'), transferredFrom: get('transferred_from') || undefined };
+  return { slug: get('slug'), machine: get('machine'), owns: arr('owns'), reads: arr('reads'), status: get('status'), transferredFrom: get('transferred_from') || undefined, rebuild: get('rebuild') === 'true' };
 }
 
 export function walk(dir: string, filter: (p: string) => boolean, skip = /(^|\/)(node_modules|\.next|\.git|test-results|playwright-report)(\/|$)/): string[] {

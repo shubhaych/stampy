@@ -1,4 +1,4 @@
-import { REPLAY_CAVEAT } from '@cleancase/contracts';
+import { REPLAY_CAVEAT } from '@stampy/contracts';
 import { Badge, DeckPage, HudFrame } from '@/components/ui';
 
 export const metadata = { title: 'QC projection' };

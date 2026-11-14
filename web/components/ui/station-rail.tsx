@@ -1,7 +1,7 @@
 'use client';
 
-import type { StationId, StepState } from '@cleancase/contracts';
-import { STATIONS } from '@cleancase/snap-rules';
+import type { StationId, StepState } from '@stampy/contracts';
+import { STATIONS } from '@stampy/snap-rules';
 
 /** Ten stations, freely navigable. Skipped stations are tracked, never forced. */
 export function StationRail({ steps, current, onSelect }: { steps: StepState[]; current: StationId; onSelect?: (id: StationId) => void }) {

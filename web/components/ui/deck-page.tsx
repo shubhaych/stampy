@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { Prov } from '@cleancase/contracts';
+import type { Prov } from '@stampy/contracts';
 import { Badge } from './badge';
 
 /** Work-page shell: switches the body to the dark deck (body:has(.app-dark)). */

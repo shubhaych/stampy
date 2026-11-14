@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { GC1_BUNDLE, GC1_WORKED_BUNDLE, GC4_BUNDLE } from '@cleancase/contracts/fixtures';
+import { GC1_BUNDLE, GC1_WORKED_BUNDLE, GC4_BUNDLE } from '@stampy/contracts/fixtures';
 import { buildPipeline } from './graph';
 
 describe('decision pipeline graph', () => {

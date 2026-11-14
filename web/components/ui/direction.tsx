@@ -1,4 +1,4 @@
-import type { Direction as Dir } from '@cleancase/contracts';
+import type { Direction as Dir } from '@stampy/contracts';
 
 /** Amber and blue are never the only signal: always an arrow glyph and the word. */
 export function Direction({ dir, long = false }: { dir: Dir; long?: boolean }) {

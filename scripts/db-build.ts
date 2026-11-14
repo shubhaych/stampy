@@ -1,5 +1,5 @@
 /**
- * npm run db:build [-- --reset] — build data/db/cleancase.db deterministically on this machine.
+ * npm run db:build [-- --reset] — build data/db/stampy.db deterministically on this machine.
  * Applies every migration. Until the USDA QC file is ingested (npm run qc:ingest, qc-data feature),
  * loads data/golden into qc_history with source='golden' and logs UNVERIFIED-LIVE: qc-file.
  * Never pads or fabricates rows.
@@ -9,7 +9,7 @@ import { join, resolve } from 'node:path';
 import { migrate, openDb } from '../db/migrate';
 import { ROOT, envValue } from './lib';
 
-const dbPath = resolve(ROOT, envValue('DB_PATH', 'data/db/cleancase.db'));
+const dbPath = resolve(ROOT, envValue('DB_PATH', 'data/db/stampy.db'));
 if (process.argv.includes('--reset')) {
   for (const suffix of ['', '-wal', '-shm']) if (existsSync(dbPath + suffix)) rmSync(dbPath + suffix);
   console.log(`db:build: reset ${dbPath}`);

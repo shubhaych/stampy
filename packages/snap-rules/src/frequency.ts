@@ -1,4 +1,4 @@
-import type { PayFrequency } from '@cleancase/contracts';
+import type { PayFrequency } from '@stampy/contracts';
 
 /** Monthly conversion factors from master prompt section 10, station 5 (cite 7 CFR 273.10(c), verify). */
 export const FREQUENCY_FACTOR: Record<PayFrequency, number> = {

@@ -41,8 +41,8 @@ describe('authz', () => {
     expect(() => assertAiAppend(AI, 'override')).toThrow(AuthzError);
   });
   it('demo codes never yield the ai identity', () => {
-    expect(identityFromCode('cleancase-worker', 'ana', env)?.role).toBe('worker');
-    expect(identityFromCode('cleancase-supervisor', 'sam', env)?.role).toBe('supervisor');
+    expect(identityFromCode('stampy-worker', 'ana', env)?.role).toBe('worker');
+    expect(identityFromCode('stampy-supervisor', 'sam', env)?.role).toBe('supervisor');
     expect(identityFromCode('ai', 'x', env)).toBeNull();
   });
 });
