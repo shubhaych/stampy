@@ -75,7 +75,7 @@ for (const f of walk('web', (p) => /\.(tsx?|mjs|js|json|css|env)$/.test(p) || /\
 const layout = join(ROOT, 'web/app/layout.tsx');
 if (existsSync(layout) && !/<Footer\b/.test(readFileSync(layout, 'utf8'))) problems.push('web/app/layout.tsx does not render <Footer /> (rule 10)');
 const routesTs = join(ROOT, 'packages/contracts/src/routes.ts');
-const footer = 'Synthetic documents generated from public USDA QC records. No real applicants. CleanCase flags and cites; a merit-staff worker decides. Not an eligibility system.';
+const footer = 'Synthetic documents generated from public USDA QC records. No real applicants. Stampy flags and cites; a merit-staff worker decides. Not an eligibility system.';
 if (existsSync(routesTs) && !readFileSync(routesTs, 'utf8').includes(footer)) problems.push('FOOTER_TEXT in packages/contracts/src/routes.ts is not the verbatim rule 10 line');
 
 if (problems.length) {

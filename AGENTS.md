@@ -1,6 +1,6 @@
-# CleanCase: agent rules (read before every session)
+# Stampy: agent rules (read before every session)
 
-CleanCase is a document-grounded second check before SNAP benefits go out. AI roles (Claude) read the case file and flag what does not match, with the exact source line and the rule it breaks. A deterministic engine (`packages/snap-rules`) recomputes the benefit. A voice agent verifies with employers and landlords. **A merit-staff worker decides everything.** Full spec: `docs/MASTER_PROMPT.md` (section 0 overrides the rest).
+Stampy is a document-grounded second check before SNAP benefits go out. AI roles (Claude) read the case file and flag what does not match, with the exact source line and the rule it breaks. A deterministic engine (`packages/snap-rules`) recomputes the benefit. A voice agent verifies with employers and landlords. **A merit-staff worker decides everything.** Full spec: `docs/MASTER_PROMPT.md` (section 0 overrides the rest).
 
 Pitch: not "AI catches fraud". Agency-caused income and deduction errors are most error dollars, about 45% are visible in the case file. A second check before issuance, with proof, in both directions. FY2027 (sampled now) sets each state's FY2030 cost share.
 
@@ -9,7 +9,7 @@ Stack: Node 22, TS strict, npm workspaces, SQLite (`better-sqlite3`, only the wo
 ## Hard rules (enforced by `npm run check:rules` and tests)
 
 **Legal and product honesty**
-1. CleanCase never decides. Only merit staff certify (7 CFR 272.4). AI output is a flag, a citation, a question, or a draft. Nothing the AI produces writes to the case file without a human accept click. "Decision" in UI belongs to the worker.
+1. Stampy never decides. Only merit staff certify (7 CFR 272.4). AI output is a flag, a citation, a question, or a draft. Nothing the AI produces writes to the case file without a human accept click. "Decision" in UI belongs to the worker.
 2. Never deny on thin evidence. Unsure means ask for evidence, ask a question, or send to a person. No code path produces an automatic denial or correction.
 3. Both directions. Overissuance (amber, ↑ over) and underissuance (blue, ↓ under) get the same weight and urgency.
 4. Never say or imply: detects fraud, determines eligibility, reduces error rate by X%, FNA-approved, FedRAMP/StateRAMP/Pub 1075, uses credit data, integrated with any state system, projected PER equals official PER. Banned UI words: `fraud`, `scam`, `deny`, `denied`, `denial`, `auto-approve`, `auto-correct`, `guarantee`, `FNA-approved`, `compliant with Pub 1075` (allow-list: quoted titles in `data/sources.json`).
@@ -20,7 +20,7 @@ Stack: Node 22, TS strict, npm workspaces, SQLite (`better-sqlite3`, only the wo
 **Data honesty**
 8. Every number on screen has a badge: Live, Replay, Synthetic, Fixture, Sandbox. A hard-coded number is never Live. `check:badges` enforces it.
 9. Synthetic documents come from QC-verified values: replay "catches" demonstrate the pipeline, not detection rates. Say so in the debrief and dashboard.
-10. Footer on every page (verbatim): "Synthetic documents generated from public USDA QC records. No real applicants. CleanCase flags and cites; a merit-staff worker decides. Not an eligibility system."
+10. Footer on every page (verbatim): "Synthetic documents generated from public USDA QC records. No real applicants. Stampy flags and cites; a merit-staff worker decides. Not an eligibility system."
 11. Voice calls open with AI disclosure, purpose, and a human-callback offer. Simulated, or only to `VOICE_ALLOWED_NUMBERS`. Household consent recorded before the call button enables. Minimum disclosure.
 
 **Engineering**

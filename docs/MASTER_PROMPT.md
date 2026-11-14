@@ -1,6 +1,8 @@
 # CleanCase master prompt (v2)
 
 > Saved verbatim at scaffold time (Phase 0, step 0). Section 0 overrides anything below that disagrees.
+>
+> **Rename (2026-11-14):** the product is now called **Stampy** (was CleanCase). The UI, footer line and docs say Stampy; package names (`@cleancase/*`), `cleancase.db` and env names are unchanged. Palette: Catppuccin Mocha on every surface (see `web/styles/tokens.css`), replacing the section 7 tokens.
 
 # 0. v2 changes (these override anything below that disagrees)
 

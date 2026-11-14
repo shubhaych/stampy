@@ -29,7 +29,7 @@ export function DecisionPipeline({ bundle, compact = false }: { bundle: CaseBund
             const lit = n.rows.length > 0;
             return (
               <g key={n.id} transform={`translate(${n.x - W / 2}, ${n.y - H / 2})`} opacity={lit ? 1 : 0.32} onClick={() => setOpen(n)} style={{ cursor: 'pointer' }} role="button" tabIndex={0} aria-label={`${n.label}: ${lit ? `${n.rows.length} rows` : 'not used'}`} onKeyDown={(ev) => ev.key === 'Enter' && setOpen(n)}>
-                <rect width={W} height={H} rx={8} fill={FILL[n.kind]} fillOpacity={0.7} stroke={STROKE[n.kind]} strokeWidth={n.kind === 'question' ? 1.6 : 1} />
+                <rect width={W} height={H} rx={8} fill={FILL[n.kind]} fillOpacity={0.22} stroke={STROKE[n.kind]} strokeWidth={n.kind === 'question' ? 1.6 : 1} />
                 <text x={10} y={19} fontSize={11} fill="var(--deck-ink)" fontFamily="var(--font-sans)">{n.kind === 'question' ? '? ' : ''}{n.label}</text>
                 <text x={10} y={36} fontSize={9} fill="var(--deck-ink-soft)" fontFamily="var(--font-mono)">{GLYPH[n.step]} {n.step}</text>
               </g>

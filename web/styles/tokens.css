@@ -1,28 +1,43 @@
 /*
-  FROZEN after scaffold-v1. CleanCase tokens (master prompt section 7 + 0.4).
-  Paper (pitch) and deck (work pages). Amber = overissuance risk, blue = underissuance risk,
-  always shown together and always paired with an arrow glyph and the word "over" / "under".
+  FROZEN after scaffold-v1 (changed by infra/stampy-rebrand). Stampy tokens: Catppuccin Mocha
+  (https://github.com/catppuccin/catppuccin) on every surface. Pitch pages sit on Mocha base; work pages
+  (the command deck) sit on crust/mantle. Synthetic documents render on Catppuccin Latte so they read as paper.
+  Peach = overissuance risk, blue = underissuance risk, always shown together and always paired with an arrow
+  glyph and the word "over" / "under".
 */
 :root {
-  /* paper (pitch) */
-  --paper: #F2EFE7; --paper-2: #FBF9F4; --ink: #10231D; --ink-soft: #4F625B; --line: #D8D3C5;
-  --pine: #174C41; --pine-2: #1F6355;
+  /* Catppuccin Mocha palette */
+  --ctp-rosewater: #f5e0dc; --ctp-flamingo: #f2cdcd; --ctp-pink: #f5c2e7; --ctp-mauve: #cba6f7;
+  --ctp-red: #f38ba8; --ctp-maroon: #eba0ac; --ctp-peach: #fab387; --ctp-yellow: #f9e2af;
+  --ctp-green: #a6e3a1; --ctp-teal: #94e2d5; --ctp-sky: #89dceb; --ctp-sapphire: #74c7ec;
+  --ctp-blue: #89b4fa; --ctp-lavender: #b4befe; --ctp-text: #cdd6f4; --ctp-subtext1: #bac2de;
+  --ctp-subtext0: #a6adc8; --ctp-overlay2: #9399b2; --ctp-overlay1: #7f849c; --ctp-overlay0: #6c7086;
+  --ctp-surface2: #585b70; --ctp-surface1: #45475a; --ctp-surface0: #313244; --ctp-base: #1e1e2e;
+  --ctp-mantle: #181825; --ctp-crust: #11111b;
+
+  /* pitch surface */
+  --paper: var(--ctp-base); --paper-2: var(--ctp-mantle); --ink: var(--ctp-text); --ink-soft: var(--ctp-subtext0); --line: var(--ctp-surface1);
+  --pine: var(--ctp-mauve); --pine-2: var(--ctp-lavender);   /* brand accent (names kept for compatibility) */
+  --on-accent: var(--ctp-crust);                               /* text on any filled accent */
   /* signal pair + status */
-  --over: #D99A1E;      /* overissuance risk (amber) */
-  --under: #3E6FB5;     /* underissuance risk (blue) */
-  --over-ink: #8A5F0A;  /* AA text on paper for amber labels */
-  --under-ink: #2C5594;
-  --proof: #2E8B67;     /* verified / matches */
-  --conflict: #B5473E;  /* contradiction (never "denied") */
-  --voice: #7C5CBF;     /* call accent */
+  --over: var(--ctp-peach);      /* overissuance risk */
+  --under: var(--ctp-blue);      /* underissuance risk */
+  --over-ink: var(--ctp-peach);
+  --under-ink: var(--ctp-blue);
+  --proof: var(--ctp-green);     /* verified / matches */
+  --conflict: var(--ctp-red);    /* contradiction (never "denied") */
+  --voice: var(--ctp-pink);      /* call accent */
   /* deck (work pages) */
-  --deck: #0B1411; --deck-2: #111E19; --deck-line: rgba(236,240,232,.12);
-  --deck-ink: #E8EEE9; --deck-ink-soft: rgba(232,238,233,.66); --glow: #6FE3B2;
-  --glass: rgba(255,255,255,.04); --glass-line: rgba(255,255,255,.12);
+  --deck: var(--ctp-crust); --deck-2: var(--ctp-mantle); --deck-line: rgba(205, 214, 244, .12);
+  --deck-ink: var(--ctp-text); --deck-ink-soft: var(--ctp-subtext0); --glow: var(--ctp-teal);
+  --glass: rgba(205, 214, 244, .04); --glass-line: rgba(205, 214, 244, .12);
+  /* synthetic documents (Catppuccin Latte) */
+  --doc-paper: #eff1f5; --doc-ink: #4c4f69; --doc-soft: #6c6f85; --doc-line: #ccd0da;
   /* decision pipeline legend (0.4) */
-  --src: #484840; --question: #E0B04A; --ai: #3D3585; --ledger: #22503F; --human: #6E2E1C;
+  --src: var(--ctp-overlay1); --question: var(--ctp-yellow); --ai: var(--ctp-lavender); --ledger: var(--ctp-green); --human: var(--ctp-maroon);
   /* shape */
   --radius: 10px; --radius-card: 12px; --radius-glass: 18px; --maxw: 1080px;
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -44,6 +59,8 @@
   --color-deck-ink: var(--deck-ink);
   --color-deck-ink-soft: var(--deck-ink-soft);
   --color-glow: var(--glow);
+  --color-doc-paper: var(--doc-paper);
+  --color-doc-ink: var(--doc-ink);
   --color-src: var(--src);
   --color-question: var(--question);
   --color-ai: var(--ai);

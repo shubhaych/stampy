@@ -14,7 +14,7 @@ try {
   const res = await client.messages.create({
     model,
     max_tokens: 256,
-    messages: [{ role: 'user', content: 'Reply with exactly: CleanCase hello ok' }],
+    messages: [{ role: 'user', content: 'Reply with exactly: Stampy hello ok' }],
   });
   const text = res.content.map((b) => (b.type === 'text' ? b.text : '')).join('');
   console.log(`anthropic ok · ${model} · ${Math.round(performance.now() - t0)} ms · stop=${res.stop_reason}`);

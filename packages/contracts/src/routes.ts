@@ -23,7 +23,7 @@ export const WorkerRoutes = {
 } as const;
 
 export const FOOTER_TEXT =
-  'Synthetic documents generated from public USDA QC records. No real applicants. CleanCase flags and cites; a merit-staff worker decides. Not an eligibility system.';
+  'Synthetic documents generated from public USDA QC records. No real applicants. Stampy flags and cites; a merit-staff worker decides. Not an eligibility system.';
 
 export const AUTHENTICITY_CAVEAT = 'Internally consistent with the record, not proof of authenticity.';
 
