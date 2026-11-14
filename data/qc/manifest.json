@@ -1,0 +1,281 @@
+{
+  "fiscalYear": 2024,
+  "catalogUrl": "https://snapqcdata.net/datafiles",
+  "sourceUrl": "https://snapqcdata.net/sites/default/files/2026-08/qcfy2024_csv.zip",
+  "dictionaryUrl": "https://snapqcdata.net/sites/default/files/2026-08/FY-2024-Tech-Doc.pdf",
+  "archiveSha256": "b8b29b8593f78aa51c48332c47d2d92fa5bbecf5346570acb45e26f2d9ebd2b5",
+  "csvSha256": "e871a8e9caca0be72e2003b09bdf71e1d020984b52289d2b74c4c6b88c4f793b",
+  "archiveMember": "qc_pub_fy2024.csv",
+  "rowCount": 44891,
+  "columnCount": 1177,
+  "bytes": 5634728,
+  "indexSha256": "fe4364d33c89b1cc091576e5eaf603295689836a947a0dde64c2285343b3b175",
+  "retrievedAt": "2026-11-14T23:00:38.876Z",
+  "states": [
+    {
+      "code": "AL",
+      "name": "Alabama",
+      "count": 1082
+    },
+    {
+      "code": "AK",
+      "name": "Alaska",
+      "count": 546
+    },
+    {
+      "code": "AZ",
+      "name": "Arizona",
+      "count": 925
+    },
+    {
+      "code": "AR",
+      "name": "Arkansas",
+      "count": 920
+    },
+    {
+      "code": "CA",
+      "name": "California",
+      "count": 883
+    },
+    {
+      "code": "CO",
+      "name": "Colorado",
+      "count": 856
+    },
+    {
+      "code": "CT",
+      "name": "Connecticut",
+      "count": 941
+    },
+    {
+      "code": "DE",
+      "name": "Delaware",
+      "count": 778
+    },
+    {
+      "code": "DC",
+      "name": "District of Columbia",
+      "count": 1019
+    },
+    {
+      "code": "FL",
+      "name": "Florida",
+      "count": 968
+    },
+    {
+      "code": "GA",
+      "name": "Georgia",
+      "count": 945
+    },
+    {
+      "code": "GU",
+      "name": "Guam",
+      "count": 197
+    },
+    {
+      "code": "HI",
+      "name": "Hawaii",
+      "count": 571
+    },
+    {
+      "code": "ID",
+      "name": "Idaho",
+      "count": 1130
+    },
+    {
+      "code": "IL",
+      "name": "Illinois",
+      "count": 861
+    },
+    {
+      "code": "IN",
+      "name": "Indiana",
+      "count": 916
+    },
+    {
+      "code": "IA",
+      "name": "Iowa",
+      "count": 980
+    },
+    {
+      "code": "KS",
+      "name": "Kansas",
+      "count": 920
+    },
+    {
+      "code": "KY",
+      "name": "Kentucky",
+      "count": 1016
+    },
+    {
+      "code": "LA",
+      "name": "Louisiana",
+      "count": 939
+    },
+    {
+      "code": "ME",
+      "name": "Maine",
+      "count": 960
+    },
+    {
+      "code": "MD",
+      "name": "Maryland",
+      "count": 745
+    },
+    {
+      "code": "MA",
+      "name": "Massachusetts",
+      "count": 907
+    },
+    {
+      "code": "MI",
+      "name": "Michigan",
+      "count": 920
+    },
+    {
+      "code": "MN",
+      "name": "Minnesota",
+      "count": 1011
+    },
+    {
+      "code": "MS",
+      "name": "Mississippi",
+      "count": 1137
+    },
+    {
+      "code": "MO",
+      "name": "Missouri",
+      "count": 793
+    },
+    {
+      "code": "MT",
+      "name": "Montana",
+      "count": 608
+    },
+    {
+      "code": "NE",
+      "name": "Nebraska",
+      "count": 950
+    },
+    {
+      "code": "NV",
+      "name": "Nevada",
+      "count": 1005
+    },
+    {
+      "code": "NH",
+      "name": "New Hampshire",
+      "count": 666
+    },
+    {
+      "code": "NJ",
+      "name": "New Jersey",
+      "count": 651
+    },
+    {
+      "code": "NM",
+      "name": "New Mexico",
+      "count": 1017
+    },
+    {
+      "code": "NY",
+      "name": "New York",
+      "count": 885
+    },
+    {
+      "code": "NC",
+      "name": "North Carolina",
+      "count": 955
+    },
+    {
+      "code": "ND",
+      "name": "North Dakota",
+      "count": 463
+    },
+    {
+      "code": "OH",
+      "name": "Ohio",
+      "count": 934
+    },
+    {
+      "code": "OK",
+      "name": "Oklahoma",
+      "count": 932
+    },
+    {
+      "code": "OR",
+      "name": "Oregon",
+      "count": 868
+    },
+    {
+      "code": "PA",
+      "name": "Pennsylvania",
+      "count": 814
+    },
+    {
+      "code": "RI",
+      "name": "Rhode Island",
+      "count": 980
+    },
+    {
+      "code": "SC",
+      "name": "South Carolina",
+      "count": 961
+    },
+    {
+      "code": "SD",
+      "name": "South Dakota",
+      "count": 667
+    },
+    {
+      "code": "TN",
+      "name": "Tennessee",
+      "count": 964
+    },
+    {
+      "code": "TX",
+      "name": "Texas",
+      "count": 955
+    },
+    {
+      "code": "UT",
+      "name": "Utah",
+      "count": 1065
+    },
+    {
+      "code": "VT",
+      "name": "Vermont",
+      "count": 657
+    },
+    {
+      "code": "VI",
+      "name": "Virgin Islands",
+      "count": 278
+    },
+    {
+      "code": "VA",
+      "name": "Virginia",
+      "count": 770
+    },
+    {
+      "code": "WA",
+      "name": "Washington",
+      "count": 861
+    },
+    {
+      "code": "WV",
+      "name": "West Virginia",
+      "count": 772
+    },
+    {
+      "code": "WI",
+      "name": "Wisconsin",
+      "count": 1044
+    },
+    {
+      "code": "WY",
+      "name": "Wyoming",
+      "count": 303
+    }
+  ]
+}

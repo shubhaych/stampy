@@ -74,22 +74,27 @@ export function DocumentsPanel({ docs, facts, selectedDocId, onSelectDoc, select
 
 function DocViewer({ doc, facts, selectedFactId, onSelectFact }: { doc: DocumentMeta; facts: Fact[]; selectedFactId: string | null; onSelectFact: (id: string | null) => void }) {
   const fixture = useIsFixture();
+  const pv = useProv();
+  const selected = facts.find((f) => f.id === selectedFactId);
+  const page = selected?.page && selected.page > 0 ? selected.page : 1;
   const [failed, setFailed] = useState<Record<string, boolean>>({});
   const url = api.docUrl(doc.id);
-  if (fixture) return <div className="stp-doc__missing">Image not loaded for this fixture. Review its recorded fields in the evidence ledger.</div>;
+  if (fixture) return <div className="desk-fixture-paper"><p className="eyebrow">Fixture field transcript <Badge kind="fixture" /></p><h2>{doc.filename}</h2><p className="stp-hint">Original image not loaded. These are the recorded fixture quotes, not a reproduced document.</p>{facts.map((f) => <button key={f.id} aria-pressed={f.id === selectedFactId} onClick={() => onSelectFact(f.id)}><small>{fieldLabel(f.field)} · page {f.page ?? 'not loaded'}</small><span><MoneyText text={f.line ?? f.value} prov="fixture" /></span></button>)}</div>;
   if (failed[doc.id]) return <div className="stp-doc__missing">Document image not loaded.</div>;
   if (doc.contentType === 'application/pdf') {
     return (
       <div className="stp-doc__frame">
-        <object data={url} type="application/pdf" className="stp-doc__pdf" aria-label={doc.filename}>
+        <p className="stp-hint">Source page <Fig prov={pv(doc.synthetic ? 'synthetic' : 'live')}>{page}</Fig> · Exact location unavailable in PDF preview.</p>
+        <object key={`${doc.id}-${page}`} data={`${url}#page=${page}`} type="application/pdf" className="stp-doc__pdf" aria-label={doc.filename}>
           <div className="stp-doc__missing">PDF preview not loaded. <a className="stp-link" href={url} target="_blank" rel="noreferrer">Open the PDF</a></div>
         </object>
       </div>
     );
   }
-  const boxed = facts.filter((f) => f.bbox && (f.page === null || f.page === 1));
+  const boxed = facts.filter((f) => f.bbox && f.confidence >= 0.85 && f.bbox.x >= 0 && f.bbox.y >= 0 && f.bbox.w > 0 && f.bbox.h > 0 && f.bbox.x + f.bbox.w <= 1 && f.bbox.y + f.bbox.h <= 1 && (f.page === null || f.page === 1));
   return (
     <div className="stp-doc__frame">
+      {selected && <p className="stp-hint">{boxed.some((f) => f.id === selected.id) ? 'Approximate source location. Confirm against the printed line.' : 'Exact location unavailable. Compare the quoted source line with the page.'}</p>}
       <div className="stp-doc__img">
         <img src={url} alt={`${doc.filename}`} onError={() => setFailed((m) => ({ ...m, [doc.id]: true }))} />
         {boxed.map((f) => (
@@ -141,6 +146,7 @@ function QuestionCard({ q, facts, onSelectFact }: { q: Question; facts: Fact[]; 
         <span className={`stp-pill stp-pill--q-${q.status}`}>{q.status}</span>
       </header>
       <p className="stp-q__ask">“{q.ask}”</p>
+      <div className="desk-question-sources">{q.factIds.map((id) => facts.find((f) => f.id === id)).filter((f): f is Fact => !!f).map((f) => <button key={f.id} onClick={() => onSelectFact(f)}><small>{f.sourceLabel} →</small><MoneyText text={f.line ?? f.value} prov={pv(f.prov)} /></button>)}</div>
       <p className="stp-q__why"><MoneyText text={q.why} prov={pv('live')} /></p>
       {q.candidates.length ? (
         <div className="stp-cands">

@@ -1,7 +1,7 @@
 # Machine A status
 
-Frontend integration branch `a/stampy-ui` is based on the user-selected `origin/b/stampy-loop`, not the legacy SQLite frontend. See `docs/stampy-ui.md` and `.features/stampy-ui.md` for scope and verification.
+Published prior backend/UI baseline to main: fadbe85. Follow-up implements compact three-pane evidence desk and real public QC import/browser. See docs/stampy-ui.md and data/qc/README.md.
 
-Implemented queue filtering, next-step guidance, contract validation, stale response handling, source provenance, stronger decision controls, and responsive UI verification. Typecheck and 56 unit tests pass; six browser tests pass with mocked backend responses.
+Actual official archive download succeeded: 44,891 records, 53 jurisdictions, pinned archive/CSV hashes. Safe public projection served from worker8791; full raw release stays server-side and gitignored. Three real state examples retained with row provenance. No applicant documents invented.
 
-Needs from Machine B: QC release ingestion and replay API with source manifest; human fact acceptance and checklist-send approval; selected Postgres worker and PolicyEngine runtime. Ownership checker compares all inherited rebuild changes against main, so full check is blocked despite frontend checks passing. Do not bypass it or describe live integrations as verified.
+Validation: npm run check green (63 tests); all10 browser tests pass, including actual QC data, mobile layout, and source-field navigation. Live external AI/voice and operational Postgres case flow not rerun. Existing fact-acceptance and per-outreach approval service gaps remain for backend owners.

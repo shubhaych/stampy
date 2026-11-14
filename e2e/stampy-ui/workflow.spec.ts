@@ -66,6 +66,23 @@ test('fixture review has no live provenance and fits the viewport @mobile', asyn
   await page.goto(`/cases/${FIXTURE_CASE_ID}?fixture=1`);
   await expect(page.getByRole('heading', { name: 'Lena Torres' })).toBeVisible();
   await expect(page.locator('[data-prov="live"]')).toHaveCount(0);
+  if (info.project.name === 'mobile') await page.getByRole('button', { name: 'tasks', exact: true }).click();
+  await page.getByRole('button', { name: '▤ application-form.png AI extracted' }).click();
+  await expect(page.getByText('Fixture field transcript')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.screenshot({ path: `e2e/stampy-ui/${info.project.name}-case.png`, fullPage: true });
+});
+
+test('source and fields share persistent selection; tabs support keyboard', async ({ page }) => {
+  await page.goto(`/cases/${FIXTURE_CASE_ID}?fixture=1`);
+  await page.getByRole('button', { name: '▤ application-form.png AI extracted' }).click();
+  await expect(page.getByRole('tab', { name: 'Fields', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await page.locator('.desk-fixture-paper button').filter({ hasText: 'People in your household' }).click();
+  await expect(page.locator('.desk-review [data-fact="F-1001-2"]')).toHaveClass(/stp-fact--on/);
+  await page.getByRole('tab', { name: 'Fields', exact: true }).focus();
+  await page.keyboard.press('ArrowLeft');
+  await expect(page.getByRole('tab', { name: 'Issues', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await page.getByRole('tab', { name: 'Fields', exact: true }).click();
+  await page.locator('.desk-review [data-fact="F-1001-5"]').click();
+  await expect(page.locator('.desk-fixture-paper button[aria-pressed="true"]')).toContainText('How often are you paid');
 });

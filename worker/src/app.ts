@@ -16,6 +16,7 @@ import { inboxAddress, verifySvix, type AmMessage } from './email/agentmail';
 import { buildAssistant, endCall, recordAnswer, requestCallback, simulateCall, startCall, verifyCaller, type Turn } from './voice/call';
 import { callInNumber } from './voice/vapi';
 import { policyEngineHealth } from './rules/benefit';
+import { registerQc } from './qc/routes';
 import { publicBaseUrl } from './tunnel';
 
 export function modes() {
@@ -36,6 +37,7 @@ function worker(body: { worker?: { name?: string; code?: string } }): Identity {
 
 export function createApp(db: Db): Hono {
   const app = new Hono();
+  registerQc(app);
   app.use('*', cors({ origin: (o) => o ?? '*' }));
 
   app.onError((e, c) => {

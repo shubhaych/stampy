@@ -1,55 +1,54 @@
-# Frontend integration and backend audit
+# Evidence desk and real public QC ingestion
 
-Integration base: `origin/b/stampy-loop` at `439a80b`. Frontend branch: `a/stampy-ui`.
+The user-selected backend baseline and first frontend pass were published to main as `fadbe85`. The follow-up replaces the stacked case cards with a task rail, central source/task workspace, and a tabbed review rail.
 
-## Implemented frontend
+## Real data
 
-- Loaded case queue: name/reference search, state and stage filtering, empty/error states and manual refresh.
-- Next worker step derives from actual document, question, outreach, calculation and decision rows.
-- Existing worker endpoints remain the integration boundary: upload, reader retry, outreach approval, simulated call/reply, recompute and worker decision. No API keys enter web.
-- Full case/queue responses validated using shared Zod contracts; legacy scaffold responses produce an actionable incompatibility error.
-- Refetch on SSE reconnect; ignore older overlapping responses. Failed refresh prevents decision/outreach actions on the stale snapshot.
-- Source provenance remains Synthetic when live AI processes generated documents. Fixture preview never displays Live evidence.
-- Decision controls require completed reads, closed questions and non-null benefit calculations. This frontend gate is not a substitute for worker enforcement.
-- Phone evidence links to call transcripts; question links no longer nest inside evidence buttons. Retry is exposed for failed request emails.
-- Required footer restored on the touched queue, case and source pages. Other inherited pages still need the original footer requirement restored through the owning feature.
+The reproducible importer `node --import tsx scripts/qc-ingest.ts` downloads the official FY2024 release. The host returned 403 for curl's default User-Agent; a browser-compatible, explicitly named importer User-Agent succeeds without credentials or cookies. A fresh download and a repeat import succeeded.
 
-## Backend findings
+- 44,891 records; 1,177 source columns; 53 jurisdictions.
+- Raw ZIP and CSV and the validated public index are stored locally under gitignored `data/qc/raw/`.
+- Download size, release hashes, CSV structure, missing values, unique IDs, and exact row count are checked before promotion. Stored index hash is checked before serving it.
+- The worker serves an allowlist of public ID, jurisdiction, sample month, certified household size, reported certified benefit and source-row index.
+- Income/error fields and constructed QC outcomes are not exposed to the frontend or AI. Public records are read-only historical replays, not operational applicant cases. No applicant documents are fabricated.
+- `data/qc/manifest.json` records source URLs and checksums; `examples.json` stores genuine CA/TX/NY examples for tests and inspection.
 
-| Capability | Evidence in selected branch | Verification |
-| --- | --- | --- |
-| Claude document reading | `worker/src/reader/reader.ts`: image/PDF input, structured extraction, persisted facts and source lines | Implemented; live API run not performed |
-| Voice | `worker/src/voice/call.ts`, `vapi.ts`: inbound applicant call, Deepgram → Anthropic → ElevenLabs, verification, transcript and answers | Implemented; live call not performed |
-| Email | AgentMail request approval, inbound attachment extraction | Implemented; no email sent during this work |
-| Calculation | `worker/src/rules/benefit.ts`, local PolicyEngine service | Implemented; service unavailable in this session |
-| Public QC ingest | No importer or QC replay API in this selected backend; raw QC directory contains only `.gitkeep` | Not implemented |
-| Database | `worker/src/db.ts` uses Postgres; case summaries come from `app_case` | Selected worker not running locally |
+| State | Public HHLDNO | Sample month | Certified household size | Reported certified benefit | Source record |
+| --- | --- | --- | --- | --- | --- |
+| CA | 47737 | 2024-01 | 1 | $158 | 39377 |
+| TX | 37840 | 2023-10 | 2 | $535 | 31251 |
+| NY | 4118 | 2023-10 | 1 | $291 | 3475 |
 
-Port 8787 responds with the older scaffold's `{ok:true,machine:"a",slot:0,mode:"fixture"}` health payload. No Postgres/Docker executable or PolicyEngine service was available in this environment. The selected checkout has no `.env.local`; no secrets were copied or printed.
+Source: https://snapqcdata.net/datafiles . See `data/qc/README.md` for the verified dictionary mapping and acquisition details. These are Replay values, not live applicant records.
 
-The backend automatically sends checklist messages when AUTO_SEND_CHECKLIST is enabled and computes from resolved evidence without a human fact-acceptance endpoint. These differ from the supplied rules requiring approval for each outreach and accepted facts only. The frontend cannot repair those service-layer guarantees. They are recorded in the feature claim for Machine B.
+## UI
 
-## Data proof and limitations
+- Left: concise worker tasks and source list. AI extraction is distinct from worker review.
+- Center: remaining tasks until a source is selected; then image, PDF, transcript or budget. Existing static fixture images are absent, so its recorded quotes are labeled a fixture transcript instead of substituting a mismatched image.
+- Right: Guide / Issues / Fields / History. Guidance and document retry use existing worker APIs. Outreach and final changes still require worker clicks.
+- Selecting a field or question opens its source; selecting a source region reveals the field. Selection persists while navigating tabs. PDF page navigation and missing/low-confidence bounding-box fallbacks are explicit.
+- Mobile: Tasks / Source / Review switches replace a stack of long panes. Reduced-motion settings are respected.
+- `/cases/qc`: actual imported records, state filter, pagination, original columns, source record number and checksums. `/cases/sources` checks import availability dynamically.
 
-Verified public catalog: https://snapqcdata.net/datafiles
-The catalog links FY2024 CSV release https://snapqcdata.net/sites/default/files/2026-08/qcfy2024_csv.zip and its dictionary https://snapqcdata.net/sites/default/files/2026-08/FY-2024-Tech-Doc.pdf . It identifies an August 2026 weighting revision. Direct archive acquisition returned HTTP 403 after an initial sandbox DNS failure. No source rows or checksum were obtained, so no purported real-case examples are supplied.
+## Run
 
-Existing local examples in `data/samples/index.json` are explicitly generated: `application-form`, `paystub-2026-09`, `lease`, `paystub-2026-10-photo`. Their sidecars mark `synthetic:true`. They are not downloaded applicant records or proof of a QC import. The static frontend fixture and generated sample images also differ in employer/date details, so the fixture viewer does not substitute those images for absent matching source images.
+```sh
+node --import tsx scripts/qc-ingest.ts
+node --import tsx worker/src/qc/server.ts
+npm run dev -w web -- --port 3104
+```
 
-ERS policy data (https://ers.usda.gov/data-products/snap-policy-data-sets) covers historical state policy choices through December 2020; it is not current benefit parameters. eCFR 273.2(e)(2) permits telephone interviewing under the specified conditions; the interview remains a worker task. No policy text or new eligibility rule was added to the UI.
+The public QC server binds loopback port 8791. The web's read-only same-origin proxy uses `QC_WORKER_URL`, default `http://localhost:8791`. The main application worker also registers the QC routes; deployments can point that variable at it. The web never opens the data files or database.
 
-## Validation
+## Validation and limits
 
-- `npm run typecheck`: passed.
-- `npm test`: 56 tests passed, including API incompatibility, malformed response handling, provenance and decision gating.
-- `npm run check:rules`, `check:badges`: passed on this branch's existing checker implementations.
-- `E2E_PORT=3104 npx playwright test e2e/stampy-ui`: 6 passed; desktop and mobile filters, incompatible backend, sign-in → approve outreach → updated evidence → approve change; fixture provenance and viewport checks.
-- Browser worker responses were mocked to the shared contract. These are frontend integration tests, not proof that external providers or Postgres ran.
-- Screenshots: `e2e/stampy-ui/desktop-case.png`, `mobile-case.png`.
-- `npm run check`: fails only at ownership because the checker compares with main and counts all inherited stampy-loop rebuild changes. No check bypass, commit or push was performed.
-- `npm run sync` was attempted in the original checkout and blocked by sandbox IPC/Git writes. Fetch succeeded with escalation; rebasing the selected backend rebuild onto main was not attempted as part of frontend work.
+- `npm run check`: green; typecheck, 63 unit tests, rules, badges, ownership.
+- `E2E_PORT=3104 npx playwright test e2e/stampy-ui`: 10 passed, including actual imported QC records on desktop/mobile and source-to-field navigation.
+- QC browser tests use the real imported worker data. Application decision/outreach browser tests mock provider/backend responses; no messages or calls were sent.
+- Screenshots: `e2e/stampy-ui/{desktop,mobile}-{case,qc}.png`.
+- The public snapshot is file-backed in the worker, not inserted into Postgres `app_case`. It cannot trigger outreach or decisions.
+- Live Anthropic/Vapi/AgentMail and the Postgres/PolicyEngine application loop have not been rerun here. Existing backend checklist auto-send and missing human fact-acceptance endpoint remain separate service-layer gaps.
 
-UNVERIFIED-LIVE: anthropic: npm run demo:run
-UNVERIFIED-LIVE: voice: npm run demo:run
-UNVERIFIED-LIVE: policyengine: npm run hello:policyengine
-UNVERIFIED-LIVE: qc: public FY2024 archive acquisition returned HTTP 403
+## Design research
+
+The three-pane pattern follows [ServiceNow document review](https://www.servicenow.com/docs/r/customer-service-management/csm-doc-intel-review-values.html?contentId=AJkrKXJko~BrCttVeuWKmg). Concise task rows and restrained states follow [GOV.UK](https://design-system.service.gov.uk/components/task-list/) and [Scottish Government task-list research](https://designsystem.gov.scot/patterns/task-list). Source-linked review follows [GitHub review](https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request?tool=codespaces); density uses [Linear display options](https://linear.app/docs/display-options) as a reference. These support design choices, not claims of measured SNAP productivity.

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { DeckPage, Badge } from '@/components/ui';
+import { QcImportStatus } from '@/components/stampy/qc-browser';
 import { DataFooter } from '@/components/stampy/common';
 
 export const metadata = { title: 'SNAP data sources' };
@@ -11,7 +12,7 @@ export default function SourcesPage() {
       <section className="panel">
         <h2 className="panel__title">Public QC case records <Badge kind="replay" /></h2>
         <p>USDA publishes anonymized historical quality-control records. These can support case replays; the public release does not contain applicant paystubs, leases or contact details.</p>
-        <p><strong>Local import: not loaded.</strong> The current worker queue contains uploaded applications. A public QC replay import is not connected to this backend.</p>
+        <QcImportStatus />
         <a className="stp-link" href="https://snapqcdata.net/datafiles" target="_blank" rel="noreferrer">Open the public release catalog ↗</a>
       </section>
       <section className="panel">
