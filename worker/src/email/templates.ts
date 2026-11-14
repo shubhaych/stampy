@@ -15,24 +15,31 @@ const prettyPhone = (e164: string | null) => {
 export function requestEmail(input: { name: string; refCode: string; phone: string | null; questions: Question[] }) {
   const phoneQs = input.questions.filter((q) => q.channel === 'phone' && q.status === 'open');
   const docQs = input.questions.filter((q) => q.channel === 'document' && q.status === 'open');
-  const subject = `Your food assistance application: a few things to confirm (ref ${spaced(input.refCode)})`;
+  const phone = prettyPhone(input.phone);
+  const subject = phone
+    ? `Please call ${phone} about your food assistance application (ref ${spaced(input.refCode)})`
+    : `Your food assistance application: a few things to confirm (ref ${spaced(input.refCode)})`;
+  const agency = `${env.AGENCY_NAME[0]!.toUpperCase()}${env.AGENCY_NAME.slice(1)}`;
   const lines = [
     `Hi ${first(input.name)},`,
     '',
-    `Thanks for applying. Before your application can be finished, ${env.AGENCY_NAME} needs to confirm ${phoneQs.length + docQs.length === 1 ? 'one thing' : 'a few things'}:`,
+    `Thanks for applying. We need to confirm ${phoneQs.length + docQs.length === 1 ? 'one thing' : 'a few things'} before we can finish your application.`,
     '',
-    ...phoneQs.map((q, i) => `${i + 1}. ${q.title}: ${q.ask}`),
-    ...docQs.map((q, i) => `${phoneQs.length + i + 1}. ${q.title}: ${q.ask}`),
+    ...(phone
+      ? [
+          `Please give us a call at ${phone}.`,
+          'Call whenever it suits you, any time of day. It takes about two minutes.',
+          `Have your reference number ready: ${spaced(input.refCode)}`,
+          '',
+          ...(phoneQs.length ? ['On the call we will ask:', ...phoneQs.map((q) => `- ${q.ask}`), ''] : []),
+          'An automated assistant answers. You can ask for a person to call you back at any point.',
+        ]
+      : [...phoneQs.map((q, i) => `${i + 1}. ${q.ask}`), '', 'Reply to this email with your answers.', '', `Your reference number: ${spaced(input.refCode)}`]),
     '',
-    input.phone
-      ? `The quickest way: call ${prettyPhone(input.phone)} whenever it suits you, any time of day. An automated assistant will answer, ask your reference number, and take your answers. You can ask for a person to call you back at any point.`
-      : 'Reply to this email with your answers.',
-    '',
-    `Your reference number: ${spaced(input.refCode)}`,
-    '',
-    docQs.length ? 'For documents, you can reply to this email with a clear photo of each page.' : '',
-    '',
-    `${env.AGENCY_NAME[0]!.toUpperCase()}${env.AGENCY_NAME.slice(1)}`,
+    ...(docQs.length
+      ? ['We also need a document from you:', ...docQs.map((q) => `- ${q.ask}`), 'You can reply to this email with a clear photo of it, or we will remind you after your call.', '']
+      : []),
+    agency,
   ];
   return { subject, text: lines.filter((l, i, a) => !(l === '' && a[i - 1] === '')).join('\n') };
 }

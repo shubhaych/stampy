@@ -172,13 +172,17 @@ export function OutreachPanel({ outreach, inbound, onSend }: { outreach: Outreac
               </div>
               <div className="stp-mail__subject">{it.out.subject}</div>
               <pre className="stp-mail__body"><MoneyText text={it.out.bodyText} prov={pv('live')} /></pre>
-              {it.out.approvedBy ? <div className="stp-sub">Approved by {it.out.approvedBy}</div> : null}
+              {it.out.approvedBy ? (
+                <div className="stp-sub">
+                  {it.out.approvedBy.startsWith('worker:') ? `Approved by ${it.out.approvedBy.slice(7)}` : it.out.approvedBy[0]!.toUpperCase() + it.out.approvedBy.slice(1)}
+                </div>
+              ) : null}
               {it.out.error ? <p className="stp-error">{it.out.error}</p> : null}
-              {it.out.status === 'draft' && it.out.kind === 'request' ? (
+              {(it.out.status === 'draft' || it.out.status === 'failed') && it.out.kind === 'request' ? (
                 <div className="stp-mail__actions">
-                  <span className="stp-sub">Draft</span>
+                  <span className="stp-sub">{it.out.status === 'failed' ? 'Not sent' : 'Draft'}</span>
                   <button type="button" className="btn btn--primary" disabled={fixture || !!busy} onClick={() => run('send', onSend)}>
-                    {busy === 'send' ? 'Sending…' : 'Approve and send'}
+                    {busy === 'send' ? 'Sending…' : it.out.status === 'failed' ? 'Send again' : 'Send'}
                   </button>
                 </div>
               ) : null}

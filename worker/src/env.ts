@@ -64,6 +64,8 @@ export const env = {
   EMAIL_DAILY_LIMIT: n('EMAIL_DAILY_LIMIT', 40),
   /** The checklist email is promised to the applicant on the call, so it goes out when the call ends. */
   AUTO_SEND_CHECKLIST: s('AUTO_SEND_CHECKLIST', 'true') !== 'false',
+  /** Send the request email (questions + call-in number) as soon as the application is read. */
+  AUTO_SEND_REQUEST: s('AUTO_SEND_REQUEST', 'true') !== 'false',
 
   VOICE_MODE: mode('VOICE_MODE', !!VAPI_PRIVATE_API_KEY),
   VAPI_PRIVATE_API_KEY,
