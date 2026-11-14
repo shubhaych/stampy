@@ -26,6 +26,9 @@ export function Workspace({ bundle }: { bundle: CaseBundle }) {
   const [docId, setDocId] = useState(bundle.docs.find((d) => d.kind !== 'application')?.id ?? bundle.docs[0]?.id ?? '');
   const [flags, setFlags] = useState<Flag[]>(bundle.flags);
   const [proofFlag, setProofFlag] = useState<string | null>(flags[0]?.id ?? null);
+  const [focusedExtraction, setFocusedExtraction] = useState<string | null>(null);
+  const [reviewed, setReviewed] = useState<StationId[]>([]);
+  const [finalCheck, setFinalCheck] = useState(false);
   const doc = bundle.docs.find((d) => d.id === docId);
   const ex = bundle.extractions.filter((e) => e.docId === docId);
   const over = flags.filter((f) => f.direction === 'over').length;
@@ -33,9 +36,27 @@ export function Workspace({ bundle }: { bundle: CaseBundle }) {
   const st = useMemo(() => STATIONS.find((s) => s.id === station)!, [station]);
 
   const setStatus = (id: string, status: Flag['status']) => setFlags((fs) => fs.map((f) => (f.id === id ? { ...f, status } : f)));
+  const showProof = (flag: Flag) => {
+    setProofFlag(flag.id);
+    const extraction = bundle.extractions.find((e) => flag.extractionIds.includes(e.id));
+    if (extraction) {
+      setDocId(extraction.docId);
+      setFocusedExtraction(extraction.id);
+      setTab('documents');
+    }
+  };
+  const focusFact = (factId: string) => {
+    const fact = bundle.facts.find((f) => f.id === factId);
+    if (!fact) return;
+    const source = bundle.docs.find((d) => d.id === fact.sourceRef);
+    if (source) setDocId(source.id);
+    const extraction = bundle.extractions.find((e) => e.docId === fact.sourceRef && e.field === fact.field);
+    setFocusedExtraction(extraction?.id ?? null);
+    setTab('documents');
+  };
 
   return (
-    <main className="app-dark deck-page" data-case={c.id}>
+    <main className="app-dark deck-page case-desk" data-case={c.id}>
       <div className="wrap" style={{ maxWidth: 1360 }}>
         <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-3">
@@ -50,10 +71,11 @@ export function Workspace({ bundle }: { bundle: CaseBundle }) {
           </div>
         </header>
 
-        <div className="grid gap-4 lg:grid-cols-[200px_1fr_360px]">
+        <div className="grid gap-4 lg:grid-cols-[190px_1fr_370px]">
           <aside className="panel" aria-label="Stations">
             <h2 className="panel__title">Stations</h2>
             <StationRail steps={bundle.steps} current={station} onSelect={setStation} />
+            <p className="case-desk__hint">Choose a section to review its source and requirements. Status changes here are a local demo preview.</p>
           </aside>
 
           <section className="grid gap-4" aria-label="Case file and documents">
@@ -78,14 +100,14 @@ export function Workspace({ bundle }: { bundle: CaseBundle }) {
                       </button>
                     ))}
                   </div>
-                  <div className="relative mx-auto aspect-[8.5/11] max-w-[520px] rounded-md bg-[var(--doc-paper)] p-6 text-[var(--doc-ink)] shadow-lg" data-figure aria-label={`${doc?.title ?? 'Document'} (synthetic rendering)`}>
+                  <div className="case-desk__paper relative mx-auto aspect-[8.5/11] max-w-[520px] bg-[var(--doc-paper)] p-6 text-[var(--doc-ink)] shadow-lg" data-figure aria-label={`${doc?.title ?? 'Document'} (synthetic rendering)`}>
                     <div className="flex items-center justify-between font-mono text-[0.7rem] uppercase tracking-widest text-[var(--doc-soft)]">
                       <span>{doc?.title}</span>
                       {doc ? <Badge kind={doc.prov} /> : null}
                     </div>
                     {ex.map((e) => (
                       <div key={e.id} className="absolute whitespace-nowrap font-mono text-[0.66rem]" style={{ left: `${e.bbox.x * 100}%`, top: `${e.bbox.y * 100}%`, width: `${e.bbox.w * 100}%`, height: `${e.bbox.h * 100}%` }}>
-                        <span className="absolute inset-0 rounded-sm" style={{ border: '1.5px solid var(--over)', boxShadow: '0 0 0 3px color-mix(in srgb, var(--over) 18%, transparent)' }} aria-hidden />
+                        <span className={`absolute inset-0 rounded-sm ${focusedExtraction === e.id ? 'case-desk__focus' : ''}`} style={{ border: '1.5px solid var(--over)', boxShadow: '0 0 0 3px color-mix(in srgb, var(--over) 18%, transparent)' }} aria-hidden />
                         <span className="relative px-1">{e.text}</span>
                       </div>
                     ))}
@@ -131,6 +153,19 @@ export function Workspace({ bundle }: { bundle: CaseBundle }) {
           </section>
 
           <aside className="grid content-start gap-4" aria-label="AI review">
+            <div className="panel case-desk__review-card">
+              <span className="eyebrow opacity-60">Worker checklist · <Badge kind={c.prov} /></span>
+              <h2 className="font-display text-xl">{st.name}</h2>
+              <p className="text-sm opacity-75">{st.workerDoes}</p>
+              <p className="text-xs opacity-70">California policy text for this item: not loaded. Confirm applicability before acting.</p>
+              <button type="button" className="btn btn--ghost" onClick={() => setReviewed((items) => items.includes(station) ? items : [...items, station])}>{reviewed.includes(station) ? 'Reviewed locally' : 'Mark reviewed locally'}</button>
+            </div>
+            <div className="panel case-desk__ledger">
+              <h2 className="panel__title">Evidence ledger <Badge kind={c.prov} /></h2>
+              <p className="text-xs opacity-65">Select a document fact to focus its recorded source position.</p>
+              {bundle.facts.filter((fact) => fact.sourceKind === 'document' || fact.sourceKind === 'household_reply').map((fact) => <button key={fact.id} type="button" className="case-desk__fact" onClick={() => focusFact(fact.id)}><strong>{fact.field.replaceAll('_', ' ')}</strong><span>{fact.value} <Badge kind={fact.prov} /></span><small>{fact.status === 'accepted' ? 'Worker accepted' : 'AI extracted · pending'} · {fact.sourceRef}</small></button>)}
+              {!bundle.facts.length && <p className="text-sm opacity-70">No facts recorded.</p>}
+            </div>
             <div className="panel">
               <h2 className="panel__title">
                 <span>Flags ({flags.length})</span>
@@ -139,7 +174,7 @@ export function Workspace({ bundle }: { bundle: CaseBundle }) {
               <div className="grid gap-3">
                 {flags.length === 0 ? <p className="m-0 text-sm opacity-70">No discrepancies found in the documents on file.</p> : null}
                 {flags.map((f) => (
-                  <FlagCard key={f.id} flag={f} onProof={() => setProofFlag(f.id)} onAccept={() => setStatus(f.id, 'accepted')} onDismiss={() => setStatus(f.id, 'dismissed')} />
+                  <FlagCard key={f.id} flag={f} onProof={() => showProof(f)} onAccept={() => setStatus(f.id, 'accepted')} onDismiss={() => setStatus(f.id, 'dismissed')} />
                 ))}
               </div>
             </div>
@@ -167,6 +202,12 @@ export function Workspace({ bundle }: { bundle: CaseBundle }) {
                 {bundle.questions.map((q) => <li key={q.id}>{q.text}</li>)}
                 {bundle.questions.length === 0 ? <li className="list-none opacity-60">None</li> : null}
               </ul>
+            </div>
+            <div className="panel case-desk__final">
+              <h2 className="panel__title">Final second check <Badge kind="fixture" /></h2>
+              <p className="text-sm opacity-75">Preview the recorded open questions before the worker certifies. A live AI run is shown only after it is connected and invoked.</p>
+              <button type="button" className="btn btn--primary" onClick={() => setFinalCheck(true)}>Preview remaining work</button>
+              {finalCheck && <div className="mt-3 text-sm" role="status">{bundle.questions.filter((q) => q.status === 'open' || q.status === 'answered').length ? bundle.questions.filter((q) => q.status === 'open' || q.status === 'answered').map((q) => <p key={q.id}>{q.text} <Badge kind={q.prov} /></p>) : <p>No open questions recorded in this fixture. The worker still reviews the file and policy.</p>}</div>}
             </div>
           </aside>
         </div>

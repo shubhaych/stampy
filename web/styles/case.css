@@ -1,1 +1,32 @@
 /* case feature styles. Owned by the case-workspace feature (see OWNERS.md). Imported once in app/layout.tsx. */
+.case-desk {
+  background: radial-gradient(circle at 72% -12%, rgba(126, 111, 185, .18), transparent 34%),
+    linear-gradient(150deg, #171b20 0%, #20262a 62%, #192322 100%);
+  min-height: 100vh;
+}
+.case-desk .wrap { padding-top: clamp(1rem, 2vw, 2.3rem); }
+.case-desk .panel {
+  border: 1px solid rgba(226, 228, 215, .11);
+  border-radius: 24px;
+  background: rgba(244, 242, 226, .055);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, .09);
+  backdrop-filter: blur(12px);
+}
+.case-desk .panel__title { letter-spacing: -.025em; }
+.case-desk__paper { border-radius: 4px 22px 22px 4px; overflow: hidden; }
+.case-desk__focus { animation: case-proof-focus 1.3s ease-out; background: rgba(224, 176, 74, .28); }
+.case-desk__hint { font-size: .78rem; opacity: .68; line-height: 1.55; margin-top: 1.4rem; }
+.case-desk__review-card { border-left: 3px solid #b38c67 !important; }
+.case-desk__ledger { border-left: 3px solid #6eac91 !important; }
+.case-desk__final { border-left: 3px solid #827cc0 !important; }
+.case-desk__fact {
+  width: 100%; display: grid; grid-template-columns: 1fr auto; gap: .25rem .75rem;
+  text-align: left; padding: .75rem .2rem; border-bottom: 1px solid rgba(255,255,255,.12);
+  transition: background .15s ease, transform .15s ease; border-radius: 8px;
+}
+.case-desk__fact:hover, .case-desk__fact:focus-visible { background: rgba(255,255,255,.07); transform: translateX(3px); outline: 2px solid #c6b8ec; }
+.case-desk__fact strong { font-size: .85rem; font-weight: 600; text-transform: capitalize; }
+.case-desk__fact span { font-size: .78rem; text-align: right; }
+.case-desk__fact small { grid-column: 1 / -1; font-size: .7rem; opacity: .65; }
+@keyframes case-proof-focus { from { box-shadow: 0 0 0 0 rgba(224,176,74,.7); } to { box-shadow: 0 0 0 12px rgba(224,176,74,0); } }
+@media (prefers-reduced-motion: reduce) { .case-desk__focus { animation: none; background: rgba(224,176,74,.28); } .case-desk__fact { transition: none; } }
