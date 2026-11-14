@@ -28,6 +28,10 @@ async function forward(request: Request, { params }: { params: Promise<{ path: s
       const value = upstream.headers.get(name);
       if (value) out.set(name, value);
     }
+    // A tunnel that is down answers with its own HTML page. Report that plainly instead of passing it on.
+    if (!upstream.ok && (upstream.headers.get('content-type') ?? '').includes('text/html')) {
+      return Response.json({ error: 'The Stampy worker is offline. Start it (and its tunnel), then retry.' }, { status: 503 });
+    }
     if (out.get('content-type')?.includes('text/event-stream')) out.set('x-accel-buffering', 'no');
     return new Response(upstream.body, { status: upstream.status, headers: out });
   } catch {

@@ -4,7 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import type { CaseBundleV2, Fact } from '@stampy/contracts/stampy';
 import { Check, FileText, Phone, Scale } from 'lucide-react';
-import { Badge, DeckPage, Fig } from '@/components/ui';
+import { Badge, DeckPage, Direction, Fig } from '@/components/ui';
+import { money } from '@/lib/format';
 import { api, ApiError, subscribeEvents } from '@/lib/stampy/api';
 import { FIXTURE_BUNDLE, FIXTURE_CASE_ID } from '@/lib/stampy/fixture';
 import { formatRef, timeAgo } from '@/lib/stampy/util';
@@ -211,6 +212,7 @@ export function CaseScreen({ id, fixture }: { id: string; fixture: boolean }) {
               {recordId && emailed && pending.some((q) => q.channel === 'document') && (
                 <p className="rv-demo">Presenting? <button type="button" className="cq-inline" onClick={() => void replyPaystub(recordId).then(({ filename, blob }) => { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename; a.click(); URL.revokeObjectURL(a.href); })}>Download this household&apos;s recent paystub</button> and attach it to your reply to the email.</p>
               )}
+              <Outcome bundle={bundle} prov={fixture ? 'fixture' : provenance} />
               {(decisionReady(bundle) || bundle.decision) && <DecisionPanel bundle={bundle} worker={lockedWorker} onDecide={async (choice, note) => { if (!lockedWorker) return; await api.decide(id, choice, lockedWorker, note); await after(); }} />}
             </section>
 
@@ -249,6 +251,28 @@ export function CaseScreen({ id, fixture }: { id: string; fixture: boolean }) {
         <div className="rv-foot"><span>Document and voice findings are internally consistent with the record, not proof of authenticity.</span><DataFooter /></div>
       </main>
     </FixtureProvider>
+  );
+}
+
+/** The before and after in one sentence, once the benefit has been recomputed from the evidence. */
+function Outcome({ bundle, prov }: { bundle: CaseBundleV2; prov: 'live' | 'replay' | 'synthetic' | 'fixture' | 'sandbox' }) {
+  const before = bundle.recompute?.before.benefitMonthly, after = bundle.recompute?.after.benefitMonthly;
+  if (before == null || after == null) return null;
+  const gap = Math.abs(before - after);
+  const done = bundle.decision?.action === 'approve';
+  return (
+    <div className="rv-outcome" data-dir={after < before ? 'over' : after > before ? 'under' : 'same'}>
+      <div className="rv-outcome__figures">
+        <span><small>As filed</small><Fig prov={prov}>{money(before)}</Fig></span>
+        <span aria-hidden>→</span>
+        <span><small>From the evidence</small><Fig prov={prov}>{money(after)}</Fig></span>
+      </div>
+      <p>
+        {gap === 0 ? 'The evidence supports the benefit as filed.'
+          : after < before ? <><Direction dir="over" /> <Fig prov={prov}>{money(gap)}</Fig> a month would have been overissued. {done ? 'Corrected before it went out.' : 'Approve to issue the corrected amount.'}</>
+          : <><Direction dir="under" /> The household was <Fig prov={prov}>{money(gap)}</Fig> a month short. {done ? 'Corrected before it went out.' : 'Approve to issue the corrected amount.'}</>}
+      </p>
+    </div>
   );
 }
 

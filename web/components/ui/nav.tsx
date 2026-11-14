@@ -7,6 +7,7 @@ import { ROUTES, isDeckPath } from '@/lib/routes';
 import { StampyMark } from './logo';
 
 const LINKS = [
+  { href: ROUTES.data, label: 'Data' },
   { href: ROUTES.apply, label: 'Apply' },
   { href: ROUTES.cases, label: 'Caseworker' },
   { href: ROUTES.system, label: 'System' },

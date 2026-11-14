@@ -1,7 +1,7 @@
 import type { Hono } from 'hono';
 import { loadSnapshot, QC_DIRECTORY } from './store';
 import { STATE_CODES } from './release';
-import { featured, replayFile } from './replay';
+import { featured, findingRecords, replayFile } from './replay';
 
 /** Read-only public data. These records are not applicant cases and cannot trigger outreach or decisions. */
 export function registerQc(app: Hono, directory = QC_DIRECTORY) {
@@ -30,6 +30,17 @@ export function registerQc(app: Hono, directory = QC_DIRECTORY) {
     try {
       const snapshot = loadSnapshot(directory);
       const picked = featured(Number(seedText), Number(limitText), directory);
+      if (!snapshot || !picked) return c.json({ error: 'QC records are not loaded. Run node --import tsx scripts/qc-ingest.ts.' }, 503);
+      return c.json({ ...picked, release: snapshot.release, prov: 'replay' });
+    } catch { return c.json({ error: 'QC cache validation failed. Re-run the importer before using these records.' }, 503); }
+  });
+  // Published QC findings for the Data page. Never requested by, or shown inside, an open case.
+  app.get('/qc/findings', (c) => {
+    const seedText = c.req.query('seed') ?? '1', limitText = c.req.query('limit') ?? '10';
+    if (!/^\d{1,9}$/.test(seedText) || !/^\d{1,2}$/.test(limitText) || Number(limitText) < 1 || Number(limitText) > 20) return c.json({ error: 'Invalid seed or limit' }, 400);
+    try {
+      const snapshot = loadSnapshot(directory);
+      const picked = findingRecords(Number(seedText), Number(limitText), directory);
       if (!snapshot || !picked) return c.json({ error: 'QC records are not loaded. Run node --import tsx scripts/qc-ingest.ts.' }, 503);
       return c.json({ ...picked, release: snapshot.release, prov: 'replay' });
     } catch { return c.json({ error: 'QC cache validation failed. Re-run the importer before using these records.' }, 503); }

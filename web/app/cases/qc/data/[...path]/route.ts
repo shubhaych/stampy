@@ -2,7 +2,7 @@
 export async function GET(request: Request, { params }: { params: Promise<{ path: string[] }> }) {
   const { path } = await params;
   const record = path[0] === 'cases' && /^qc-\d{4}-[A-Za-z0-9-]+$/.test(path[1] ?? '');
-  if (!(path.length === 1 && (path[0] === 'status' || path[0] === 'cases' || path[0] === 'featured')) &&
+  if (!(path.length === 1 && (path[0] === 'status' || path[0] === 'cases' || path[0] === 'featured' || path[0] === 'findings')) &&
       !(path.length === 2 && record) && !(path.length === 3 && record && path[2] === 'documents')) {
     return Response.json({ error: 'Unknown QC resource.' }, { status: 404 });
   }

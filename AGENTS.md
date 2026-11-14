@@ -27,7 +27,7 @@ Stack: Node 22, TS strict, npm workspaces, SQLite (`better-sqlite3`, only the wo
 12. Keys stay server-side. No `DEEPGRAM_API_KEY`, `ANTHROPIC_API_KEY`, `MOSS_PROJECT_KEY`, `MANUS_API_KEY` in `web/`.
 13. Never stop for a missing key. Every integration is `fixture | live`, default fixture; the app runs with zero keys. Log `UNVERIFIED-LIVE: <service>: <command>` in `PROGRESS.md` and `docs/LIVE_CHECKLIST.md`.
 14. No self-starting loops. `AI_DAILY_RUN_LIMIT`, `VOICE_DAILY_CALL_LIMIT`, outreach caps enforced in the worker service layer.
-15. `case_truth` (QC-verified values) is server-only, read only via `worker/src/core/truth.ts`, never in a REST response or SSE stream, never sent to an agent, never rendered before debrief. Tested.
+15. `case_truth` (QC-verified values) is server-only, read only via `worker/src/core/truth.ts`, never in a REST response or SSE stream, never sent to an agent, never rendered before debrief. Tested. Exception (decided 2026-11-14): the Data page (`/data`) may show the published QC finding fields of public records (status, error amount, error element, verified earnings and rent), labelled Replay, to explain what causes errors. Those fields are still never shown inside an open case and never sent to an agent.
 16. Detectors use behavior and documents only. Region and agency are never evidence.
 
 ## The core loop (section 0.3)

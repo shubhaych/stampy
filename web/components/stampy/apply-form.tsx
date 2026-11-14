@@ -65,7 +65,9 @@ export function ApplyForm() {
     };
   }, []);
 
-  const defaults = useMemo(() => (samples ?? []).filter((s) => s.uploadByDefault), [samples]);
+  // The demo file includes the recent paystub, so the only thing left to settle is the pay-frequency
+  // conflict between the form and the paystubs: one phone call closes the case.
+  const defaults = useMemo(() => (samples ?? []).filter((s) => s.uploadByDefault || s.name === 'paystub-2026-10-photo'), [samples]);
   const e164 = normalizePhone(phone);
   const phoneOk = /^\+\d{8,15}$/.test(e164);
   const hasDocs = files.length > 0 || (useSamples && defaults.length > 0);

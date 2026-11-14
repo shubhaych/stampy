@@ -12,20 +12,25 @@ import { join } from 'node:path';
 import { loadSnapshot, QC_DIRECTORY } from './store';
 import type { PublicRecord } from './ingest';
 
+/** One row of QC findings. Read by the Data page (never by an open case) and by the replay document generator. */
+export interface Finding {
+  direction: 'over' | 'under'; errorAmount: number; element: string; nature: string;
+  earnedMonthly: number; rentMonthly: number; size: number;
+}
 interface Verified { earnedMonthly: number; rentMonthly: number; direction: 'over' | 'under' }
-let cache: { key: string; rows: Map<string, Verified> } | null = null;
+let cache: { key: string; findings: Map<string, Finding>; rows: Map<string, Verified> } | null = null;
 
-/** One pass over the public CSV (no quoted fields in this release), keeping only replay-eligible rows. */
-function verifiedRows(directory: string): Map<string, Verified> {
+/** One pass over the public CSV (no quoted fields in this release). */
+function load(directory: string) {
   const path = join(directory, 'qc_pub_fy2024.csv');
   const key = `${path}:${statSync(path).mtimeMs}`;
-  if (cache?.key === key) return cache.rows;
+  if (cache?.key === key) return cache;
   const text = readFileSync(path, 'utf8');
   const end = text.indexOf('\n');
   const header = text.slice(text.charCodeAt(0) === 0xfeff ? 1 : 0, end).trim().split(',');
   const col = (name: string) => { const i = header.indexOf(name); if (i < 0) throw new Error(`QC column ${name} is missing`); return i; };
-  const [hh, status, element, earn, rent, size, error] = ['HHLDNO', 'STATUS', 'ELEMENT1', 'FSEARN', 'RENT', 'CERTHHSZ', 'AMTERR'].map(col) as [number, number, number, number, number, number, number];
-  const rows = new Map<string, Verified>();
+  const [hh, status, element, nature, earn, rent, size, error] = ['HHLDNO', 'STATUS', 'ELEMENT1', 'NATURE1', 'FSEARN', 'RENT', 'CERTHHSZ', 'AMTERR'].map(col) as [number, number, number, number, number, number, number, number];
+  const findings = new Map<string, Finding>(), rows = new Map<string, Verified>();
   let start = end + 1;
   while (start < text.length) {
     let stop = text.indexOf('\n', start);
@@ -34,14 +39,46 @@ function verifiedRows(directory: string): Map<string, Verified> {
     start = stop + 1;
     if (v.length !== header.length) continue;
     const s = v[status]!.trim();
-    // Wage findings only (element 311), with earnings and rent on file and a household small enough to print.
-    if ((s !== '2' && s !== '3') || v[element]!.trim() !== '311') continue;
-    const earned = Number(v[earn]), rentMonthly = Number(v[rent]), people = Number(v[size]);
-    if (!(earned >= 400 && earned <= 6000) || !(rentMonthly >= 200) || !(people >= 1 && people <= 5) || !(Number(v[error]) >= 40)) continue;
-    rows.set(`qc-2024-${v[hh]!.trim()}`, { earnedMonthly: earned, rentMonthly, direction: s === '2' ? 'over' : 'under' });
+    if (s !== '2' && s !== '3') continue;
+    const f: Finding = {
+      direction: s === '2' ? 'over' : 'under', errorAmount: Number(v[error]) || 0, element: v[element]!.trim(), nature: v[nature]!.trim(),
+      earnedMonthly: Number(v[earn]) || 0, rentMonthly: Number(v[rent]) || 0, size: Number(v[size]) || 0,
+    };
+    const id = `qc-2024-${v[hh]!.trim()}`;
+    findings.set(id, f);
+    // Replay pool: wage findings (element 311) with earnings and rent on file and a household small enough to print.
+    if (f.element === '311' && f.earnedMonthly >= 400 && f.earnedMonthly <= 6000 && f.rentMonthly >= 200 && f.size >= 1 && f.size <= 5 && f.errorAmount >= 40) {
+      rows.set(id, { earnedMonthly: f.earnedMonthly, rentMonthly: f.rentMonthly, direction: f.direction });
+    }
   }
-  cache = { key, rows };
-  return rows;
+  cache = { key, findings, rows };
+  return cache;
+}
+const verifiedRows = (directory: string) => load(directory).rows;
+
+/** Elements shown on the Data page. Labels follow the QC review schedule; other codes are left to the data dictionary. */
+export const ELEMENTS: Record<string, string> = { '311': 'Wages and salaries', '363': 'Shelter deduction', '364': 'Standard utility allowance', '150': 'Household composition' };
+
+export interface FindingRecord extends PublicRecord { finding: Finding & { elementLabel: string } }
+
+/** A random set of records with a QC finding in one of the labelled elements, balanced over and under. */
+export function findingRecords(seed: number, limit: number, directory = QC_DIRECTORY): { items: FindingRecord[]; pool: number; total: number } | null {
+  const snapshot = loadSnapshot(directory);
+  if (!snapshot) return null;
+  const { findings } = load(directory);
+  const random = rng(seed);
+  const eligible = snapshot.records.filter((r) => { const f = findings.get(r.id); return !!f && f.element in ELEMENTS && f.errorAmount >= 40 && r.benefitMonthly !== null && r.householdSize !== null; });
+  const take = (direction: Finding['direction'], n: number) => {
+    const pool = eligible.filter((r) => findings.get(r.id)!.direction === direction);
+    const out: PublicRecord[] = [];
+    while (out.length < n && pool.length) out.push(pool.splice(Math.floor(random() * pool.length), 1)[0]!);
+    return out;
+  };
+  const half = Math.ceil(limit / 2);
+  const items = [...take('over', half), ...take('under', limit - half)]
+    .map((r) => ({ r, k: random() })).sort((x, y) => x.k - y.k)
+    .map(({ r }): FindingRecord => { const f = findings.get(r.id)!; return { ...r, finding: { ...f, elementLabel: ELEMENTS[f.element]! } }; });
+  return { items, pool: eligible.length, total: findings.size };
 }
 
 function rng(seed: number) {
