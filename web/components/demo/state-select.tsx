@@ -50,7 +50,7 @@ export function StateSelect({ states }: { states: StateProfile[] }) {
                 role="option"
                 aria-selected={s.code === code}
                 onClick={() => setCode(s.code)}
-                className="aspect-square rounded-md font-mono text-[0.68rem] transition-transform hover:-translate-y-0.5"
+                className="aspect-square rounded-md tabular text-[0.68rem] transition-transform hover:-translate-y-0.5"
                 style={{
                   gridColumn: s.col + 1,
                   gridRow: s.row + 1,

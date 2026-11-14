@@ -55,7 +55,7 @@ export function RecomputePanel({ recompute }: { recompute: Recompute | null }) {
   const dir = benefitDirection(recompute);
   const delta = after.benefitMonthly !== null && before.benefitMonthly !== null ? after.benefitMonthly - before.benefitMonthly : null;
   return (
-    <HudFrame label="Rules engine · recomputed" right={<span className="stp-sub font-mono">{recompute.engine} · {recompute.ms} ms</span>} className="stp-hero">
+    <HudFrame label="Rules engine · recomputed" right={<span className="stp-sub tabular">{recompute.engine} · {recompute.ms} ms</span>} className="stp-hero">
       <div className="stp-hero__grid">
         <div className="stp-hero__row">
           <span className="stp-hero__label">Income per month</span>
@@ -234,7 +234,7 @@ export function CallsPanel({ calls }: { calls: Call[] }) {
               {c.turns.map((t, i) => (
                 <li key={i} className={`stp-turn stp-turn--${t.role}`}>
                   <span className="stp-turn__who">{t.role === 'assistant' ? 'AI agent' : 'Caller'}</span>
-                  <span className="stp-turn__at font-mono">{mss(t.atSeconds)}</span>
+                  <span className="stp-turn__at tabular">{mss(t.atSeconds)}</span>
                   <span className="stp-turn__text"><MoneyText text={t.text} prov={pv(c.simulated ? 'fixture' : 'live')} /></span>
                 </li>
               ))}

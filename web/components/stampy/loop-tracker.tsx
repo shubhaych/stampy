@@ -12,7 +12,7 @@ export function LoopTracker({ audit }: { audit: CaseBundleV2['audit'] }) {
     <section className="panel stp-loop" aria-label="Loop tracker">
       <div className="panel__title">
         <span>The loop</span>
-        <span className="font-mono">{lit} of {nodes.length}</span>
+        <span className="tabular">{lit} of {nodes.length}</span>
       </div>
       <ol className="stp-loop__list">
         {nodes.map((n) => (

@@ -42,7 +42,7 @@ export default async function SystemPage() {
           </section>
           <section className="panel">
             <h2 className="panel__title">UNVERIFIED-LIVE</h2>
-            <ul className="m-0 grid list-none gap-1 p-0 font-mono text-xs">
+            <ul className="m-0 grid list-none gap-1 p-0 tabular text-xs">
               {status.unverifiedLive.map((u) => <li key={u}>UNVERIFIED-LIVE: {u}</li>)}
             </ul>
             <p className="mt-3 mb-0 text-xs opacity-60">Recompute match rate on the 500-case sample: {status.recomputeMatchRate?.rate == null ? 'not measured yet' : `${status.recomputeMatchRate.rate}`}</p>

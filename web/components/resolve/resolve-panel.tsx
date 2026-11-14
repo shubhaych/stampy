@@ -37,7 +37,7 @@ export function ResolvePanel({ bundle }: { bundle: CaseBundle }) {
                   return (
                     <li key={i} className="flex flex-wrap items-center justify-between gap-2 rounded-md p-2" style={{ background: 'var(--glass)' }}>
                       <div className="min-w-0">
-                        <div className="text-sm font-semibold">{i + 1}. {CHANNEL_LABEL[o.channel] ?? o.channel} <span className="font-mono text-xs opacity-60">· {o.estCost} · {o.estTime}</span></div>
+                        <div className="text-sm font-semibold">{i + 1}. {CHANNEL_LABEL[o.channel] ?? o.channel} <span className="tabular text-xs opacity-60">· {o.estCost} · {o.estTime}</span></div>
                         <div className="text-xs opacity-75">{o.why}</div>
                       </div>
                       {isApproved ? <span className="eyebrow" style={{ color: 'var(--glow)' }}>Approved by worker</span> : (

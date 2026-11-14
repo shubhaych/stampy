@@ -83,10 +83,10 @@ export function CaseQueue({ fixture }: { fixture: boolean }) {
                     </Link>
                     <div className="stp-sub">{c.id} · {c.state}</div>
                   </td>
-                  <td className="font-mono">{formatRef(c.refCode)}</td>
+                  <td className="tabular">{formatRef(c.refCode)}</td>
                   <td><StatusChip status={c.status} /></td>
-                  <td className="text-right font-mono">{c.openQuestions}</td>
-                  <td className="text-right font-mono">{c.documents}</td>
+                  <td className="text-right tabular">{c.openQuestions}</td>
+                  <td className="text-right tabular">{c.documents}</td>
                   <td className="stp-sub" title={dateTime(c.updatedAt)}>{timeAgo(c.updatedAt)}</td>
                 </tr>
               ))}

@@ -24,9 +24,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 body:not(:has(.app-dark)) :focus-visible { outline-color: var(--pine); }
 
 .font-display { font-family: var(--font-display); font-weight: 650; letter-spacing: -0.03em; text-wrap: balance; }
-.font-mono, .num { font-family: var(--font-mono); }
+.num { font-family: var(--font-sans); }
 .num, .tabular { font-variant-numeric: tabular-nums; }
-.eyebrow { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em; }
+.eyebrow { font-family: var(--font-sans); font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
 .h-hero { font-size: clamp(1.9rem, 3.6vw, 3rem); line-height: 1.08; }
 .h-section { font-size: clamp(1.65rem, 3.2vw, 2.35rem); line-height: 1.12; }
 .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 16px; }

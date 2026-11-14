@@ -79,12 +79,12 @@ export function Workspace({ bundle }: { bundle: CaseBundle }) {
                     ))}
                   </div>
                   <div className="relative mx-auto aspect-[8.5/11] max-w-[520px] rounded-md bg-[var(--doc-paper)] p-6 text-[var(--doc-ink)] shadow-lg" data-figure aria-label={`${doc?.title ?? 'Document'} (synthetic rendering)`}>
-                    <div className="flex items-center justify-between font-mono text-[0.7rem] uppercase tracking-widest text-[var(--doc-soft)]">
+                    <div className="flex items-center justify-between tabular text-[0.7rem] uppercase tracking-widest text-[var(--doc-soft)]">
                       <span>{doc?.title}</span>
                       {doc ? <Badge kind={doc.prov} /> : null}
                     </div>
                     {ex.map((e) => (
-                      <div key={e.id} className="absolute whitespace-nowrap font-mono text-[0.66rem]" style={{ left: `${e.bbox.x * 100}%`, top: `${e.bbox.y * 100}%`, width: `${e.bbox.w * 100}%`, height: `${e.bbox.h * 100}%` }}>
+                      <div key={e.id} className="absolute whitespace-nowrap tabular text-[0.66rem]" style={{ left: `${e.bbox.x * 100}%`, top: `${e.bbox.y * 100}%`, width: `${e.bbox.w * 100}%`, height: `${e.bbox.h * 100}%` }}>
                         <span className="absolute inset-0 rounded-sm" style={{ border: '1.5px solid var(--over)', boxShadow: '0 0 0 3px color-mix(in srgb, var(--over) 18%, transparent)' }} aria-hidden />
                         <span className="relative px-1">{e.text}</span>
                       </div>

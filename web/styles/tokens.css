@@ -67,6 +67,5 @@
   --color-ledger: var(--ledger);
   --color-human: var(--human);
   --font-sans: var(--font-dm), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
   --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
 }

@@ -52,7 +52,7 @@ export function DocumentsPanel({ docs, facts, selectedDocId, onSelectDoc, select
           </div>
           <div className="stp-doc">
             <div className="stp-doc__meta">
-              <span className="font-mono text-xs">{doc.filename}</span>
+              <span className="tabular text-xs">{doc.filename}</span>
               <SourceBadge source={doc.source} />
               {doc.synthetic ? <Badge kind={pv('synthetic')} /> : null}
               <span className={`stp-pill stp-pill--${doc.readStatus}`}>{READ_LABEL[doc.readStatus]}</span>
@@ -178,7 +178,7 @@ function QuestionCard({ q, facts, onSelectFact }: { q: Question; facts: Fact[]; 
             <button type="button" className="stp-q__fact" onClick={() => onSelectFact(resolving)}>
               <span className="source-chip">{resolving.sourceLabel}</span>
               {resolving.line ? <q><MoneyText text={resolving.line} prov={pv(resolving.prov)} /></q> : null}
-              {resolving.atSeconds !== null ? <span className="font-mono text-xs">at {mss(resolving.atSeconds)}</span> : null}
+              {resolving.atSeconds !== null ? <span className="tabular text-xs">at {mss(resolving.atSeconds)}</span> : null}
             </button>
           ) : null}
           {q.closedAt ? <span className="stp-sub">closed {clockTime(q.closedAt)}</span> : null}
@@ -244,9 +244,9 @@ export function LedgerPanel({ facts, questions, selectedFactId, onSelectFact }: 
                         <span className="stp-fact__value"><Fig prov={pv(f.prov)}>{f.value}</Fig></span>
                         <span className="source-chip">{f.sourceLabel}</span>
                         <span className="stp-fact__quote">
-                          {f.page !== null ? <span className="font-mono">p{f.page} </span> : null}
+                          {f.page !== null ? <span className="tabular">p{f.page} </span> : null}
                           {f.line ? <q><MoneyText text={f.line} prov={pv(f.prov)} /></q> : null}
-                          {f.atSeconds !== null ? <span className="font-mono"> at {mss(f.atSeconds)}</span> : null}
+                          {f.atSeconds !== null ? <span className="tabular"> at {mss(f.atSeconds)}</span> : null}
                         </span>
                         <span className={`stp-fact__conf stp-fact__conf--${confLevel(f.confidence)}`} title="Reader confidence">{confLevel(f.confidence)} confidence</span>
                         {f.questionId ? <a className="stp-fact__q" href={`#q-${f.questionId}`} onClick={(e) => e.stopPropagation()}>answers {qTitle(f.questionId)}</a> : null}

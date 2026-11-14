@@ -31,7 +31,7 @@ export function DecisionPipeline({ bundle, compact = false }: { bundle: CaseBund
               <g key={n.id} transform={`translate(${n.x - W / 2}, ${n.y - H / 2})`} opacity={lit ? 1 : 0.32} onClick={() => setOpen(n)} style={{ cursor: 'pointer' }} role="button" tabIndex={0} aria-label={`${n.label}: ${lit ? `${n.rows.length} rows` : 'not used'}`} onKeyDown={(ev) => ev.key === 'Enter' && setOpen(n)}>
                 <rect width={W} height={H} rx={8} fill={FILL[n.kind]} fillOpacity={0.22} stroke={STROKE[n.kind]} strokeWidth={n.kind === 'question' ? 1.6 : 1} />
                 <text x={10} y={19} fontSize={11} fill="var(--deck-ink)" fontFamily="var(--font-sans)">{n.kind === 'question' ? '? ' : ''}{n.label}</text>
-                <text x={10} y={36} fontSize={9} fill="var(--deck-ink-soft)" fontFamily="var(--font-mono)">{GLYPH[n.step]} {n.step}</text>
+                <text x={10} y={36} fontSize={9} fill="var(--deck-ink-soft)" fontFamily="var(--tabular)">{GLYPH[n.step]} {n.step}</text>
               </g>
             );
           })}
@@ -40,7 +40,7 @@ export function DecisionPipeline({ bundle, compact = false }: { bundle: CaseBund
       {!compact && open ? (
         <div className="panel mt-3" role="dialog" aria-label={`${open.label} rows`}>
           <h3 className="panel__title">{open.label} · {open.step} {open.prov ? <Badge kind={open.prov} /> : null}</h3>
-          {open.rows.length ? <ul className="m-0 pl-4 font-mono text-xs">{open.rows.map((r) => <li key={r}>{r}</li>)}</ul> : <p className="m-0 text-sm opacity-70">No rows: this branch was not used on this case.</p>}
+          {open.rows.length ? <ul className="m-0 pl-4 tabular text-xs">{open.rows.map((r) => <li key={r}>{r}</li>)}</ul> : <p className="m-0 text-sm opacity-70">No rows: this branch was not used on this case.</p>}
         </div>
       ) : null}
     </div>
