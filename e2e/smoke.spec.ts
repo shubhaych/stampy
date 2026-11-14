@@ -1,10 +1,9 @@
 /**
- * G0 smoke: every route returns 200 in fixture mode with no console errors, renders the rule 10 footer,
+ * G0 smoke: every route returns 200 in fixture mode with no console errors,
  * and every money/percent text node sits inside a [data-figure] that carries a [data-prov] badge, or inside a
  * [data-prov-scope] whose visible [data-prov-note] names the source and provenance (rule 8).
  */
 import { expect, test } from '@playwright/test';
-import { FOOTER_TEXT } from '../packages/contracts/src/routes';
 import { SMOKE_ROUTES } from '../web/lib/routes';
 
 for (const route of SMOKE_ROUTES) {
@@ -14,7 +13,6 @@ for (const route of SMOKE_ROUTES) {
     page.on('pageerror', (e) => errors.push(e.message));
     const res = await page.goto(route);
     expect(res?.status(), `${route} status`).toBe(200);
-    await expect(page.getByTestId('footer-line')).toHaveText(FOOTER_TEXT);
 
     const unbadged = await page.evaluate(() => {
       const out: string[] = [];

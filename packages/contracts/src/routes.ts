@@ -22,10 +22,5 @@ export const WorkerRoutes = {
   evalRun: '/eval/run',
 } as const;
 
-export const FOOTER_TEXT =
-  'Synthetic demo documents. No real applicants. Stampy flags and cites; a merit-staff worker decides. Not an eligibility system.';
-
-export const AUTHENTICITY_CAVEAT = 'Internally consistent with the record, not proof of authenticity.';
-
 export const REPLAY_CAVEAT =
   'Synthetic documents are generated from the QC-verified values, so a catch on a replay case demonstrates the pipeline, not a real-world detection rate.';

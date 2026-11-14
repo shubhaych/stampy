@@ -33,7 +33,6 @@ export function requestEmail(input: { name: string; refCode: string; phone: stri
     docQs.length ? 'For documents, you can reply to this email with a clear photo of each page.' : '',
     '',
     `${env.AGENCY_NAME[0]!.toUpperCase()}${env.AGENCY_NAME.slice(1)}`,
-    '(Stampy demo. Synthetic case; no real benefits are affected.)',
   ];
   return { subject, text: lines.filter((l, i, a) => !(l === '' && a[i - 1] === '')).join('\n') };
 }
@@ -51,7 +50,6 @@ export function checklistEmail(input: { name: string; refCode: string; closed: Q
     'Just reply to this email with a photo attached. Make sure the whole page is in the picture and the numbers are readable.',
     '',
     `Reference number: ${spaced(input.refCode)}`,
-    '(Stampy demo. Synthetic case; no real benefits are affected.)',
   ];
   return { text: lines.join('\n') };
 }

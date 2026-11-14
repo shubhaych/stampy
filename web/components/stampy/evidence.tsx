@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { AUTHENTICITY_CAVEAT } from '@stampy/contracts';
 import { FIELD_LABEL } from '@stampy/contracts/stampy';
 import type { DocumentMeta, Fact, Question } from '@stampy/contracts/stampy';
 import { Badge, Direction, Fig } from '@/components/ui';
@@ -66,7 +65,6 @@ export function DocumentsPanel({ docs, facts, selectedDocId, onSelectDoc, select
                 <MoneyText text={doc.summary} prov={pv(doc.synthetic ? 'synthetic' : 'live')} />
               </p>
             ) : null}
-            <p className="stp-caveat">{AUTHENTICITY_CAVEAT}</p>
           </div>
         </>
       )}
@@ -259,7 +257,6 @@ export function LedgerPanel({ facts, questions, selectedFactId, onSelectFact }: 
           );
         })}
       </div>
-      <p className="stp-caveat">{AUTHENTICITY_CAVEAT}</p>
     </section>
   );
 }

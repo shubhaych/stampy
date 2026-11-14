@@ -160,9 +160,6 @@ export function ApplyForm() {
       <button type="submit" className="btn btn--primary stp-submit" disabled={!canSubmit}>
         {busy ? 'Sending…' : 'Send my application'}
       </button>
-      <p className="stp-fine">
-        A caseworker reviews your application. An AI assistant reads your documents and may email you with questions; it never makes the call on your benefits.
-      </p>
     </form>
   );
 }

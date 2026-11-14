@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { AUTHENTICITY_CAVEAT } from '@stampy/contracts';
 import type { Direction as Dir } from '@stampy/contracts';
 import type { Call, CaseBundleV2, Decision, InboundEmail, Outreach, Recompute } from '@stampy/contracts/stampy';
 import { Badge, Direction, Fig, HudFrame, Odometer, StampMark } from '@/components/ui';
@@ -45,9 +44,8 @@ export function RecomputePanel({ recompute }: { recompute: Recompute | null }) {
       <HudFrame label="Rules engine" className="stp-hero">
         <div className="stp-hero__empty">
           <p className="m-0 font-display text-xl">Not recomputed yet.</p>
-          <p className="m-0 stp-sub">The rules engine runs once the open questions have accepted evidence.</p>
+          <p className="m-0 stp-sub">Waiting on open questions.</p>
         </div>
-        <p className="stp-hero__caption">Rules engine (PolicyEngine-US) recomputed from accepted evidence. A flag alone never changes a case.</p>
       </HudFrame>
     );
   }
@@ -83,14 +81,11 @@ export function RecomputePanel({ recompute }: { recompute: Recompute | null }) {
       <div className="stp-hero__dir">
         <Direction dir={dir} long />
         {delta !== null ? <Fig prov={p}>{signedMoney(delta)} / mo</Fig> : null}
-        {dir === 'over' ? <span className="stp-sub">The filed application would have paid more than the evidence supports.</span> : null}
-        {dir === 'under' ? <span className="stp-sub">The filed application would have paid less than the evidence supports.</span> : null}
       </div>
       <div className="stp-hero__basis">
         <div><span className="eyebrow opacity-60">Before</span> <MoneyText text={before.basis} prov={p} /></div>
         <div><span className="eyebrow opacity-60">After</span> <MoneyText text={after.basis} prov={p} /></div>
       </div>
-      <p className="stp-hero__caption">Rules engine (PolicyEngine-US) recomputed from accepted evidence. A flag alone never changes a case.</p>
     </HudFrame>
   );
 }
@@ -144,7 +139,6 @@ export function DecisionPanel({ bundle, worker, onDecide }: { bundle: CaseBundle
           </div>
           {why ? <p className="stp-hint mt-2">{why}</p> : null}
           <ErrorLine error={error} />
-          <p className="stp-hint mt-2">The decision is yours. Stampy flags, asks and recomputes; it never changes a case on its own.</p>
         </>
       )}
     </section>
@@ -185,7 +179,7 @@ export function OutreachPanel({ outreach, inbound, worker, onSend }: { outreach:
               {it.out.error ? <p className="stp-error">{it.out.error}</p> : null}
               {it.out.status === 'draft' && it.out.kind === 'request' ? (
                 <div className="stp-mail__actions">
-                  <span className="stp-sub">AI draft. Nothing goes out until a caseworker approves it.</span>
+                  <span className="stp-sub">Draft</span>
                   <button type="button" className="btn btn--primary" disabled={fixture || !worker || !!busy} onClick={() => run('send', onSend)}>
                     {busy === 'send' ? 'Sending…' : 'Approve and send'}
                   </button>
@@ -208,7 +202,6 @@ export function OutreachPanel({ outreach, inbound, worker, onSend }: { outreach:
         )}
       </ol>
       <ErrorLine error={error} />
-      <p className="stp-hint">Nothing is sent automatically except the checklist the applicant was promised on the call.</p>
     </section>
   );
 }
@@ -247,7 +240,6 @@ export function CallsPanel({ calls }: { calls: Call[] }) {
           </article>
         ))}
       </div>
-      {calls.length ? <p className="stp-caveat">{AUTHENTICITY_CAVEAT}</p> : null}
     </section>
   );
 }

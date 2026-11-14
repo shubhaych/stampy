@@ -14,13 +14,13 @@ Stack: Node 22, TS strict, npm workspaces, SQLite (`better-sqlite3`, only the wo
 3. Both directions. Overissuance (amber, ↑ over) and underissuance (blue, ↓ under) get the same weight and urgency.
 4. Never say or imply: detects fraud, determines eligibility, reduces error rate by X%, FNA-approved, FedRAMP/StateRAMP/Pub 1075, uses credit data, integrated with any state system, projected PER equals official PER. Banned UI words: `fraud`, `scam`, `deny`, `denied`, `denial`, `auto-approve`, `auto-correct`, `guarantee`, `FNA-approved`, `compliant with Pub 1075` (allow-list: quoted titles in `data/sources.json`).
 5. No credit-bureau identity data (CRS).
-6. Document, photo and voice findings say "internally consistent with the record, not proof of authenticity."
+6. Document, photo and voice findings are evidence consistent with the record, never treated as proof of authenticity (a person weighs them; no on-screen caveat text, see rule 10).
 7. Never invent numbers, URLs, IDs, scores or policy text. Unknown = `<fill in>` in code, "not loaded" on screen. Policy text shown must come from `data/policy/` (fetched, with `source`, `section`, `url`, `retrieved_at`). CFR cites marked *(verify)* stay `verified:false` in `data/policy/citations.json` until checked on eCFR.
 
 **Data honesty**
 8. Every number on screen has a badge: Live, Replay, Synthetic, Fixture, Sandbox. A hard-coded number is never Live. Pitch pages may instead carry one visible source note per section (`data-prov-scope` → `data-prov-note`) naming the source and whether it is replay or test data. `check:badges` and the smoke test enforce it.
 9. Synthetic documents come from QC-verified values: replay "catches" demonstrate the pipeline, not detection rates. Say so in the debrief and dashboard.
-10. Footer on every page (verbatim): "Synthetic demo documents. No real applicants. Stampy flags and cites; a merit-staff worker decides. Not an eligibility system."
+10. No reasoning or disclaimers in the product UI: no disclaimer footer, no "AI never decides" captions, no self-justifying copy. Honesty lives in behavior (badges on numbers, a human click before anything changes, AI disclosure at the start of every call).
 11. Voice calls open with AI disclosure, purpose, and a human-callback offer. Simulated, or only to `VOICE_ALLOWED_NUMBERS`. Household consent recorded before the call button enables. Minimum disclosure.
 
 **Engineering**

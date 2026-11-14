@@ -5,7 +5,7 @@
  *     Comments are stripped before scanning: they are not UI strings.
  *  2. Disallowed claims (section 3 "Not allowed on screen").
  *  3. Server keys never appear in web/ (rule 12).
- *  4. The footer line renders on every page (rule 10).
+ *  4. No disclaimer footer or self-explaining captions in the product UI (rule 10).
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -73,13 +73,10 @@ for (const f of walk('web', (p) => /\.(tsx?|mjs|js|json|css|env)$/.test(p) || /\
 }
 
 const layout = join(ROOT, 'web/app/layout.tsx');
-if (existsSync(layout) && !/<Footer\b/.test(readFileSync(layout, 'utf8'))) problems.push('web/app/layout.tsx does not render <Footer /> (rule 10)');
-const routesTs = join(ROOT, 'packages/contracts/src/routes.ts');
-const footer = 'Synthetic demo documents. No real applicants. Stampy flags and cites; a merit-staff worker decides. Not an eligibility system.';
-if (existsSync(routesTs) && !readFileSync(routesTs, 'utf8').includes(footer)) problems.push('FOOTER_TEXT in packages/contracts/src/routes.ts is not the verbatim rule 10 line');
+if (existsSync(layout) && /<Footer\b/.test(readFileSync(layout, 'utf8'))) problems.push('web/app/layout.tsx renders a disclaimer <Footer /> (rule 10: no reasoning or disclaimers in the product UI)');
 
 if (problems.length) {
   console.error(`check:rules FAILED (${problems.length})\n${problems.join('\n')}`);
   process.exit(1);
 }
-console.log(`check:rules: ${files.length} UI source files clean; no server keys in web/; footer wired.`);
+console.log(`check:rules: ${files.length} UI source files clean; no server keys in web/; no disclaimer footer.`);

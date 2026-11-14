@@ -5,7 +5,6 @@ export * from './direction';
 export * from './hud-frame';
 export * from './section-divider';
 export * from './text-cta';
-export * from './footer';
 export * from './nav';
 export * from './odometer';
 export * from './clock-chip';

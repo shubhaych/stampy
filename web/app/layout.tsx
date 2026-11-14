@@ -15,7 +15,6 @@ import '../styles/dashboard.css';
 import '../styles/system.css';
 import '../styles/stampy.css';
 import { Nav } from '@/components/ui/nav';
-import { Footer } from '@/components/ui/footer';
 
 const fraunces = Fraunces({ variable: '--font-fraunces', subsets: ['latin'], weight: ['400', '600', '700'], display: 'swap' });
 const dmSans = DM_Sans({ variable: '--font-dm', subsets: ['latin'], display: 'swap' });
@@ -34,7 +33,6 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         <a href="#main" className="sr-only focus:not-sr-only">Skip to content</a>
         <Nav />
         <div id="main">{children}</div>
-        <Footer />
       </body>
     </html>
   );

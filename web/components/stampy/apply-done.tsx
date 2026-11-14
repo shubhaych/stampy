@@ -49,8 +49,6 @@ export function ApplyDone({ id, refCode }: { id: string; refCode: string | null 
         </div>
       ) : null}
       <ul className="stp-done__list">
-        <li>A caseworker reviews your application before anything changes.</li>
-        <li>If an AI assistant answers the phone, it will say so, and you can ask for a person to call you back.</li>
         <li>You don&apos;t need to do anything else right now.</li>
       </ul>
     </div>
