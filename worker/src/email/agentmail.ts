@@ -47,9 +47,10 @@ export async function sendMessage(to: string, subject: string, text: string): Pr
   return am<SentMessage>(`/inboxes/${encodeURIComponent(ib!.inbox_id)}/messages/send`, { method: 'POST', body: JSON.stringify({ to: [to], subject, text }) });
 }
 
-export async function replyTo(messageId: string, text: string): Promise<SentMessage> {
+/** Reply in the same thread. `to` is explicit: replying to our own sent message would otherwise address it to us. */
+export async function replyTo(messageId: string, text: string, to: string): Promise<SentMessage> {
   const ib = await ensureInbox();
-  return am<SentMessage>(`/inboxes/${encodeURIComponent(ib!.inbox_id)}/messages/${encodeURIComponent(messageId)}/reply`, { method: 'POST', body: JSON.stringify({ text }) });
+  return am<SentMessage>(`/inboxes/${encodeURIComponent(ib!.inbox_id)}/messages/${encodeURIComponent(messageId)}/reply`, { method: 'POST', body: JSON.stringify({ text, to: [to] }) });
 }
 
 export async function getMessage(inboxId: string, messageId: string): Promise<AmMessage> {

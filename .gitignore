@@ -14,3 +14,4 @@ web/.next/
 *.tsbuildinfo
 dist/
 .DS_Store
+web/AGENTS.md

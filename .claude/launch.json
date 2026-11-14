@@ -1,7 +1,9 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "web", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "-w", "web"], "port": 3000 },
-    { "name": "worker", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "-w", "worker"], "port": 8787 }
+    { "name": "web", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "-w", "web", "--", "-p", "3000"], "port": 3000 },
+    { "name": "worker", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "-w", "worker"], "port": 8787 },
+    { "name": "policyengine", "runtimeExecutable": "npm", "runtimeArgs": ["run", "pe:serve"], "port": 8790 },
+    { "name": "tunnel", "runtimeExecutable": "sh", "runtimeArgs": ["-c", "set -a; . ./.env.local; set +a; exec ngrok http 8787 --log stdout --log-level warn"], "port": 4040 }
   ]
 }

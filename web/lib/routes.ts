@@ -9,11 +9,15 @@ export const ROUTES = {
   system: '/system',
   upload: (token: string) => `/upload/${encodeURIComponent(token)}`,
   voiceAnswer: (callId: string) => `/voice/answer/${encodeURIComponent(callId)}`,
+  apply: '/apply',
+  applyDone: (id: string) => `/apply/${encodeURIComponent(id)}`,
+  cases: '/cases',
+  caseV2: (id: string) => `/cases/${encodeURIComponent(id)}`,
 } as const;
 
 /** Work pages render on the dark command deck. */
 export function isDeckPath(path: string): boolean {
-  return /^\/(demo|case|dashboard|system|voice)(\/|$)/.test(path);
+  return /^\/(demo|case|cases|dashboard|system|voice)(\/|$)/.test(path);
 }
 
 /** Every route, for the smoke test. */

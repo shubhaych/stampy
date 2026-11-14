@@ -56,7 +56,7 @@ export const env = {
   AGENTMAIL_API_KEY,
   AGENTMAIL_BASE: s('AGENTMAIL_BASE', 'https://api.agentmail.to/v0'),
   AGENTMAIL_USERNAME: s('AGENTMAIL_USERNAME', 'stampy-benefits'),
-  AGENTMAIL_DISPLAY_NAME: s('AGENTMAIL_DISPLAY_NAME', 'Stampy Benefits Office (demo)'),
+  AGENTMAIL_DISPLAY_NAME: s('AGENTMAIL_DISPLAY_NAME', 'Stampy Benefits Office Demo'),
   /** websocket (no tunnel needed) | webhook (needs PUBLIC_BASE_URL) | off */
   AGENTMAIL_EVENTS: s('AGENTMAIL_EVENTS', 'websocket') as 'websocket' | 'webhook' | 'off',
   AGENTMAIL_WEBHOOK_SECRET: s('AGENTMAIL_WEBHOOK_SECRET'),

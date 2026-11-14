@@ -6,9 +6,8 @@ import { useEffect, useState } from 'react';
 import { ROUTES, isDeckPath } from '@/lib/routes';
 
 const LINKS = [
-  { href: ROUTES.demo, label: 'Demo' },
-  { href: `${ROUTES.home}#how`, label: 'How it works' },
-  { href: `${ROUTES.home}#numbers`, label: 'Numbers' },
+  { href: ROUTES.apply, label: 'Apply' },
+  { href: ROUTES.cases, label: 'Caseworker' },
   { href: ROUTES.system, label: 'System' },
 ];
 
@@ -34,13 +33,13 @@ export function Nav() {
         </Link>
         <div className="nav__links">
           {LINKS.map((l) => (
-            <Link key={l.href} href={l.href} aria-current={path === l.href ? 'page' : undefined}>
+            <Link key={l.href} href={l.href} aria-current={path === l.href || path.startsWith(`${l.href}/`) ? 'page' : undefined}>
               {l.label}
             </Link>
           ))}
         </div>
-        <Link href={ROUTES.demo} className="text-cta" style={{ minHeight: 0 }}>
-          Work a case
+        <Link href={ROUTES.cases} className="text-cta" style={{ minHeight: 0 }}>
+          Open the queue
         </Link>
       </nav>
     </header>

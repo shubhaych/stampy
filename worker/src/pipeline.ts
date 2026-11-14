@@ -90,7 +90,7 @@ async function deliver(db: Q, outreachId: string): Promise<void> {
     } else {
       await consume(db, 'email', env.EMAIL_DAILY_LIMIT);
       const sent = o.kind === 'checklist' && c.email_last_message_id
-        ? await replyTo(c.email_last_message_id, o.body_text)
+        ? await replyTo(c.email_last_message_id, o.body_text, o.to_addr)
         : await sendMessage(o.to_addr, o.subject, o.body_text);
       await db.query(`UPDATE outreach SET status='sent', sent_at=now(), agentmail_message_id=$2, thread_id=$3 WHERE id=$1`, [o.id, sent.message_id, sent.thread_id]);
       await db.query(`UPDATE app_case SET email_thread_id=coalesce(email_thread_id,$2), email_last_message_id=$3, updated_at=now() WHERE id=$1`, [c.id, sent.thread_id, sent.message_id]);

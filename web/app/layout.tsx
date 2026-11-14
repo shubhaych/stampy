@@ -13,6 +13,7 @@ import '../styles/resolve.css';
 import '../styles/voice.css';
 import '../styles/dashboard.css';
 import '../styles/system.css';
+import '../styles/stampy.css';
 import { Nav } from '@/components/ui/nav';
 import { Footer } from '@/components/ui/footer';
 
