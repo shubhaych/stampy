@@ -29,6 +29,8 @@ export function Workspace({ bundle }: { bundle: CaseBundle }) {
   const [focusedExtraction, setFocusedExtraction] = useState<string | null>(null);
   const [reviewed, setReviewed] = useState<StationId[]>([]);
   const [finalCheck, setFinalCheck] = useState(false);
+  const [finalBusy, setFinalBusy] = useState(false);
+  const [finalResult, setFinalResult] = useState<{ status: string; reason?: string; mode?: string; findings?: Array<{ title: string; explanation: string; sourceIds: string[] }> } | null>(null);
   const doc = bundle.docs.find((d) => d.id === docId);
   const ex = bundle.extractions.filter((e) => e.docId === docId);
   const over = flags.filter((f) => f.direction === 'over').length;
@@ -53,6 +55,16 @@ export function Workspace({ bundle }: { bundle: CaseBundle }) {
     const extraction = bundle.extractions.find((e) => e.docId === fact.sourceRef && e.field === fact.field);
     setFocusedExtraction(extraction?.id ?? null);
     setTab('documents');
+  };
+  const runFinalReview = async () => {
+    setFinalBusy(true);
+    setFinalCheck(true);
+    try {
+      const response = await fetch(`/case/${encodeURIComponent(c.id)}/review`, { method: 'POST' });
+      setFinalResult(await response.json());
+    } catch {
+      setFinalResult({ status: 'needs_human', reason: 'AI review service is unavailable. Continue with worker review.' });
+    } finally { setFinalBusy(false); }
   };
 
   return (
@@ -205,9 +217,12 @@ export function Workspace({ bundle }: { bundle: CaseBundle }) {
             </div>
             <div className="panel case-desk__final">
               <h2 className="panel__title">Final second check <Badge kind="fixture" /></h2>
-              <p className="text-sm opacity-75">Preview the recorded open questions before the worker certifies. A live AI run is shown only after it is connected and invoked.</p>
-              <button type="button" className="btn btn--primary" onClick={() => setFinalCheck(true)}>Preview remaining work</button>
-              {finalCheck && <div className="mt-3 text-sm" role="status">{bundle.questions.filter((q) => q.status === 'open' || q.status === 'answered').length ? bundle.questions.filter((q) => q.status === 'open' || q.status === 'answered').map((q) => <p key={q.id}>{q.text} <Badge kind={q.prov} /></p>) : <p>No open questions recorded in this fixture. The worker still reviews the file and policy.</p>}</div>}
+              <p className="text-sm opacity-75">Run a source-bound second check before the worker certifies. Findings remain suggestions.</p>
+              <button type="button" className="btn btn--primary" disabled={finalBusy} onClick={runFinalReview}>{finalBusy ? 'Reviewing…' : 'Run final review'}</button>
+              {finalCheck && <div className="mt-3 text-sm" role="status">
+                {finalResult?.status === 'needs_human' && <p>{finalResult.reason}</p>}
+                {finalResult?.status === 'ok' && <><p>AI review complete · <Badge kind={finalResult.mode === 'live' ? 'live' : 'fixture'} /></p>{finalResult.findings?.map((finding, index) => <div key={`${finding.title}-${index}`} className="case-desk__result"><strong>{finding.title}</strong><p>{finding.explanation}</p>{finding.sourceIds.map((sourceId) => <button key={sourceId} type="button" className="text-cta" onClick={() => { if (bundle.facts.some((f) => f.id === sourceId)) focusFact(sourceId); else { const flag = bundle.flags.find((f) => f.id === sourceId); if (flag) showProof(flag); } }}>{sourceId} →</button>)}</div>)}</>}
+              </div>}
             </div>
           </aside>
         </div>
