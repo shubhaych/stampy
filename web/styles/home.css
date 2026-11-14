@@ -57,8 +57,6 @@ html.lenis, html.lenis body { height: auto; }
 .two2__title { text-align: center; max-width: none; }
 .two2 { display: grid; grid-template-columns: 1fr auto 1fr; gap: 36px; align-items: center; margin-top: 18px; }
 .two2__col { padding: 22px; border-radius: var(--radius-glass); background: var(--paper-2); border: 1px solid var(--line); }
-.two2__col--over { border-top: 4px solid var(--over); }
-.two2__col--under { border-top: 4px solid var(--under); }
 .two2__word { font-family: var(--font-display); font-weight: 650; font-size: clamp(1.6rem, 3vw, 2.2rem); letter-spacing: -0.02em; }
 .two2__col--over .two2__word { color: var(--over-ink); }
 .two2__col--under .two2__word { color: var(--under-ink); }
@@ -135,7 +133,7 @@ html.lenis, html.lenis body { height: auto; }
 .wt-new { font-weight: 700; color: var(--over-ink); }
 .wt-pending { color: var(--over-ink); }
 .wt-flags { width: 230px; border-left: 1px solid var(--deck-line); padding: 14px 12px; display: grid; gap: 10px; align-content: start; }
-.wt-flag { border: 1px solid var(--deck-line); border-left: 3px solid var(--over); border-radius: 8px; padding: 10px; display: grid; gap: 6px; background: var(--glass); }
+.wt-flag { border: 1px solid var(--deck-line); border-radius: 8px; padding: 10px; display: grid; gap: 6px; background: var(--glass); }
 .wt-flag__top { display: flex; justify-content: space-between; align-items: center; }
 .wt-flag__title { font-weight: 600; }
 .wt-flag__btns { display: flex; gap: 6px; }
@@ -238,8 +236,8 @@ html.lenis, html.lenis body { height: auto; }
 .bl__wait { font-size: 0.8rem; color: var(--human); font-weight: 600; margin-top: 4px; }
 .bl__features { list-style: none; padding: 0; margin: 16px 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 @media (max-width: 900px) { .bl__features { grid-template-columns: 1fr 1fr; } }
-.bl__features li { padding: 14px; border-radius: var(--radius-card); border: 1px solid var(--line); border-top: 3px solid var(--line); transition: border-color .35s, background .35s; }
-.bl__features li.is-on { border-top-color: var(--pine); background: #fff; }
+.bl__features li { padding: 14px; border-radius: var(--radius-card); border: 1px solid var(--line); transition: border-color .35s, background .35s; }
+.bl__features li.is-on { border-color: var(--pine); background: #fff; }
 .bl__f-t { font-weight: 650; }
 .bl__f-d { font-size: 0.86rem; color: var(--ink-soft); margin-top: 4px; }
 .bl__note { font-size: 0.74rem; color: var(--ink-soft); margin-top: 10px; }

@@ -105,9 +105,7 @@ body:has(.app-dark) .site-footer { border-top-color: var(--deck-line); color: va
 .app-dark .dir--none { color: var(--deck-ink-soft); }
 
 /* ---------- FlagCard ---------- */
-.flag-card { border: 1px solid var(--deck-line); border-left: 3px solid var(--deck-ink-soft); border-radius: var(--radius); padding: 12px; background: var(--glass); display: grid; gap: 6px; }
-.flag-card--over { border-left-color: var(--over); }
-.flag-card--under { border-left-color: var(--under); }
+.flag-card { border: 1px solid var(--deck-line); border-radius: var(--radius); padding: 12px; background: var(--glass); display: grid; gap: 6px; }
 .flag-card__rule { font-family: var(--font-sans); font-size: 0.64rem; color: var(--deck-ink-soft); letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
 .flag-card__title { font-weight: 600; font-size: 0.95rem; }
 .flag-card__actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }

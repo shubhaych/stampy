@@ -192,8 +192,6 @@
 .stp-bbox--on { border: 2px solid var(--question); background: color-mix(in srgb, var(--question) 18%, transparent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--question) 25%, transparent); }
 
 /* ledger */
-.stp-lg { border-left: 2px solid var(--deck-line); padding-left: 12px; }
-.stp-lg--conflict { border-left-color: var(--question); }
 .stp-lg__head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 6px; }
 .stp-lg__field { font-weight: 600; font-size: 0.9rem; }
 .stp-lg__rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
