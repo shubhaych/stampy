@@ -14,3 +14,4 @@ export * from './case-vs-doc';
 export * from './station-rail';
 export * from './stamp-mark';
 export * from './deck-page';
+export * from './logo';

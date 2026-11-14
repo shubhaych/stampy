@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ROUTES, isDeckPath } from '@/lib/routes';
+import { StampyMark } from './logo';
 
 const LINKS = [
   { href: ROUTES.apply, label: 'Apply' },
@@ -28,7 +29,7 @@ export function Nav() {
     <header className={cls}>
       <nav className="wrap nav__inner" aria-label="Main">
         <Link href={ROUTES.home} className="nav__mark">
-          <span className="nav__square" aria-hidden />
+          <StampyMark className="nav__logo" />
           Stampy
         </Link>
         <div className="nav__links">
