@@ -56,7 +56,17 @@
 .stp-field--deck > span { font-family: var(--font-sans); font-weight: 500; font-size: 0.64rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--deck-ink-soft); font-variant-numeric: tabular-nums; }
 .stp-docs { padding: 16px; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--paper-2); gap: 10px; }
 .stp-docs > legend { padding: 0 6px; margin-left: -6px; }
-.stp-filelist { margin: 0; padding-left: 18px; font-size: 0.86rem; font-family: var(--font-sans); font-variant-numeric: tabular-nums; }
+.stp-drop { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); transition: border-color .15s ease, background .15s ease; }
+.stp-drop.is-over { border-color: var(--pine); background: color-mix(in srgb, var(--pine) 7%, var(--paper)); }
+.stp-drop:focus-within .stp-drop__btn { outline: 2px solid var(--pine); outline-offset: 2px; }
+.stp-drop__btn { cursor: pointer; min-height: 38px; }
+.stp-drop__hint { font-size: 0.86rem; color: var(--ink-soft); }
+.stp-files { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.stp-files__row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 0.9rem; }
+.stp-files__name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stp-files__size { color: var(--ink-soft); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+.stp-files__remove { background: none; border: 0; padding: 0; font-size: 0.8rem; color: var(--ink-soft); text-decoration: underline; text-underline-offset: 3px; }
+.stp-files__remove:hover { color: var(--conflict); }
 .stp-samples { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding-top: 4px; }
 .stp-thumbs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
 .stp-thumb { display: grid; gap: 6px; border: 1px solid var(--line); border-radius: 8px; padding: 6px; background: var(--doc-paper); }

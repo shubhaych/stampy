@@ -19,6 +19,11 @@ const STATES: [string, string][] = [
   ['WV', 'West Virginia'], ['WI', 'Wisconsin'], ['WY', 'Wyoming'],
 ];
 
+const ACCEPT = 'image/png,image/jpeg,image/gif,image/webp,application/pdf';
+const ACCEPTED = new Set(ACCEPT.split(','));
+const fileKey = (f: File) => `${f.name}:${f.size}:${f.lastModified}`;
+const fileSize = (n: number) => (n < 1024 * 1024 ? `${Math.max(1, Math.round(n / 1024))} KB` : `${(n / 1024 / 1024).toFixed(1)} MB`);
+
 /** Remembered for the confirmation page so the email never goes in a URL. */
 export const APPLY_SESSION_KEY = (id: string) => `stampy.apply.${id}`;
 
@@ -34,6 +39,20 @@ export function ApplyForm() {
   const [useSamples, setUseSamples] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dragging, setDragging] = useState(false);
+  const [skipped, setSkipped] = useState<string | null>(null);
+
+  /** Add picked or dropped files to the list (no duplicates); skip types the reader can't open. */
+  function addFiles(list: FileList | null) {
+    const picked = Array.from(list ?? []);
+    const ok = picked.filter((f) => ACCEPTED.has(f.type));
+    const bad = picked.filter((f) => !ACCEPTED.has(f.type));
+    setSkipped(bad.length ? `Skipped ${bad.map((f) => f.name).join(', ')}: use a photo (JPG, PNG) or a PDF.` : null);
+    setFiles((xs) => {
+      const seen = new Set(xs.map(fileKey));
+      return [...xs, ...ok.filter((f) => !seen.has(fileKey(f)))];
+    });
+  }
 
   useEffect(() => {
     let live = true;
@@ -106,18 +125,44 @@ export function ApplyForm() {
       <fieldset className="stp-field stp-docs">
         <legend>Your documents</legend>
         <small>Your application form, recent paystubs, and your lease. Photos or PDFs.</small>
-        <input
-          className="stp-input"
-          type="file"
-          multiple
-          accept="image/*,application/pdf"
-          onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
-          aria-label="Choose documents"
-        />
+        <div
+          className={`stp-drop ${dragging ? 'is-over' : ''}`}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDragging(true);
+          }}
+          onDragLeave={() => setDragging(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setDragging(false);
+            addFiles(e.dataTransfer.files);
+          }}
+        >
+          <input
+            id="stp-files"
+            className="sr-only"
+            type="file"
+            multiple
+            accept={ACCEPT}
+            onChange={(e) => {
+              addFiles(e.target.files);
+              e.target.value = '';
+            }}
+          />
+          <label htmlFor="stp-files" className="btn btn--ghost stp-drop__btn">Choose files</label>
+          <span className="stp-drop__hint">or drag them here</span>
+        </div>
+        {skipped ? <small className="stp-hint">{skipped}</small> : null}
         {files.length ? (
-          <ul className="stp-filelist">
+          <ul className="stp-files" aria-label="Files to send">
             {files.map((f) => (
-              <li key={f.name + f.size}>{f.name}</li>
+              <li key={fileKey(f)} className="stp-files__row">
+                <span className="stp-files__name">{f.name}</span>
+                <span className="stp-files__size">{fileSize(f.size)}</span>
+                <button type="button" className="stp-files__remove" onClick={() => setFiles((xs) => xs.filter((x) => fileKey(x) !== fileKey(f)))} aria-label={`Remove ${f.name}`}>
+                  Remove
+                </button>
+              </li>
             ))}
           </ul>
         ) : null}
