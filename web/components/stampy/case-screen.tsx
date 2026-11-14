@@ -181,7 +181,7 @@ export function CaseScreen({ id, fixture }: { id: string; fixture: boolean }) {
                   </button>
                 </li>
               ))}
-              {bundle.calls.length > 0 && <li><button type="button" aria-pressed={canvas === 'calls'} onClick={() => setCanvas('calls')}><Phone size={15} aria-hidden /><span><strong>Phone call</strong><small>{bundle.calls.length === 1 ? 'Transcript' : `${bundle.calls.length} transcripts`}</small></span></button></li>}
+              {bundle.calls.length > 0 && <li><button type="button" onClick={() => document.getElementById('rv-call')?.scrollIntoView({ block: 'start', behavior: 'smooth' })}><Phone size={15} aria-hidden /><span><strong>Phone call</strong><small>{bundle.calls.length === 1 ? 'Transcript' : `${bundle.calls.length} transcripts`}</small></span></button></li>}
               {bundle.recompute && <li><button type="button" aria-pressed={canvas === 'budget'} onClick={() => setCanvas('budget')}><Scale size={15} aria-hidden /><span><strong>Benefit check</strong><small>Before and after</small></span></button></li>}
             </ul>
           </nav>
@@ -213,6 +213,15 @@ export function CaseScreen({ id, fixture }: { id: string; fixture: boolean }) {
               )}
               {(decisionReady(bundle) || bundle.decision) && <DecisionPanel bundle={bundle} worker={lockedWorker} onDecide={async (choice, note) => { if (!lockedWorker) return; await api.decide(id, choice, lockedWorker, note); await after(); }} />}
             </section>
+
+            {(bundle.calls.length > 0 || pending.some((q) => q.channel === 'phone')) && (
+              <section id="rv-call">
+                <span className="rv-label">Phone call {bundle.calls.some((k) => k.status === 'in_progress') && <span className="rv-oncall">On the line now</span>}</span>
+                {bundle.calls.length === 0
+                  ? <p className="rv-quiet">No call yet.{bundle.phoneNumber ? ` The household calls ${bundle.phoneNumber} and gives reference ${formatRef(c.refCode)}.` : ''} What is said appears here as a transcript.</p>
+                  : <CallsPanel calls={bundle.calls} />}
+              </section>
+            )}
 
             <section id="rv-questions">
               <span className="rv-label">What does not match <Fig prov={fixture ? 'fixture' : provenance}>{pending.length}</Fig></span>
