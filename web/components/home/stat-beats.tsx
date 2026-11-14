@@ -1,15 +1,15 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react';
 import { Fig } from '@/components/ui';
 import { FACTS, source, type Fact } from './facts';
 import { LedgerBeam } from './ledger-beam';
 import { useHomeStatic } from './use-static';
 
-interface Beat { fact: Fact; label: string }
+interface Beat { fact: Fact; label: ReactNode }
 const BEATS: Beat[] = [
-  { fact: FACTS.perFy2025Dollars, label: `in improper SNAP payments in FY2025, a ${FACTS.perFy2025.value} payment error rate` },
+  { fact: FACTS.perFy2025Dollars, label: <>in improper SNAP payments in FY2025, a <Fig prov={FACTS.perFy2025.prov}>{FACTS.perFy2025.value}</Fig> payment error rate</> },
   { fact: FACTS.agencyPoints, label: 'points of FY2023 dollar error were caused by agencies, not households' },
   { fact: FACTS.incomeShare, label: 'of FY2023 variances were in income' },
 ];
@@ -46,30 +46,31 @@ function TwoWays() {
   );
 }
 
-/** Section 2: the cost of getting it wrong. Sticky stat beats, each figure alone on stage, then Two ways to be wrong. */
-export function StatBeats() {
-  const isStatic = useHomeStatic();
+function BeatsScroll() {
   const track = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: track, offset: ['start start', 'end end'] });
   const [i, setI] = useState(0);
   useMotionValueEvent(scrollYProgress, 'change', (v) => setI(Math.min(BEATS.length - 1, Math.floor(v * BEATS.length))));
+  return (
+    <div ref={track} className="stats__track">
+      <div className="stats__stage">
+        <AnimatePresence mode="wait">
+          <motion.div key={i} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -24 }} transition={{ duration: 0.35 }}>
+            <BeatView b={BEATS[i]!} />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
 
+/** Section 2: the cost of getting it wrong. Sticky stat beats, each figure alone on stage, then Two ways to be wrong. */
+export function StatBeats() {
+  const isStatic = useHomeStatic();
   return (
     <section id="numbers" className="stats" aria-label="The cost of getting it wrong">
       <div className="wrap"><div className="eyebrow stats__eyebrow">The cost of getting it wrong</div></div>
-      {isStatic ? (
-        <div className="wrap stats__static">{BEATS.map((b) => <BeatView key={b.fact.value} b={b} />)}</div>
-      ) : (
-        <div ref={track} className="stats__track">
-          <div className="stats__stage">
-            <AnimatePresence mode="wait">
-              <motion.div key={i} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -24 }} transition={{ duration: 0.35 }}>
-                <BeatView b={BEATS[i]!} />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-      )}
+      {isStatic ? <div className="wrap stats__static">{BEATS.map((b) => <BeatView key={b.fact.value} b={b} />)}</div> : <BeatsScroll />}
       <TwoWays />
     </section>
   );

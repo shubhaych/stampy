@@ -13,7 +13,7 @@ export function LedgerBeam({ over, under, overLabel, underLabel, prov }: { over:
     <figure className="beam" aria-label={`Overissuance ${overLabel}, underissuance ${underLabel}`}>
       <svg viewBox="0 0 320 170" className="beam__svg" aria-hidden>
         <path d="M150 160 L160 60 L170 160 Z" fill="var(--ink)" opacity="0.85" />
-        <motion.g style={{ originX: '160px', originY: '60px' }} initial={{ rotate: 0 }} whileInView={{ rotate: angle }} viewport={{ once: true }} transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 60, damping: 12 }}>
+        <motion.g style={{ transformBox: 'view-box', transformOrigin: '160px 60px' }} initial={{ rotate: 0 }} whileInView={{ rotate: angle }} viewport={{ once: true }} transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 60, damping: 12 }}>
           <line x1="40" y1="60" x2="280" y2="60" stroke="var(--ink)" strokeWidth="3" />
           <line x1="40" y1="60" x2="40" y2="96" stroke="var(--ink)" />
           <line x1="280" y1="60" x2="280" y2="96" stroke="var(--ink)" />

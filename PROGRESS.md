@@ -5,7 +5,7 @@ Tick a gate only with evidence (test name, screenshot path, command output). Eac
 | Gate | Owner | Status | Evidence |
 |---|---|---|---|
 | G0 scaffold | A | done | `npm run check` green (typecheck, 34 unit tests, check:rules, check:badges, check:ownership); `npx playwright test` 20/20 (`e2e/smoke.spec.ts`, 10 routes × 1440 and 390, footer + runtime badge check, no console errors); tag `scaffold-v1` |
-| G1 homepage | A | open | |
+| G1 homepage | A | in review (branch a/home) | `e2e/home/home.spec.ts` (1440 animated, 390 static with no horizontal scroll, reduced-motion static, keyboard reaches CTA); smoke runtime badge check on `/`; shots `e2e/home/shots/home-1440-hero.png`, `home-1440-full.png`, `home-390-full.png`. Not yet measured: Lighthouse |
 | G2 golden path (fixture) | A + B | open | |
 | G3 rules + recompute match rate | B | open | match rate: not measured |
 | G4 QC pipeline | B | open | qc_history = 4 golden rows; QC file not ingested |

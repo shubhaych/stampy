@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useInView, useReducedMotion } from 'motion/react';
 import { GC1_BUNDLE } from '@cleancase/contracts/fixtures';
 import { Badge, HudFrame } from '@/components/ui';
 
@@ -29,17 +29,20 @@ function Wave({ color, active }: { color: string; active: boolean }) {
 export function VoiceSpotlight() {
   const turns = GC1_BUNDLE.callTurns;
   const facts = GC1_BUNDLE.callFacts;
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { amount: 0.3 });
   const [n, setN] = useState(1);
   useEffect(() => {
+    if (!inView) return;
     const id = window.setTimeout(() => setN((x) => (x >= turns.length + 2 ? 1 : x + 1)), n > turns.length ? 3000 : 1600);
     return () => window.clearTimeout(id);
-  }, [n, turns.length]);
+  }, [n, turns.length, inView]);
   const shown = turns.slice(0, n);
   const speaker = shown[shown.length - 1]?.speaker;
   const landed = facts.filter((f) => f.turnIds.every((t) => shown.some((s) => s.id === t)));
 
   return (
-    <section className="voice wrap" aria-labelledby="voice-title">
+    <section ref={ref} className="voice wrap" aria-labelledby="voice-title">
       <div className="eyebrow">Voice Verifier</div>
       <h2 id="voice-title" className="font-display h-section">When the document can&apos;t answer, CleanCase makes the call.</h2>
       <div className="voice__grid">

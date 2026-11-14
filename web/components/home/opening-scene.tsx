@@ -29,6 +29,15 @@ function Hero({ animated }: { animated: boolean }) {
   );
 }
 
+/** The bbox drawn around an extracted field (pathLength scrubbed by scroll; fully drawn in the static version). */
+function BBoxRect({ box }: { box?: MotionValue<number> }) {
+  return (
+    <svg className="pass-stub__bbox" aria-hidden>
+      <motion.rect x="0" y="0" width="100%" height="100%" rx="3" pathLength={1} style={box ? { pathLength: box } : undefined} />
+    </svg>
+  );
+}
+
 function Paystub({ scan, box }: { scan?: MotionValue<string>; box?: MotionValue<number> }) {
   return (
     <div className="pass-stub" data-figure>
@@ -37,13 +46,9 @@ function Paystub({ scan, box }: { scan?: MotionValue<string>; box?: MotionValue<
         <Badge kind="synthetic" />
       </div>
       <div className="pass-stub__row">Pay period 10/01/2026 to 10/14/2026</div>
-      <div className="pass-stub__row pass-stub__row--freq">Pay frequency: <b>Biweekly</b></div>
+      <div className="pass-stub__row pass-stub__row--box">Pay frequency: <b>Biweekly</b><BBoxRect box={box} /></div>
       <div className="pass-stub__row">Hours 80.00</div>
-      <div className="pass-stub__row pass-stub__row--gross">Gross <b>$1,240.00</b></div>
-      <svg className="pass-stub__boxes" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
-        <motion.rect x="4" y="34" width="62" height="12" rx="1.5" style={box ? { pathLength: box } : undefined} />
-        <motion.rect x="4" y="62" width="56" height="12" rx="1.5" style={box ? { pathLength: box } : undefined} />
-      </svg>
+      <div className="pass-stub__row pass-stub__row--box">Gross <b>$1,240.00</b><BBoxRect box={box} /></div>{/* badge-ok: inside this paystub's data-figure, badged Synthetic in its header */}
       {scan ? <motion.div className="pass-stub__beam" style={{ top: scan }} aria-hidden /> : null}
     </div>
   );
@@ -100,9 +105,10 @@ function PassScroll() {
         <div className="wrap pass-grid">
           <motion.div style={{ opacity: lift, y: liftY }}><Paystub scan={scan} box={box} /></motion.div>
           <div className="pass-right">
-            <motion.div className="pass-flying" style={{ opacity: chips, x: chipsX }}>
+            <motion.div className="pass-flying" style={{ opacity: chips, x: chipsX }} data-figure>
               <span className="source-chip">Gross $1,240.00</span>
               <span className="source-chip">Biweekly</span>
+              <Badge kind="synthetic" />
             </motion.div>
             <Sheet recomputed={phase.recomputed} struck={phase.struck} />
             <motion.div style={{ opacity: delta }}><Fig prov="fixture">+$1,426 / mo not counted · ↑ overissuance risk</Fig></motion.div>
