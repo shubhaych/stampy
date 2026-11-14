@@ -7,14 +7,14 @@ A = Face (everything people see). B = Brain (data, rules, roles, voice, db).
 | Feature slug | Machine | Owned paths |
 |---|---|---|
 | `home` | A | `web/app/(site)/**`, `web/components/home/**`, `web/styles/home.css`, `web/public/images/home/**`, `data/sources.json` |
-| `web-core` | A | `web/components/ui/**`, `web/lib/**`, `web/app/globals.css`, `web/app/not-found.tsx`, `web/next.config.ts`, `web/postcss.config.mjs`, `web/tsconfig.json`, `web/public/*` |
+| `web-core` | A | `web/components/ui/**`, `web/lib/**`, `web/styles/ui.css`, `web/app/globals.css`, `web/app/not-found.tsx`, `web/next.config.ts`, `web/postcss.config.mjs`, `web/tsconfig.json`, `web/public/*` |
 | `demo-shell` | A | `web/app/demo/**`, `web/components/demo/**`, `web/styles/demo.css`, `data/states.json` |
 | `case-workspace` | A | `web/app/case/**`, `web/components/case/**`, `web/styles/case.css` |
 | `pipeline-ui` | A | `web/components/pipeline/**`, `web/styles/pipeline.css` |
 | `resolve-ui` | A | `web/components/resolve/**`, `web/app/upload/**`, `web/styles/resolve.css` |
 | `voice-ui` | A | `web/components/voice/**`, `web/app/voice/**`, `web/styles/voice.css` |
 | `dashboard-ui` | A | `web/app/dashboard/**`, `web/components/dashboard/**`, `web/styles/dashboard.css` |
-| `system-page` | A | `web/app/system/**`, `web/components/system/**` |
+| `system-page` | A | `web/app/system/**`, `web/components/system/**`, `web/styles/system.css` |
 | `rules` | B | `packages/snap-rules/**` |
 | `qc-data` | B | `data/qc/**`, `db/migrations/qc/**`, `data/golden/**`, `worker/src/features/qc/**`, `worker/src/features/docgen/**`, `worker/fixtures/qc/**`, `worker/fixtures/docgen/**`, `scripts/qc-*.ts` |
 | `seats` | B | `worker/src/features/seats/**`, `worker/src/features/recompute/**`, `worker/fixtures/seats/**`, `worker/fixtures/recompute/**` |

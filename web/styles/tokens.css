@@ -1,0 +1,55 @@
+/*
+  FROZEN after scaffold-v1. CleanCase tokens (master prompt section 7 + 0.4).
+  Paper (pitch) and deck (work pages). Amber = overissuance risk, blue = underissuance risk,
+  always shown together and always paired with an arrow glyph and the word "over" / "under".
+*/
+:root {
+  /* paper (pitch) */
+  --paper: #F2EFE7; --paper-2: #FBF9F4; --ink: #10231D; --ink-soft: #4F625B; --line: #D8D3C5;
+  --pine: #174C41; --pine-2: #1F6355;
+  /* signal pair + status */
+  --over: #D99A1E;      /* overissuance risk (amber) */
+  --under: #3E6FB5;     /* underissuance risk (blue) */
+  --over-ink: #8A5F0A;  /* AA text on paper for amber labels */
+  --under-ink: #2C5594;
+  --proof: #2E8B67;     /* verified / matches */
+  --conflict: #B5473E;  /* contradiction (never "denied") */
+  --voice: #7C5CBF;     /* call accent */
+  /* deck (work pages) */
+  --deck: #0B1411; --deck-2: #111E19; --deck-line: rgba(236,240,232,.12);
+  --deck-ink: #E8EEE9; --deck-ink-soft: rgba(232,238,233,.66); --glow: #6FE3B2;
+  --glass: rgba(255,255,255,.04); --glass-line: rgba(255,255,255,.12);
+  /* decision pipeline legend (0.4) */
+  --src: #484840; --question: #E0B04A; --ai: #3D3585; --ledger: #22503F; --human: #6E2E1C;
+  /* shape */
+  --radius: 10px; --radius-card: 12px; --radius-glass: 18px; --maxw: 1080px;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-pine: var(--pine);
+  --color-pine-2: var(--pine-2);
+  --color-over: var(--over);
+  --color-under: var(--under);
+  --color-proof: var(--proof);
+  --color-conflict: var(--conflict);
+  --color-voice: var(--voice);
+  --color-deck: var(--deck);
+  --color-deck-2: var(--deck-2);
+  --color-deck-line: var(--deck-line);
+  --color-deck-ink: var(--deck-ink);
+  --color-deck-ink-soft: var(--deck-ink-soft);
+  --color-glow: var(--glow);
+  --color-src: var(--src);
+  --color-question: var(--question);
+  --color-ai: var(--ai);
+  --color-ledger: var(--ledger);
+  --color-human: var(--human);
+  --font-sans: var(--font-dm), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+}
