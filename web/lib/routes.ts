@@ -6,7 +6,6 @@ export const ROUTES = {
   gate: (id: string) => `/case/${encodeURIComponent(id)}/gate`,
   debrief: (id: string) => `/case/${encodeURIComponent(id)}/debrief`,
   dashboard: '/dashboard',
-  system: '/system',
   upload: (token: string) => `/upload/${encodeURIComponent(token)}`,
   voiceAnswer: (callId: string) => `/voice/answer/${encodeURIComponent(callId)}`,
   data: '/data',
@@ -18,11 +17,11 @@ export const ROUTES = {
 
 /** Work pages render on the dark command deck. */
 export function isDeckPath(path: string): boolean {
-  return /^\/(demo|case|cases|data|dashboard|system|voice)(\/|$)/.test(path);
+  return /^\/(demo|case|cases|data|dashboard|voice)(\/|$)/.test(path);
 }
 
 /** Every route, for the smoke test. */
 export const SMOKE_ROUTES = [
   '/', '/demo', '/demo/queue', '/case/GC-1', '/case/GC-1/gate', '/case/GC-1/debrief',
-  '/dashboard', '/system', '/upload/demo-token', '/voice/answer/CALL-GC1-1',
+  '/dashboard', '/upload/demo-token', '/voice/answer/CALL-GC1-1',
 ] as const;

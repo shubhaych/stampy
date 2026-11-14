@@ -56,7 +56,7 @@ export function openedCases(): Record<string, string> {
 
 /* ---------- documents ---------- */
 
-async function toPng(svg: string): Promise<Blob> {
+export async function toPng(svg: string): Promise<Blob> {
   const image = new Image();
   image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
   await image.decode();

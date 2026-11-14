@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { Badge, Direction, Fig } from '@/components/ui';
 import { money } from '@/lib/format';
 import { ROUTES } from '@/lib/routes';
+import { demoFiles, svgUrl } from '@/lib/stampy/demo-case';
 import { ErrorLine } from './common';
 
 const Finding = z.object({
@@ -55,6 +56,7 @@ export function DataExplorer() {
   const record = page?.items.find((r) => r.id === selected) ?? null;
   return (
     <>
+      <DemoCase />
       <ErrorLine error={error} />
       {page && (
         <p className="dx-count">
@@ -137,6 +139,51 @@ function RecordSheet({ record, release }: { record: Item; release: z.infer<typeo
         {' · '}<a href={release.dictionaryUrl} target="_blank" rel="noreferrer">Data dictionary ↗</a>
         {' · '}Cause lists are general; the file does not say which one applied to this household.
       </p>
+    </section>
+  );
+}
+
+/** The one household used in the live demo: its three files, with the problem circled. */
+function DemoCase() {
+  const [open, setOpen] = useState(false);
+  const [focus, setFocus] = useState<'record' | 'tax' | 'payments'>('payments');
+  const files = demoFiles(undefined, true);
+  const shown = files.find((f) => f.key === focus)!;
+  return (
+    <section className="dx-demo" aria-labelledby="dx-demo-title">
+      <div className="dx-demo__head">
+        <div>
+          <h2 id="dx-demo-title">The case in this demo <Badge kind="synthetic" /></h2>
+          <p>One household, three files. The same kind of wage error the federal records below are full of.</p>
+        </div>
+        <button type="button" className="btn btn--primary" aria-expanded={open} onClick={() => setOpen((v) => !v)}>{open ? 'Hide the files' : 'Show the files and the error'}</button>
+      </div>
+      {open && (
+        <div className="dx-demo__body">
+          <div className="dx-demo__files" role="tablist" aria-label="Case files">
+            {files.map((f) => (
+              <button key={f.key} type="button" role="tab" aria-selected={f.key === focus} onClick={() => setFocus(f.key)}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={svgUrl(f.svg)} alt="" />
+                <span><strong>{f.title}</strong><small>{f.blurb}</small></span>
+              </button>
+            ))}
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="dx-demo__page" src={svgUrl(shown.svg)} alt={`${shown.title} with the relevant lines circled`} />
+          <div className="dx-demo__story">
+            <h3>What went wrong</h3>
+            <ol>
+              <li data-on={focus === 'record' ? '' : undefined}><button type="button" onClick={() => setFocus('record')}><strong>The case file says monthly.</strong> One paycheck of <Fig prov="synthetic">$1,240</Fig> is budgeted as the whole month&apos;s income.</button></li>
+              <li data-on={focus === 'payments' ? '' : undefined}><button type="button" onClick={() => setFocus('payments')}><strong>The payment history says every two weeks.</strong> Two paychecks landed in August, on the 14th and the 28th.</button></li>
+              <li data-on={focus === 'tax' ? '' : undefined}><button type="button" onClick={() => setFocus('tax')}><strong>The tax record agrees with the payroll.</strong> 26 paychecks last year, not 12.</button></li>
+            </ol>
+            <p>Paid every two weeks, income is <Fig prov="synthetic">$2,666</Fig> a month, not <Fig prov="synthetic">$1,240</Fig>. Issued as filed, the household would be overpaid every month and billed for it later.</p>
+            <p className="dx-demo__fix"><strong>What Stampy does:</strong> reads all three files, opens one question, and calls to confirm which is right before the benefit goes out. The caseworker approves the corrected amount.</p>
+            <Link className="dx-next" href={ROUTES.apply}>Apply with these files <ArrowRight size={16} aria-hidden /></Link>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

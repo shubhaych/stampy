@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Badge } from '@/components/ui';
+import { demoFiles } from '@/lib/stampy/demo-case';
+import { toPng } from '@/lib/stampy/replay';
 import { api, type SampleDoc } from '@/lib/stampy/api';
 import { normalizePhone } from '@/lib/stampy/util';
 import { ROUTES } from '@/lib/routes';
@@ -37,6 +39,7 @@ export function ApplyForm() {
   const [samples, setSamples] = useState<SampleDoc[] | null>(null);
   const [samplesError, setSamplesError] = useState<string | null>(null);
   const [useSamples, setUseSamples] = useState(false);
+  const [useDemo, setUseDemo] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -70,7 +73,7 @@ export function ApplyForm() {
   const defaults = useMemo(() => (samples ?? []).filter((s) => s.uploadByDefault || s.name === 'paystub-2026-10-photo'), [samples]);
   const e164 = normalizePhone(phone);
   const phoneOk = /^\+\d{8,15}$/.test(e164);
-  const hasDocs = files.length > 0 || (useSamples && defaults.length > 0);
+  const hasDocs = files.length > 0 || useDemo || (useSamples && defaults.length > 0);
   const canSubmit = !busy && name.trim() && /.+@.+\..+/.test(email.trim()) && phoneOk && hasDocs;
 
   async function submit(e: React.FormEvent) {
@@ -86,6 +89,8 @@ export function ApplyForm() {
     for (const f of files) form.append('files', f, f.name);
     if (useSamples && defaults.length) form.set('samples', defaults.map((s) => s.name).join(','));
     try {
+      // The demo case files carry the name typed above, so the case reads as this applicant's own file.
+      if (useDemo) for (const d of demoFiles(name)) form.append('files', new File([await toPng(d.svg)], d.filename, { type: 'image/png' }));
       const res = await api.createCase(form);
       try {
         window.sessionStorage.setItem(APPLY_SESSION_KEY(res.id), JSON.stringify({ email: email.trim(), refCode: res.refCode }));
@@ -170,10 +175,17 @@ export function ApplyForm() {
         ) : null}
 
         <div className="stp-samples">
+          <button type="button" className={`btn ${useDemo ? 'btn--primary' : 'btn--ghost'}`} onClick={() => { setUseDemo((v) => !v); setUseSamples(false); }} aria-pressed={useDemo}>
+            {useDemo ? 'Using the demo case files' : 'Use the demo case files'}
+          </button>
+          <Badge kind="synthetic" />
+          <small className="stp-hint">{useDemo ? 'Household record, tax record and payment history, in your name.' : 'The three files shown on the Data page.'}</small>
+        </div>
+        <div className="stp-samples">
           <button
             type="button"
             className={`btn ${useSamples ? 'btn--primary' : 'btn--ghost'}`}
-            onClick={() => setUseSamples((v) => !v)}
+            onClick={() => { setUseSamples((v) => !v); setUseDemo(false); }}
             disabled={!defaults.length}
             aria-pressed={useSamples}
           >
