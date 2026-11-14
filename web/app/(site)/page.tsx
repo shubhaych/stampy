@@ -1,38 +1,24 @@
-import { SectionDivider } from '@/components/ui';
-import { OpeningScene } from '@/components/home/opening-scene';
-import { StatBeats } from '@/components/home/stat-beats';
-import { CostShareClock } from '@/components/home/cost-share-clock';
-import { AnswerBar } from '@/components/home/answer-bar';
-import { HowItWorks } from '@/components/home/how-it-works';
-import { MiniDemo } from '@/components/home/mini-demo';
-import { VoiceSpotlight } from '@/components/home/voice-spotlight';
-import { Closing, Guardrails, MarketProof, PoweredBy, StateStart } from '@/components/home/closing-sections';
+import { SectionDivider, TextCta } from '@/components/ui';
+import { Hero } from '@/components/home/hero';
+import { ProblemScroll } from '@/components/home/problem-scroll';
+import { CaseWalkthrough } from '@/components/home/case-walkthrough';
+import { BackendLedger } from '@/components/home/backend-ledger';
+import { SmoothScroll } from '@/components/home/smooth-scroll';
 
 export default function HomePage() {
   return (
     <main className="home">
-      <OpeningScene />
+      <SmoothScroll />
+      <Hero />
+      <ProblemScroll />
       <SectionDivider />
-      <StatBeats />
+      <CaseWalkthrough />
       <SectionDivider />
-      <CostShareClock />
-      <SectionDivider />
-      <AnswerBar />
-      <SectionDivider />
-      <HowItWorks />
-      <SectionDivider />
-      <MiniDemo />
-      <SectionDivider />
-      <VoiceSpotlight />
-      <SectionDivider />
-      <Guardrails />
-      <SectionDivider />
-      <MarketProof />
-      <SectionDivider />
-      <StateStart />
-      <SectionDivider />
-      <PoweredBy />
-      <Closing />
+      <BackendLedger />
+      <section className="closing wrap" aria-labelledby="closing-title">
+        <h2 id="closing-title" className="font-display h-section">Work a case yourself.</h2>
+        <TextCta href="/demo">Start the demo →</TextCta>
+      </section>
     </main>
   );
 }
