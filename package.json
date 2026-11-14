@@ -1,0 +1,66 @@
+{
+  "name": "cleancase",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "packages/*",
+    "worker",
+    "web"
+  ],
+  "scripts": {
+    "dev": "tsx scripts/dev.ts",
+    "dev:worker": "npm run dev -w worker",
+    "dev:web": "npm run dev -w web",
+    "build": "npm run build -w web",
+    "typecheck": "tsc -p tsconfig.json --noEmit && npm run typecheck -w web",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "check": "tsx scripts/check.ts",
+    "check:rules": "tsx scripts/check-rules.ts",
+    "check:badges": "tsx scripts/check-badges.ts",
+    "check:ownership": "tsx scripts/check-ownership.ts",
+    "sync": "tsx scripts/sync.ts",
+    "feature:start": "tsx scripts/feature-start.ts",
+    "feature:list": "tsx scripts/feature-list.ts",
+    "env:build": "tsx scripts/env-build.ts",
+    "env:check": "tsx scripts/env-check.ts",
+    "dev-ports": "tsx scripts/dev-ports.ts",
+    "db:migrate": "tsx db/migrate.ts",
+    "db:build": "tsx scripts/db-build.ts",
+    "db:reset": "tsx scripts/db-build.ts --reset",
+    "qc:ingest": "tsx scripts/qc-ingest.ts",
+    "qc:sample": "tsx scripts/qc-sample.ts",
+    "policy:fetch": "tsx scripts/policy-fetch.ts",
+    "policy:index": "tsx scripts/policy-index.ts",
+    "eval": "tsx scripts/eval.ts",
+    "hello:db": "tsx scripts/hello-db.ts",
+    "hello:claude": "tsx scripts/hello-claude.ts",
+    "hello:moss": "tsx scripts/hello-moss.ts",
+    "hello:deepgram": "tsx scripts/hello-deepgram.ts",
+    "hello:policyengine": "tsx scripts/hello-policyengine.ts",
+    "e2e": "playwright test",
+    "prepare": "simple-git-hooks || true"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx tsx scripts/check-ownership.ts --staged && npx tsx scripts/check-rules.ts"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.4.1",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.56.1",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^22.19.1",
+    "eslint": "^10.15.0",
+    "simple-git-hooks": "^2.13.1",
+    "tsx": "^4.20.6",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.72.2",
+    "vitest": "^4.0.8"
+  }
+}
