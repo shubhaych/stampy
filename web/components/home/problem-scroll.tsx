@@ -177,7 +177,7 @@ function BeatCost() {
 }
 
 const BEATS: ((local: number) => ReactNode)[] = [
-  () => <BeatPER />, () => <BeatCost />, () => <BeatTwoWays />, () => <BeatAgency />, () => <BeatWhere />, (l) => <BeatClock local={l} />,
+  () => <BeatPER />, () => <BeatCost />, () => <BeatTwoWays />, (l) => <BeatClock local={l} />, () => <BeatAgency />, () => <BeatWhere />,
 ];
 
 function SourceNote() {
