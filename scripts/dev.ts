@@ -22,12 +22,30 @@ procs.push(spawn('npm', ['run', 'dev', '-w', 'worker'], { cwd: ROOT, stdio: 'inh
 procs.push(spawn('npm', ['run', 'dev', '-w', 'web', '--', '-p', String(p.web)], { cwd: ROOT, stdio: 'inherit', env }));
 
 const token = envValue('NGROK_AUTHTOKEN');
+/** The tunnel is optional (only Vapi webhooks need it). A tunnel failure never takes the rest of the stack down. */
+let tunnel: ChildProcess | null = null;
 if (token && !envValue('PUBLIC_BASE_URL')) {
-  procs.push(spawn('ngrok', ['http', String(p.worker), '--log', 'stdout', '--log-level', 'warn'], { cwd: ROOT, stdio: 'inherit', env: { ...env, NGROK_AUTHTOKEN: token } }));
+  const running = await fetch('http://127.0.0.1:4040/api/tunnels', { signal: AbortSignal.timeout(1000) })
+    .then((r) => r.json() as Promise<{ tunnels: { public_url: string }[] }>)
+    .catch(() => null);
+  if (running?.tunnels.length) {
+    console.log(`[dev] ngrok already running on this machine (${running.tunnels.map((t) => t.public_url).join(', ')}); not starting another`);
+  } else {
+    tunnel = spawn('ngrok', ['http', String(p.worker), '--log', 'stdout', '--log-level', 'warn'], { cwd: ROOT, stdio: 'inherit', env: { ...env, NGROK_AUTHTOKEN: token } });
+    tunnel.on('error', (e) => console.warn(`[dev] ngrok could not start (${e.message}). Install it with: brew install ngrok`));
+    tunnel.on('exit', (code) => {
+      if (!code) return;
+      console.warn(
+        `[dev] ngrok exited (code ${code}). Everything else keeps running; only phone calls need the tunnel.\n` +
+        '      Most common cause: the free ngrok plan allows one agent per account, so the same NGROK_AUTHTOKEN\n' +
+        '      cannot run on two machines at once. Run the tunnel on one machine only, or use your own token.',
+      );
+    });
+  }
 }
 
 console.log(`[dev] web http://localhost:${p.web}  worker http://localhost:${p.worker}  policyengine http://127.0.0.1:8790${token ? '  ngrok → worker' : ''}`);
-const stop = () => procs.forEach((c) => c.kill('SIGINT'));
+const stop = () => [...procs, ...(tunnel ? [tunnel] : [])].forEach((c) => c.kill('SIGINT'));
 process.on('SIGINT', stop);
 process.on('SIGTERM', stop);
 procs.forEach((c) => c.on('exit', (code) => { if (code) { stop(); process.exit(code); } }));

@@ -19,7 +19,7 @@ process.env.NEXT_PUBLIC_DATA ||= 'fixture';
 
 const nextConfig: NextConfig = {
   transpilePackages: ['@stampy/contracts', '@stampy/snap-rules'],
-  allowedDevOrigins: ['*.trycloudflare.com', '*.ngrok-free.app', '*.ngrok.app'],
+  allowedDevOrigins: ['*.trycloudflare.com', '*.ngrok-free.app', '*.ngrok-free.dev', '*.ngrok.app', '*.ngrok.dev'],
   env: {
     NEXT_PUBLIC_WORKER_URL: process.env.NEXT_PUBLIC_WORKER_URL,
     NEXT_PUBLIC_DATA: process.env.NEXT_PUBLIC_DATA,
