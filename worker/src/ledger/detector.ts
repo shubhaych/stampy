@@ -30,7 +30,14 @@ const COMPARED: Record<string, { ask: (c: Candidate[]) => string; why: string }>
     why: 'Pay frequency sets how a paycheck converts to monthly income, which drives the benefit.',
   },
   gross_pay_amount: {
-    ask: () => 'What is your usual pay before taxes on each paycheck?',
+    // Two paystubs with the same pay date and different pay: ask which one is right, by name.
+    ask: (c) => {
+      const stubs = c.filter((x) => x.sources.some((l) => l.startsWith('Paystub')));
+      const dated = stubs.length >= 2 ? stubs[0]!.sources.find((l) => l.startsWith('Paystub') && stubs[1]!.sources.includes(l)) : undefined;
+      return dated
+        ? `We have two paystubs with ${dated.replace(/^Paystub, /, '')} that show different pay before taxes: ${stubs.map((x) => x.label).join(' and ')}. Which amount is correct?`
+        : 'What is your usual pay before taxes on each paycheck?';
+    },
     why: 'Gross pay per check is counted income.',
   },
   monthly_rent: {

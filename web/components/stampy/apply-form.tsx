@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Badge } from '@/components/ui';
-import { demoFiles } from '@/lib/stampy/demo-case';
+import { DEMO, demoFiles, svgUrl } from '@/lib/stampy/demo-case';
 import { toPng } from '@/lib/stampy/replay';
-import { api, type SampleDoc } from '@/lib/stampy/api';
+import { api } from '@/lib/stampy/api';
 import { normalizePhone } from '@/lib/stampy/util';
 import { ROUTES } from '@/lib/routes';
 
@@ -31,14 +31,11 @@ export const APPLY_SESSION_KEY = (id: string) => `stampy.apply.${id}`;
 
 export function ApplyForm() {
   const router = useRouter();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [name, setName] = useState(DEMO.name === 'Jane Doe' ? '' : DEMO.name);
+  const [email, setEmail] = useState(DEMO.email);
+  const [phone, setPhone] = useState(DEMO.phone);
   const [state, setState] = useState('CA');
   const [files, setFiles] = useState<File[]>([]);
-  const [samples, setSamples] = useState<SampleDoc[] | null>(null);
-  const [samplesError, setSamplesError] = useState<string | null>(null);
-  const [useSamples, setUseSamples] = useState(false);
   const [useDemo, setUseDemo] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,23 +54,9 @@ export function ApplyForm() {
     });
   }
 
-  useEffect(() => {
-    let live = true;
-    api.samples().then(
-      (s) => live && setSamples(s),
-      (e: Error) => live && setSamplesError(e.message),
-    );
-    return () => {
-      live = false;
-    };
-  }, []);
-
-  // The demo file includes the recent paystub, so the only thing left to settle is the pay-frequency
-  // conflict between the form and the paystubs: one phone call closes the case.
-  const defaults = useMemo(() => (samples ?? []).filter((s) => s.uploadByDefault || s.name === 'paystub-2026-10-photo'), [samples]);
   const e164 = normalizePhone(phone);
   const phoneOk = /^\+\d{8,15}$/.test(e164);
-  const hasDocs = files.length > 0 || useDemo || (useSamples && defaults.length > 0);
+  const hasDocs = files.length > 0 || useDemo;
   const canSubmit = !busy && name.trim() && /.+@.+\..+/.test(email.trim()) && phoneOk && hasDocs;
 
   async function submit(e: React.FormEvent) {
@@ -87,7 +70,6 @@ export function ApplyForm() {
     form.set('applicantPhone', e164);
     form.set('state', state);
     for (const f of files) form.append('files', f, f.name);
-    if (useSamples && defaults.length) form.set('samples', defaults.map((s) => s.name).join(','));
     try {
       // The demo case files carry the name typed above, so the case reads as this applicant's own file.
       if (useDemo) for (const d of demoFiles(name)) form.append('files', new File([await toPng(d.svg)], d.filename, { type: 'image/png' }));
@@ -175,36 +157,18 @@ export function ApplyForm() {
         ) : null}
 
         <div className="stp-samples">
-          <button type="button" className={`btn ${useDemo ? 'btn--primary' : 'btn--ghost'}`} onClick={() => { setUseDemo((v) => !v); setUseSamples(false); }} aria-pressed={useDemo}>
-            {useDemo ? 'Using the demo case files' : 'Use the demo case files'}
+          <button type="button" className={`btn ${useDemo ? 'btn--primary' : 'btn--ghost'}`} onClick={() => setUseDemo((v) => !v)} aria-pressed={useDemo}>
+            {useDemo ? 'Using the sample documents' : 'Use the sample documents'}
           </button>
           <Badge kind="synthetic" />
-          <small className="stp-hint">{useDemo ? 'Household record, tax record and payment history, in your name.' : 'The three files shown on the Data page.'}</small>
         </div>
-        <div className="stp-samples">
-          <button
-            type="button"
-            className={`btn ${useSamples ? 'btn--primary' : 'btn--ghost'}`}
-            onClick={() => { setUseSamples((v) => !v); setUseDemo(false); }}
-            disabled={!defaults.length}
-            aria-pressed={useSamples}
-          >
-            {useSamples ? 'Using the sample documents' : 'Use the sample documents'}
-          </button>
-          <Badge kind="synthetic" />
-          {samplesError ? <small className="stp-hint">Samples not loaded: {samplesError}</small> : null}
-          {samples && !defaults.length ? <small className="stp-hint">No sample documents are set up.</small> : null}
-        </div>
-        {useSamples && defaults.length ? (
+        {useDemo ? (
           <ul className="stp-thumbs" aria-label="Sample documents to send">
-            {defaults.map((s) => (
-              <li key={s.name} className="stp-thumb">
-                {s.contentType.startsWith('image/') ? (
-                  <img src={api.sampleUrl(s.name)} alt={s.label} loading="lazy" />
-                ) : (
-                  <span className="stp-thumb__pdf">PDF</span>
-                )}
-                <span className="stp-thumb__label">{s.label}</span>
+            {demoFiles(name).map((d) => (
+              <li key={d.key} className="stp-thumb">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={svgUrl(d.svg)} alt={d.title} />
+                <span className="stp-thumb__label">{d.title}</span>
               </li>
             ))}
           </ul>

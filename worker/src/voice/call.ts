@@ -219,6 +219,17 @@ export async function simulateCall(db: Db, caseId: string): Promise<string> {
     await recordAnswer(db, callId, { questionId: freqQ.id, answer: 'every two weeks', quote: 'Oh, every two weeks. Every other Friday.', atSeconds: 42.0 });
     turns.push({ role: 'assistant', secondsFromStart: 46.8, message: `Got it, every two weeks. I've recorded that.` });
   }
+  // Any other open phone question: the simulated caller confirms the value the documents show that the form does not.
+  let t = 50;
+  for (const q of qs.filter((x) => x.channel === 'phone' && x.status === 'open' && x.id !== freqQ?.id)) {
+    const pick = q.candidates.find((k) => !k.sources.some((l) => l.startsWith('Application form'))) ?? q.candidates[0];
+    if (!pick) continue;
+    turns.push({ role: 'assistant', secondsFromStart: t, message: q.ask });
+    turns.push({ role: 'user', secondsFromStart: t + 9, message: `The correct one is ${pick.label}.` });
+    await recordAnswer(db, callId, { questionId: q.id, answer: pick.label, quote: `The correct one is ${pick.label}.`, atSeconds: t + 9 });
+    turns.push({ role: 'assistant', secondsFromStart: t + 13, message: `Got it, ${pick.label}. I've recorded that.` });
+    t += 18;
+  }
   if (docQ) turns.push({ role: 'assistant', secondsFromStart: 50.5, message: `One more thing we need is a recent paystub. I'll email you a checklist right after this call; you can reply with a photo.` });
   turns.push({ role: 'user', secondsFromStart: 58.9, message: `Okay, I'll send it tonight. Thanks.` });
   turns.push({ role: 'assistant', secondsFromStart: 61.7, message: `Thanks for calling. Goodbye.` });
