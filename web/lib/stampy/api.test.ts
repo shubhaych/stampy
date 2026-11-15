@@ -16,8 +16,8 @@ describe('worker API boundary', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('<html>error</html>')));
     await expect(api.recompute('test')).rejects.toThrow('unreadable');
   });
-  it('preserves authorization and service error messages', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(Response.json({ error: 'Sign in first' }, { status: 401 })));
-    await expect(api.decide('test', 'approve', { name: 'Test', code: 'bad' })).rejects.toThrow('Sign in first');
+  it('preserves service error messages', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(Response.json({ error: 'The case is questions open, not ready for review.' }, { status: 409 })));
+    await expect(api.decide('test', 'approve')).rejects.toThrow('not ready for review');
   });
 });

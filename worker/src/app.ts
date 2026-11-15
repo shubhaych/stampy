@@ -7,7 +7,7 @@ import type { StampyEvent } from '@stampy/contracts/stampy';
 import type { Db } from './db';
 import { env } from './env';
 import { subscribe } from './events';
-import { AuthzError, identityFromCode, SYSTEM, type Identity } from './core/authz';
+import { AuthzError, SYSTEM, type Identity } from './core/authz';
 import { LimitError, used } from './core/limits';
 import { HttpError, addDocument, createCase, getBundle, listCases } from './cases/service';
 import { approveAndSendRequest, decide, onCase, onInboundEmail, readAndDetect, recompute, afterEvidence } from './pipeline';
@@ -29,10 +29,10 @@ function safeEq(a: string, b: string): boolean {
   return x.length === y.length && timingSafeEqual(x, y);
 }
 
-function worker(body: { worker?: { name?: string; code?: string } }): Identity {
-  const w = identityFromCode(body.worker?.code, (body.worker?.name ?? '').trim() || 'caseworker', env);
-  if (!w) throw new HttpError(401, 'Sign in as a caseworker (name and access code) first.');
-  return w;
+/** Actions from the caseworker page are the caseworker's (there is no sign-in on this demo). */
+function worker(body: { worker?: { name?: string } }): Identity {
+  const name = (body.worker?.name ?? '').trim().replace(/[^\w .'-]/g, '').slice(0, 60) || 'caseworker';
+  return { id: `worker:${name}`, role: 'worker' };
 }
 
 export function createApp(db: Db): Hono {

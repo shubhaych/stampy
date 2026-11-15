@@ -34,11 +34,6 @@ export interface SampleDoc {
   uploadByDefault: boolean;
 }
 
-export interface WorkerIdentity {
-  name: string;
-  code: string;
-}
-
 export const workerUrl = (path: string) => `${WORKER_URL}${path}`;
 
 async function req<T>(path: string, init?: RequestInit): Promise<T> {
@@ -83,13 +78,13 @@ export const api = {
   sampleUrl: (name: string) => workerUrl(StampyRoutes.sample(name)),
   docUrl: (id: string) => workerUrl(StampyRoutes.doc(id)),
   createCase: (form: FormData) => req<{ id: string; refCode: string }>(StampyRoutes.cases, { method: 'POST', body: form }),
-  sendRequest: (id: string, worker: WorkerIdentity) => req<{ outreach: Outreach }>(StampyRoutes.sendRequest(id), json({ worker })),
+  sendRequest: (id: string) => req<{ outreach: Outreach }>(StampyRoutes.sendRequest(id), json({})),
   simulateCall: (id: string) => req<{ callId: string }>(StampyRoutes.simulateCall(id), { method: 'POST' }),
   simulateReply: (id: string) => req<{ inboundId: string }>(StampyRoutes.simulateReply(id), { method: 'POST' }),
   recompute: (id: string) => req<{ ok: boolean }>(StampyRoutes.recompute(id), { method: 'POST' }),
   reread: (id: string) => req<unknown>(StampyRoutes.reread(id), { method: 'POST' }),
-  decide: (id: string, action: 'approve' | 'reject', worker: WorkerIdentity, note?: string) =>
-    req<{ decision: Decision }>(StampyRoutes.decide(id), json({ action, note: note || undefined, worker })),
+  decide: (id: string, action: 'approve' | 'reject', note?: string) =>
+    req<{ decision: Decision }>(StampyRoutes.decide(id), json({ action, note: note || undefined })),
 };
 
 /**

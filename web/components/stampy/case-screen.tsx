@@ -12,7 +12,7 @@ import { formatRef, timeAgo } from '@/lib/stampy/util';
 import { markSynthetic, replayRecordId, replyPaystub } from '@/lib/stampy/replay';
 import { decisionReady, evidenceProvenance, nextStep } from '@/lib/stampy/workflow';
 import { ROUTES } from '@/lib/routes';
-import { CaseworkerSignIn, DataFooter, Empty, ErrorLine, FixtureProvider, StatusChip, useCaseworker } from './common';
+import { DataFooter, Empty, ErrorLine, FixtureProvider, StatusChip } from './common';
 import { LoopTracker } from './loop-tracker';
 import { FIELD_LABEL } from '@stampy/contracts/stampy';
 import type { AuditRow } from '@stampy/contracts/stampy';
@@ -28,7 +28,6 @@ export function CaseScreen({ id, fixture }: { id: string; fixture: boolean }) {
   const action = useAction();
   const [docId, setDocId] = useState<string | null>(null);
   const [factId, setFactId] = useState<string | null>(null);
-  const { worker, signIn, signOut } = useCaseworker();
   const loadVersion = useRef(0);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -111,7 +110,6 @@ export function CaseScreen({ id, fixture }: { id: string; fixture: boolean }) {
   const c = bundle.case;
   const guidance = nextStep(bundle);
   const provenance = evidenceProvenance(bundle);
-  const lockedWorker = error ? null : worker;
   const after = async () => { await load(); };
   const recordId = replayRecordId(bundle);
 
@@ -156,7 +154,6 @@ export function CaseScreen({ id, fixture }: { id: string; fixture: boolean }) {
           </div>
           <StatusChip status={c.status} />
           <span className={`cq-live ${connected || fixture ? 'cq-live--on' : ''}`}>{fixture ? 'Fixture view' : connected ? 'Updating live' : 'Reconnecting'}</span>
-          <CaseworkerSignIn worker={worker} onSignIn={signIn} onSignOut={signOut} />
         </header>
         <ErrorLine error={error} />
         <div className="rv-grid">
@@ -208,12 +205,12 @@ export function CaseScreen({ id, fixture }: { id: string; fixture: boolean }) {
               <p>{reading.length ? 'Each field Stampy reads is tied to the line it came from. Questions open as soon as two sources disagree.' : guidance.detail}</p>
               {unreadable.length > 0 && <button className="btn btn--ghost" disabled={fixture || !!action.busy} onClick={() => void action.run('reader', async () => { await api.reread(id); await load(); })}>{action.busy ? 'Reading…' : 'Read again'}</button>}
               <ErrorLine error={action.error} />
-              <OutreachPanel outreach={bundle.outreach} inbound={bundle.inbound} worker={lockedWorker} onSend={async () => { if (!lockedWorker) return; await api.sendRequest(id, lockedWorker); await after(); }} />
+              <OutreachPanel outreach={bundle.outreach} inbound={bundle.inbound} onSend={async () => { await api.sendRequest(id); await after(); }} />
               {recordId && emailed && pending.some((q) => q.channel === 'document') && (
                 <p className="rv-demo">Presenting? <button type="button" className="cq-inline" onClick={() => void replyPaystub(recordId).then(({ filename, blob }) => { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename; a.click(); URL.revokeObjectURL(a.href); })}>Download this household&apos;s recent paystub</button> and attach it to your reply to the email.</p>
               )}
               <Outcome bundle={bundle} prov={fixture ? 'fixture' : provenance} />
-              {(decisionReady(bundle) || bundle.decision) && <DecisionPanel bundle={bundle} worker={lockedWorker} onDecide={async (choice, note) => { if (!lockedWorker) return; await api.decide(id, choice, lockedWorker, note); await after(); }} />}
+              {(decisionReady(bundle) || bundle.decision) && <DecisionPanel bundle={bundle} onDecide={async (choice, note) => { await api.decide(id, choice, note); await after(); }} />}
             </section>
 
             {(bundle.calls.length > 0 || pending.some((q) => q.channel === 'phone')) && (

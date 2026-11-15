@@ -3,7 +3,7 @@
  * The caseworker's approve/reject stays a human click on /cases/<id>.
  *
  *  1. File a case with the sample documents (Claude reads them; questions open).
- *  2. Approve and send the request email (AgentMail → the test applicant inbox).
+ *  2. The request email goes out on apply (AgentMail → the test applicant inbox).
  *  3. Replay the phone call through the public Vapi webhook (same payloads Vapi sends), or --sim-call
  *     to use the in-process simulated call.
  *  4. The test applicant inbox replies in the thread with the October paystub photo attached
@@ -25,7 +25,7 @@ const simCall = process.argv.includes('--sim-call');
 const AM = 'https://api.agentmail.to/v0';
 const amKey = envValue('AGENTMAIL_API_KEY');
 const secret = envValue('STAMPY_WEBHOOK_SECRET');
-const worker = { name: 'Rehearsal', code: envValue('DEMO_WORKER_CODE') || 'stampy-worker' };
+const worker = { name: 'Rehearsal' };
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const step = (s: string) => console.log(`\n▸ ${s}`);
@@ -75,9 +75,14 @@ console.log(`case ${created.id}, reference ${created.refCode}`);
 let b = await waitFor(created.id, 'documents read', (x) => x.case.status !== 'reading' && x.documents.every((d: Bundle) => !['pending', 'reading'].includes(d.readStatus)) && x.outreach.length > 0);
 for (const q of b.questions) console.log(`  ? ${q.title} (${q.kind}): ${q.status}${q.stakeMonthly != null ? `, ${q.stakeMonthly}/mo at stake, ${q.direction}` : ''}`);
 
-step('2. Caseworker approves the drafted request email; it is sent');
-await json(`${W}/cases/${created.id}/outreach/request/send`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ worker }) });
-b = await bundle(created.id);
+step('2. The request email (call this number, with the reference) goes out on apply');
+b = await waitFor(created.id, 'request email', (x) => x.outreach.some((o: Bundle) => o.kind === 'request' && o.status !== 'draft'), 60_000);
+const req = b.outreach.find((o: Bundle) => o.kind === 'request');
+if (req.status === 'failed') {
+  console.log(`  send failed (${req.error}); sending again from the caseworker page path`);
+  await json(`${W}/cases/${created.id}/outreach/request/send`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ worker }) });
+  b = await bundle(created.id);
+}
 console.log(`  request email: ${b.outreach.find((o: Bundle) => o.kind === 'request').status}`);
 
 step(`3. Applicant calls in (${simCall || !status.publicUrl ? 'simulated in-process' : 'Vapi webhook replay through the tunnel'})`);

@@ -5,7 +5,6 @@ import type { Direction as Dir } from '@stampy/contracts';
 import type { Call, CaseBundleV2, Decision, InboundEmail, Outreach, Recompute } from '@stampy/contracts/stampy';
 import { Badge, Direction, Fig, HudFrame, Odometer, StampMark } from '@/components/ui';
 import { money, signedMoney } from '@/lib/format';
-import type { WorkerIdentity } from '@/lib/stampy/api';
 import { decisionReady } from '@/lib/stampy/workflow';
 import { clockTime, dateTime, mss } from '@/lib/stampy/util';
 import { Empty, ErrorLine, MoneyText, useIsFixture, useProv } from './common';
@@ -97,7 +96,7 @@ export function RecomputePanel({ recompute }: { recompute: Recompute | null }) {
 
 /* ---------- Decision (the caseworker's) ---------- */
 
-export function DecisionPanel({ bundle, worker, onDecide }: { bundle: CaseBundleV2; worker: WorkerIdentity | null; onDecide: (action: 'approve' | 'reject', note: string) => Promise<void> }) {
+export function DecisionPanel({ bundle, onDecide }: { bundle: CaseBundleV2; onDecide: (action: 'approve' | 'reject', note: string) => Promise<void> }) {
   const fixture = useIsFixture();
   const pv = useProv();
   const [note, setNote] = useState('');
@@ -107,11 +106,9 @@ export function DecisionPanel({ bundle, worker, onDecide }: { bundle: CaseBundle
   const r = bundle.recompute;
   const why = fixture
     ? 'Fixture view: actions are off.'
-    : !worker
-      ? 'Sign in as a caseworker to decide.'
-      : !ready
-        ? 'Resolve questions, review all documents and load both benefit calculations first.'
-        : null;
+    : !ready
+      ? 'Resolve questions, review all documents and load both benefit calculations first.'
+      : null;
   return (
     <section id="stp-decision" className="panel stp-decision" aria-label="Caseworker decision">
       <div className="panel__title"><span>Caseworker decision</span></div>
@@ -156,7 +153,7 @@ type ThreadItem = { at: string; out?: Outreach; inb?: InboundEmail };
 
 const OUT_STATUS: Record<Outreach['status'], string> = { draft: 'Draft', sent: 'Sent', simulated: 'Simulated send', failed: 'Failed' };
 
-export function OutreachPanel({ outreach, inbound, worker, onSend }: { outreach: Outreach[]; inbound: InboundEmail[]; worker: WorkerIdentity | null; onSend: () => Promise<void> }) {
+export function OutreachPanel({ outreach, inbound, onSend }: { outreach: Outreach[]; inbound: InboundEmail[]; onSend: () => Promise<void> }) {
   const fixture = useIsFixture();
   const pv = useProv();
   const { busy, error, run } = useAction();
@@ -180,15 +177,18 @@ export function OutreachPanel({ outreach, inbound, worker, onSend }: { outreach:
               </div>
               <div className="stp-mail__subject">{it.out.subject}</div>
               <pre className="stp-mail__body"><MoneyText text={it.out.bodyText} prov={pv('live')} /></pre>
-              {it.out.approvedBy ? <div className="stp-sub">Approved by {it.out.approvedBy}</div> : null}
+              {it.out.approvedBy ? (
+                <div className="stp-sub">
+                  {it.out.approvedBy.startsWith('worker:') ? `Approved by ${it.out.approvedBy.slice(7)}` : it.out.approvedBy[0]!.toUpperCase() + it.out.approvedBy.slice(1)}
+                </div>
+              ) : null}
               {it.out.error ? <p className="stp-error">{it.out.error}</p> : null}
               {(it.out.status === 'draft' || it.out.status === 'failed') && it.out.kind === 'request' ? (
                 <div className="stp-mail__actions">
-                  <span className="stp-sub">Draft</span>
-                  <button type="button" className="btn btn--primary" disabled={fixture || !worker || !!busy} onClick={() => run('send', onSend)}>
-                    {busy === 'send' ? 'Sending…' : 'Approve and send'}
+                  <span className="stp-sub">{it.out.status === 'failed' ? 'Not sent' : 'Draft'}</span>
+                  <button type="button" className="btn btn--primary" disabled={fixture || !!busy} onClick={() => run('send', onSend)}>
+                    {busy === 'send' ? 'Sending…' : it.out.status === 'failed' ? 'Send again' : 'Send'}
                   </button>
-                  {!worker && !fixture ? <span className="stp-hint">Sign in as a caseworker to send.</span> : null}
                 </div>
               ) : null}
             </li>
@@ -273,7 +273,6 @@ export function DemoControls({ onRun, disabled = false }: { disabled?: boolean; 
       </div>
       {fixture ? <p className="stp-hint">Fixture view: actions are off.</p> : null}
       <ErrorLine error={error} />
-      <p className="stp-hint">Simulations run the same code path with scripted input. Nothing here changes a case without a caseworker.</p>
     </details>
   );
 }

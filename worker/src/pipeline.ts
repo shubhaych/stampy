@@ -71,8 +71,10 @@ async function draftRequest(db: Q, caseId: string, questions: Question[]): Promi
   const c = await getCaseRow(db, caseId);
   const { subject, text } = requestEmail({ name: c.applicant_name, refCode: c.ref_code, phone: callInNumber(), questions });
   const oid = id('OUT');
-  await db.query(`INSERT INTO outreach (id, case_id, kind, to_addr, subject, body_text, status) VALUES ($1,$2,'request',$3,$4,$5,'draft')`, [oid, caseId, c.applicant_email, subject, text]);
+  await db.query(`INSERT INTO outreach (id, case_id, kind, to_addr, subject, body_text, status, approved_by) VALUES ($1,$2,'request',$3,$4,$5,'draft',$6)`,
+    [oid, caseId, c.applicant_email, subject, text, env.AUTO_SEND_REQUEST ? 'sent on apply' : null]);
   await audit(db, { caseId, who: AI, kind: 'ai', action: 'email.drafted', entity: 'outreach', entityId: oid, data: { kind: 'request', questions: questions.filter((q) => q.status === 'open').map((q) => q.id) } });
+  if (env.AUTO_SEND_REQUEST) await deliver(db, oid).catch((e) => log(`request email not sent: ${(e as Error).message}`));
 }
 
 function allowed(to: string): boolean {

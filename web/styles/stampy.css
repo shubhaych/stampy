@@ -95,9 +95,6 @@
 .stp-case__facts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 8px; font-size: 0.88rem; color: var(--deck-ink-soft); }
 .stp-ref { font-family: var(--font-sans); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
 .stp-ref b { color: var(--deck-ink); font-size: 1rem; letter-spacing: 0.03em; }
-.stp-signin { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-.stp-signin--form { align-items: stretch; gap: 8px; width: 100%; max-width: 280px; padding: 12px; border: 1px solid var(--deck-line); border-radius: var(--radius-card); background: var(--deck-2); }
-.stp-signin--on { flex-direction: row; align-items: center; gap: 10px; padding: 6px 12px; border: 1px solid var(--deck-line); border-radius: 999px; font-size: 0.88rem; }
 
 .stp-case__grid { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
 .stp-case__main, .stp-case__side { display: grid; gap: 16px; align-content: start; min-width: 0; }
