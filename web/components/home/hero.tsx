@@ -12,10 +12,10 @@ export function Hero() {
     <section className="hero" aria-label="Stampy">
       {isStatic ? null : <CaseWheel />}
       <div className="hero__copy wrap">
-        <div className="eyebrow hero__eyebrow">Stampy · Pre-issuance accuracy for SNAP</div>
-        <h1 className="font-display h-hero hero__title">Check the case before the benefit goes out.</h1>
+        <div className="eyebrow hero__eyebrow">This is Stampy</div>
+        <h1 className="font-display h-hero hero__title">The pre-issuance accuracy checker for SNAP.</h1>
         <p className="hero__sub">
-          Stampy reads the case file, flags what doesn&apos;t match with the exact source line and the rule behind it, and recomputes the benefit. A merit-staff worker makes every decision.
+          Stampy checks the case before the benefit goes out. It reads the case file, flags what doesn&apos;t match with the exact source line and the rule behind it, and recomputes the benefit. A merit-staff worker makes every decision.
         </p>
         <div className="hero__ctas">
           <TextCta href={ROUTES.cases}>Work a case →</TextCta>

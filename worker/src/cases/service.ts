@@ -81,9 +81,14 @@ export async function touch(db: Q, caseId: string): Promise<void> {
 
 export async function listCases(db: Q): Promise<CaseSummary[]> {
   const r = await db.query(
-    `SELECT c.*, (SELECT count(*)::int FROM open_question q WHERE q.case_id=c.id AND q.status <> 'closed') AS open_questions,
-            (SELECT count(*)::int FROM document d WHERE d.case_id=c.id) AS documents
-     FROM app_case c ORDER BY c.created_at DESC LIMIT 200`,
+    // One application per applicant: a newer submission under the same name replaces older ones in the queue.
+    // Older cases stay in the database (the ledger and audit log are append-only); they are only hidden here.
+    `SELECT * FROM (
+       SELECT DISTINCT ON (lower(trim(c.applicant_name))) c.*,
+              (SELECT count(*)::int FROM open_question q WHERE q.case_id=c.id AND q.status <> 'closed') AS open_questions,
+              (SELECT count(*)::int FROM document d WHERE d.case_id=c.id) AS documents
+       FROM app_case c ORDER BY lower(trim(c.applicant_name)), c.created_at DESC
+     ) latest ORDER BY created_at DESC LIMIT 200`,
   );
   return r.rows.map(rowToSummary);
 }

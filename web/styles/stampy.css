@@ -405,12 +405,12 @@
 
 /* ---------- Case review (rv-*): to-do, source, suggestions, all in view ---------- */
 .rv { height: calc(100dvh - 61px); /* site nav */ display: flex; flex-direction: column; overflow: hidden; }
-.rv-bar { display: flex; align-items: center; gap: 18px; padding: 12px 24px; border-bottom: 1px solid var(--deck-line); background: var(--deck-2); flex-wrap: wrap; }
+.rv-bar { display: flex; align-items: center; gap: 12px 18px; padding: 18px 24px 16px; border-bottom: 1px solid var(--deck-line); background: var(--deck); flex-wrap: wrap; }
 .rv-back { font-size: 0.86rem; color: var(--deck-ink-soft); text-decoration: none; }
 .rv-back:hover { color: var(--pine); }
 .rv-who { margin-right: auto; min-width: 0; }
-.rv-who h1 { font-family: var(--font-display); font-size: 1.3rem; line-height: 1.15; margin: 0; }
-.rv-who span { font-size: 0.8rem; color: var(--deck-ink-soft); font-variant-numeric: tabular-nums; }
+.rv-who h1 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 2px; }
+.rv-who span { display: block; font-size: 0.8rem; color: var(--deck-ink-soft); font-variant-numeric: tabular-nums; }
 .rv-grid { flex: 1; min-height: 0; display: grid; grid-template-columns: 248px minmax(0, 1fr) 400px; }
 .rv-left, .rv-side, .rv-stage { overflow-y: auto; min-height: 0; }
 .rv-left { padding: 22px 16px 24px 24px; }

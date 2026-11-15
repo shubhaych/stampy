@@ -31,7 +31,7 @@ export function CaseQueue({ fixture }: { fixture: boolean }) {
     try {
       const loaded = await api.cases();
       if (version !== loadVersion.current) return;
-      setRows(loaded);
+      setRows(latestPerApplicant(loaded));
       setError(null);
     } catch (e) {
       if (version !== loadVersion.current) return;
@@ -99,4 +99,15 @@ export function CaseQueue({ fixture }: { fixture: boolean }) {
       ) : null}
     </section>
   );
+}
+
+/** One application per applicant: keep only the newest case for each applicant name (the worker does the same). */
+function latestPerApplicant<T extends { applicantName: string; createdAt: string }>(rows: T[]): T[] {
+  const seen = new Set<string>();
+  return [...rows].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).filter((r) => {
+    const k = r.applicantName.trim().toLowerCase();
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
 }

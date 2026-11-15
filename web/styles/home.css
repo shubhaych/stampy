@@ -295,3 +295,12 @@ html.lenis, html.lenis body { height: auto; }
   .pl-flow { gap: 6px; }
 }
 @media (prefers-reduced-motion: reduce) { .pl-node, .pl-flow span, .pl-flow i::after, .pl-ledger__facts b { transition: none; } }
+
+/* Why now: what states are spending to find an answer */
+.hunt { list-style: none; margin: 14px 0 4px; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .hunt { grid-template-columns: 1fr; } }
+.hunt li { display: grid; gap: 4px; padding: 14px 16px; border-radius: var(--radius-glass); background: var(--paper-2); border: 1px solid var(--line); }
+.hunt__fig { font-family: var(--font-display); font-size: clamp(1.3rem, 2.4vw, 1.75rem); color: var(--pine); line-height: 1.1; }
+.hunt__what { color: var(--ink-soft); font-size: 0.92rem; line-height: 1.35; }
+.clock2--compact { max-width: 640px; margin-top: 4px; }
+.cost__fixable { margin: 18px 0 0; font-family: var(--font-display); font-size: clamp(1.2rem, 2.2vw, 1.55rem); color: var(--pine); }

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react';
 import { Odometer } from '@/components/ui';
-import { FACTS } from './facts';
+import { FACTS, MARKET, source } from './facts';
 import { LedgerBeam } from './ledger-beam';
 import { useHomeStatic } from './use-static';
 
@@ -20,7 +20,7 @@ function Roll({ to, format }: { to: number; format: (n: number) => string }) {
   return <Odometer value={v} format={format} />;
 }
 
-const Issue = () => <div className="eyebrow beat2__k">The Issue</div>;
+const Issue = ({ k = 'The issue' }: { k?: string }) => <div className="eyebrow beat2__k">{k}</div>;
 
 function BeatPER() {
   return (
@@ -35,10 +35,10 @@ function BeatPER() {
 function BeatAgency() {
   return (
     <div className="beat2">
-      <Issue />
+      <Issue k="Where it comes from" />
       <div className="beat2__big font-display"><Roll to={Number(AGENCY_SHARE)} format={(n) => `${n.toFixed(1)}%`} /></div>
-      <p className="beat2__say">of SNAP payment error dollars come from the agency side, not from households.</p>
-      <p className="beat2__why">Budgeting slips that a second check can catch before the money goes out.</p>
+      <p className="beat2__say">of SNAP payment error dollars come from the state side, not from households.</p>
+      <p className="beat2__why">Budgeting slips in the state&apos;s own case work, which a second check can catch before the money goes out.</p>
     </div>
   );
 }
@@ -52,8 +52,8 @@ const SEGMENTS = [
 function BeatWhere() {
   return (
     <div className="beat2 beat2--wide">
-      <Issue />
-      <h2 className="font-display h-section beat2__title">About 45% of errors are visible in the case file. The rest need to communicate with a person. Stampy solves both.</h2>
+      <Issue k="Where it comes from" />
+      <h2 className="font-display h-section beat2__title">About 45% of errors are visible in the case file. The rest take one question to the household, the employer or the landlord. Stampy handles all of it.</h2>
       <div className="where__bar">
         {SEGMENTS.map((s, i) => (
           <motion.div key={s.where} className="where__seg" style={{ background: s.color }} initial={{ width: 0 }} animate={{ width: `${s.pct}%` }} transition={{ duration: 0.7, delay: 0.15 + i * 0.3 }} />
@@ -76,8 +76,8 @@ function BeatWhere() {
 function BeatTwoWays() {
   return (
     <div className="beat2 beat2--wide">
-      <Issue />
-      <h2 className="font-display h-section beat2__title two2__title">The Two Ways States Are Wrong</h2>
+      <Issue k="Where it comes from" />
+      <h2 className="font-display h-section beat2__title two2__title">States get it wrong both ways</h2>
       <div className="two2">
         <motion.div className="two2__col two2__col--over" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <div className="two2__word"><span aria-hidden>↑</span> Overissue</div>
@@ -102,16 +102,25 @@ const CLOCK = [
   { x: 690, fy: 'FY2030', note: 'Cost share set' },
 ];
 
+/** Spending first, then Michigan's early results. Same sourced rows as the facts ledger. */
+const HUNT = [MARKET[2]!, MARKET[1]!, MARKET[3]!, MARKET[0]!];
+
 function BeatClock({ local }: { local: number }) {
   const step = Math.min(CLOCK.length - 1, Math.floor(local * CLOCK.length * 1.3));
   return (
     <div className="beat2 beat2--wide">
-      <Issue />
-      <h2 className="font-display h-section beat2__title">States have to fix this in FY2027.</h2>
-      <p className="clock2__lede">
-        Federal quality control is sampling FY2027 cases right now, and that year&apos;s error rate sets how much each state pays in FY2030. States are facing it today and are already looking for tools to get ahead of it.
-      </p>
-      <svg viewBox="0 0 760 170" className="clock2" role="img" aria-label="Timeline: FY2025 published, FY2026 closed, FY2027 sampled now, and FY2027 sets the FY2030 cost share">
+      <Issue k="Why now" />
+      <h2 className="font-display h-section beat2__title">States are rushing for an answer before FY2027 counts.</h2>
+      <p className="clock2__lede">FY2027&apos;s error rate sets what each state pays in FY2030. States are already spending millions looking for a fix:</p>
+      <ul className="hunt" aria-label="What states are spending now">
+        {HUNT.map((m, i) => (
+          <motion.li key={m.src} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 + i * 0.12 }}>
+            <span className="num hunt__fig">{m.figure}</span>
+            <span className="hunt__what">{m.what}</span>
+          </motion.li>
+        ))}
+      </ul>
+      <svg viewBox="0 0 760 170" className="clock2 clock2--compact" role="img" aria-label="Timeline: FY2025 published, FY2026 closed, FY2027 sampled now, and FY2027 sets the FY2030 cost share">
         <line x1="40" y1="110" x2="730" y2="110" className="clock2__rail" />
         <motion.line x1="70" y1="110" y2="110" className="clock2__done" initial={{ x2: 70 }} animate={{ x2: CLOCK[Math.min(step, 2)]!.x }} transition={{ duration: 0.6 }} />
         <motion.path d="M430 96 C 500 14, 620 14, 690 96" className="clock2__arc" initial={{ pathLength: 0 }} animate={{ pathLength: step >= 3 ? 1 : 0 }} transition={{ duration: 0.9 }} />
@@ -142,13 +151,14 @@ function BeatCost() {
   const max = COST_STATES[0]!.m;
   return (
     <div className="beat2 beat2--wide">
-      <Issue />
+      <Issue k="What changed" />
       <div className="cost">
         <div>
-          <h2 className="font-display h-section beat2__title">What it costs states</h2>
+          <h2 className="font-display h-section beat2__title">Now states pay for their errors</h2>
           <div className="cost__big font-display"><Roll to={9} format={(n) => `≈ $${n.toFixed(0)}B`} /></div>
-          <p className="cost__say">is what states would owe for SNAP benefits in FY2028 alone, the first year of the cost shift, at FY2025 error rates. Almost half of states could owe $100 million or more.</p>
+          <p className="cost__say">Under the One Big Beautiful Bill Act, each state&apos;s share of SNAP benefits is set by its error rate. At FY2025 error rates, states would owe about this much in FY2028 alone. Almost half could owe $100 million or more.</p>
           <p className="cost__why">That comes on top of the cut to federal funding for running SNAP, which started October 1, 2026.</p>
+          <p className="cost__fixable">The good news: most of this error is fixable.</p>
         </div>
         <ul className="cost__bars" aria-label="Largest estimated FY2028 state bills">
           {COST_STATES.map((c, i) => (
@@ -167,7 +177,7 @@ function BeatCost() {
 }
 
 const BEATS: ((local: number) => ReactNode)[] = [
-  () => <BeatPER />, () => <BeatAgency />, () => <BeatWhere />, () => <BeatTwoWays />, (l) => <BeatClock local={l} />, () => <BeatCost />,
+  () => <BeatPER />, () => <BeatCost />, () => <BeatTwoWays />, () => <BeatAgency />, () => <BeatWhere />, (l) => <BeatClock local={l} />,
 ];
 
 function SourceNote() {
@@ -175,7 +185,7 @@ function SourceNote() {
     <p id="issue-sources" className="wrap issue__sources" data-prov-note="replay">
       Sources: USDA FNA FY2025 payment error rate; FNS SNAP Quality Control Annual Report FY2023 (agency share = 6.65 of 11.68 points of dollar error; how errors were found; over- and underissuance). Cost-share timing as summarized from the statute. State cost estimate:{' '}
       <a href="https://www.cbpp.org/blog/states-first-ever-bill-for-snap-benefits-could-cost-billions" target="_blank" rel="noreferrer">CBPP, June 24, 2026</a>{' '}
-      (FY2028 at FY2025 error rates; actual bills depend on FY2025 or FY2026 rates and FY2028 benefit costs).
+      (FY2028 at FY2025 error rates; actual bills depend on FY2025 or FY2026 rates and FY2028 benefit costs). State spending: {MARKET.map((m) => source(m.src).label).join('; ')}; figures as reported, not independently verified.
     </p>
   );
 }

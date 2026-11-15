@@ -37,9 +37,9 @@ export function PipelineDiagram() {
 
   return (
     <section ref={ref} className="pl wrap" aria-labelledby="pl-title" data-prov-scope="pipeline">
-      <span className="eyebrow">Behind the scenes</span>
-      <h2 id="pl-title" className="font-display h-section">Every answer goes back to the question that asked for it.</h2>
-      <p className="pl-lede">Stampy keeps a ledger of facts, each with its source. When two facts disagree it opens a question, finds the cheapest way to settle it, and hands the result to a caseworker.</p>
+      <span className="eyebrow">How Stampy fixes it</span>
+      <h2 id="pl-title" className="font-display h-section">Read the file, ask the right person, recompute, hand it to a caseworker.</h2>
+      <p className="pl-lede">Stampy reads every document into a ledger of facts, each with its source. When two facts disagree it opens a question and settles it the cheapest way: the case file first, then a text to the household, then the employer or landlord. The rules engine recomputes the benefit, and a caseworker approves or rejects the change.</p>
 
       <div className="pl-controls">
         <button type="button" onClick={() => { if (stage >= LAST) { setStage(0); setPlaying(true); } else setPlaying((p) => !p); }}>
