@@ -11,7 +11,7 @@ export default function DataPage() {
         <header className="cq-top">
           <div>
             <h1 className="font-display">The data</h1>
-            <p>Every year federal reviewers re-check a sample of SNAP cases and publish what they find. These are those records. Pick one to see where the benefit went wrong.</p>
+            <p>Every year federal reviewers re-check a sample of SNAP cases and publish what they find. First, the sample case used in this demo, with the problem circled. Below it are the federal records; pick one to see where the benefit went wrong.</p>
           </div>
         </header>
         <DataExplorer />

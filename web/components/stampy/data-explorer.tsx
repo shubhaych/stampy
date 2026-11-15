@@ -56,6 +56,7 @@ export function DataExplorer() {
   const record = page?.items.find((r) => r.id === selected) ?? null;
   return (
     <>
+      <DemoCase />
       <ErrorLine error={error} />
       {page && (
         <p className="dx-count">
@@ -84,7 +85,6 @@ export function DataExplorer() {
 
         {record && page && <RecordSheet record={record} release={page.release} />}
       </div>
-      <DemoCase />
     </>
   );
 }
@@ -153,7 +153,7 @@ function DemoCase() {
       <div className="dx-demo__head">
         <div>
           <h2 id="dx-demo-title">The case in this demo: {DEMO.name} <Badge kind="synthetic" /></h2>
-          <p>Three files, one problem. The same kind of wage error the federal records above are full of.</p>
+          <p>Three files, one problem. The same kind of wage error the federal records below are full of.</p>
         </div>
         <button type="button" className="btn btn--primary" aria-expanded={open} onClick={() => setOpen((v) => !v)}>{open ? 'Hide the files' : 'Show the files and the error'}</button>
       </div>
