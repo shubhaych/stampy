@@ -145,10 +145,9 @@ function RecordSheet({ record, release }: { record: Item; release: z.infer<typeo
 
 /** The one case used in the live demo: its three files, with the problem circled. */
 function DemoCase() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [focus, setFocus] = useState<'record' | 'stubA' | 'stubB'>('stubB');
   const files = demoFiles(DEMO.name, true);
-  const shown = files.find((f) => f.key === focus)!;
   return (
     <section className="dx-demo" aria-labelledby="dx-demo-title">
       <div className="dx-demo__head">
@@ -160,17 +159,15 @@ function DemoCase() {
       </div>
       {open && (
         <div className="dx-demo__body">
-          <div className="dx-demo__files" role="tablist" aria-label="Case files">
+          <div className="dx-demo__pages">
             {files.map((f) => (
-              <button key={f.key} type="button" role="tab" aria-selected={f.key === focus} onClick={() => setFocus(f.key)}>
+              <button key={f.key} type="button" aria-pressed={f.key === focus} onClick={() => setFocus(f.key)}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={svgUrl(f.svg)} alt="" />
-                <span><strong>{f.title}</strong><small><Fig prov="synthetic">{f.blurb}</Fig></small></span>
+                <img src={svgUrl(f.svg)} alt={`${f.title} with the relevant lines circled`} />
+                <span><strong>{f.title}</strong> <Fig prov="synthetic">{f.blurb}</Fig></span>
               </button>
             ))}
           </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="dx-demo__page" src={svgUrl(shown.svg)} alt={`${shown.title} with the relevant lines circled`} />
           <div className="dx-demo__story">
             <h3>What went wrong</h3>
             <ol>
