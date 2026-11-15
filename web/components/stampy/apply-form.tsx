@@ -31,7 +31,8 @@ export const APPLY_SESSION_KEY = (id: string) => `stampy.apply.${id}`;
 
 export function ApplyForm() {
   const router = useRouter();
-  const [name, setName] = useState(DEMO.name === 'Jane Doe' ? '' : DEMO.name);
+  // Prefill only when a demo name is configured; otherwise the applicant types their own.
+  const [name, setName] = useState(process.env.NEXT_PUBLIC_DEMO_NAME ? DEMO.name : '');
   const [email, setEmail] = useState(DEMO.email);
   const [phone, setPhone] = useState(DEMO.phone);
   const [state, setState] = useState('CA');

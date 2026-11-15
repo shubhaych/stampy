@@ -6,7 +6,8 @@ export async function GET(request: Request, { params }: { params: Promise<{ path
       !(path.length === 2 && record) && !(path.length === 3 && record && path[2] === 'documents')) {
     return Response.json({ error: 'Unknown QC resource.' }, { status: 404 });
   }
-  const base = (process.env.QC_WORKER_URL ?? 'http://localhost:8791').replace(/\/$/, '');
+  // The main worker serves /qc too; QC_WORKER_URL points at a separate read-only QC worker if one is used.
+  const base = (process.env.QC_WORKER_URL || process.env.WORKER_URL || process.env.NEXT_PUBLIC_WORKER_URL || 'http://localhost:8787').replace(/\/$/, '');
   const upstream = new URL(`${base}/qc/${path.map(encodeURIComponent).join('/')}`);
   const query = new URL(request.url).searchParams;
   for (const key of ['state', 'offset', 'limit', 'seed']) if (query.has(key)) upstream.searchParams.set(key, query.get(key)!);
@@ -16,6 +17,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ path
     if (body === null) return Response.json({ error: 'QC worker returned an unreadable response.' }, { status: 502 });
     return Response.json(body, { status: response.status, headers: { 'cache-control': 'no-store' } });
   } catch {
-    return Response.json({ error: 'QC worker unavailable. Start the QC worker or configure QC_WORKER_URL.' }, { status: 503 });
+    return Response.json({ error: 'The Stampy worker is not reachable for QC records. Start it (npm run dev).' }, { status: 503 });
   }
 }

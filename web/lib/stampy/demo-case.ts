@@ -9,9 +9,9 @@ export interface DemoFile { key: 'record' | 'stubA' | 'stubB'; title: string; bl
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 export const PAY_A = '$640.00', PAY_B = '$840.00', PAY_DATE = '10/23/2026';
-/** Who the demo case belongs to. Set in web/.env.local; a placeholder name otherwise. */
+/** Who the demo case belongs to. Set NEXT_PUBLIC_DEMO_NAME in .env.local to change it. */
 export const DEMO = {
-  name: process.env.NEXT_PUBLIC_DEMO_NAME || 'Jane Doe',
+  name: process.env.NEXT_PUBLIC_DEMO_NAME || 'Rithvik Manikandan',
   email: process.env.NEXT_PUBLIC_DEMO_EMAIL || '',
   phone: process.env.NEXT_PUBLIC_DEMO_PHONE || '',
 };
